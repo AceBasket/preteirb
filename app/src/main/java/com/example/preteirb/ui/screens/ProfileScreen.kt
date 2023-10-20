@@ -3,12 +3,15 @@ package com.example.preteirb.ui.screens
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import com.example.compose.AppTheme
@@ -26,7 +29,9 @@ fun ProfileScreen(modifier: Modifier = Modifier) {
                     contentDescription = null
                 )
             },
-            label = "Username"
+            label = "Username",
+            modifier = Modifier
+                .padding(bottom = dimensionResource(id = R.dimen.padding_small))
         )
         IconAndLabelCard(
             icon = {
@@ -35,7 +40,9 @@ fun ProfileScreen(modifier: Modifier = Modifier) {
                     contentDescription = "Settings icon"
                 )
             },
-            label = "Settings"
+            label = "Settings",
+            modifier = Modifier
+                .padding(bottom = dimensionResource(id = R.dimen.padding_small))
         )
         IconAndLabelCard(
             icon = {
@@ -44,7 +51,9 @@ fun ProfileScreen(modifier: Modifier = Modifier) {
                     contentDescription = "Switch account icon"
                 )
             },
-            label = "Switch account"
+            label = "Switch account",
+            modifier = Modifier
+                .padding(bottom = dimensionResource(id = R.dimen.padding_small))
         )
         IconAndLabelCard(
             icon = {
@@ -65,8 +74,11 @@ fun IconAndLabelCard(
     label: String,
     modifier: Modifier = Modifier
 ) {
-    Row(modifier = modifier) {
+    Row(
+        modifier = modifier
+    ) {
         icon()
+        Spacer(modifier = Modifier.padding(start = dimensionResource(id = R.dimen.padding_small)))
         Text(
             text = label
         )

@@ -5,7 +5,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.rounded.AccountCircle
 import androidx.compose.material.icons.rounded.AddCircle
-import androidx.compose.material.icons.rounded.Home
+import androidx.compose.material.icons.rounded.Search
 import androidx.compose.material3.CenterAlignedTopAppBar
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
@@ -35,12 +35,12 @@ data class BottomNavItem(
 
 val bottomNavItems = listOf(
     BottomNavItem(
-        name = "Home",
-        route = "home",
-        icon = Icons.Rounded.Home,
+        name = "Search",
+        route = "search",
+        icon = Icons.Rounded.Search,
     ),
     BottomNavItem(
-        name = "Create",
+        name = "New",
         route = "add",
         icon = Icons.Rounded.AddCircle,
     ),
@@ -52,7 +52,7 @@ val bottomNavItems = listOf(
 )
 
 enum class LoanScreen(@StringRes val nameRes: Int) {
-    Home(R.string.home),
+    Search(R.string.find_object),
     Add(R.string.add),
     Account(R.string.account),
 }
@@ -66,7 +66,7 @@ fun BottomLoanAppBar(
 ) {
     
     NavigationBar(
-        containerColor = MaterialTheme.colorScheme.primary,
+        containerColor = MaterialTheme.colorScheme.primaryContainer,
         modifier = modifier,
     ) {
         bottomNavItems.forEach { item ->
@@ -137,7 +137,7 @@ fun TopAppBarPreview() {
     AppTheme {
         LoanAppTopBar(
             currentScreenTitle = R.string.app_name,
-            canNavigateBack = true,
+            canNavigateBack = false,
             navigateUp = {},
         )
     }
