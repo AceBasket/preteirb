@@ -1,6 +1,8 @@
 package com.example.preteirb.ui.screens
 
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -29,36 +31,49 @@ data class Profile(
 )
 
 @Composable
-fun ChooseProfileScreen(profileList: List<Profile>, modifier: Modifier = Modifier) {
+fun ChooseProfileScreen(
+    profileList: List<Profile>,
+    modifier: Modifier = Modifier,
+    onClickOnProfile: (Profile) -> Unit = {},
+    onClickOnAddAccount: () -> Unit = {},
+    ) {
     Column(
         modifier = modifier
     ) {
         profileList.forEach { profile ->
+            Box(modifier = Modifier.clickable { onClickOnProfile(profile) }) {
+                IconAndLabelCard(
+                    icon = {
+                        Icon(
+                            painter = painterResource(id = R.drawable.baseline_account_circle_24),
+                            contentDescription = null
+                        )
+                    },
+                    label = profile.username,
+                    modifier = Modifier.padding(bottom = dimensionResource(id = R.dimen.padding_small))
+                )
+            }
+        }
+        Box(modifier = Modifier.clickable { onClickOnAddAccount() }) {
             IconAndLabelCard(
                 icon = {
                     Icon(
-                        painter = painterResource(id = R.drawable.baseline_account_circle_24),
+                        painter = painterResource(id = R.drawable.baseline_person_add_24),
                         contentDescription = null
                     )
                 },
-                label = profile.username,
-                modifier = Modifier.padding(bottom = dimensionResource(id = R.dimen.padding_small))
+                label = stringResource(id = R.string.add_account)
             )
         }
-        IconAndLabelCard(
-            icon = {
-                Icon(
-                    painter = painterResource(id = R.drawable.baseline_person_add_24),
-                    contentDescription = null
-                )
-            },
-            label = stringResource(id = R.string.add_account)
-        )
     }
 }
 
 @Composable
-fun AddAccountDialog(modifier: Modifier = Modifier) {
+fun AddAccountDialog(
+    modifier: Modifier = Modifier,
+    onDismissRequest: () -> Unit = {},
+    onAddAccount: (String) -> Unit = {},
+) {
     var username by rememberSaveable { mutableStateOf("") }
     
     Dialog(
@@ -103,7 +118,11 @@ fun ChooseProfileScreenPreview() {
             Profile(username = "Bob"),
             Profile(username = "Alice"),
         )
-        ChooseProfileScreen(profileList = fakeProfileList)
+        ChooseProfileScreen(
+            profileList = fakeProfileList,
+            onClickOnProfile = {  },
+            onClickOnAddAccount = {  }
+        )
     }
 }
 
@@ -111,6 +130,9 @@ fun ChooseProfileScreenPreview() {
 @Composable
 fun AddAccountDialogPreview() {
     AppTheme {
-        AddAccountDialog()
+        AddAccountDialog(
+            onDismissRequest = {  },
+            onAddAccount = {  }
+        )
     }
 }

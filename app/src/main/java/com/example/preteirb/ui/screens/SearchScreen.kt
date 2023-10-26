@@ -18,6 +18,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.SearchBar
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -26,24 +27,29 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.compose.AppTheme
 import com.example.preteirb.R
-
-
-data class Item(
-    val name: String,
-    val description: String
-)
+import com.example.preteirb.data.Item
+import com.example.preteirb.model.AppViewModelProvider
+import com.example.preteirb.model.SearchResultUiState
+import com.example.preteirb.model.SearchViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun SearchScreen(modifier: Modifier = Modifier) {
+fun SearchScreen(
+    modifier: Modifier = Modifier,
+    viewModel: SearchViewModel = viewModel(factory = AppViewModelProvider.Factory),
+) {
+    
+    val uiState = viewModel.uiState.collectAsState()
+    
     // this is the text users enter
-    var queryString by remember {
-        mutableStateOf("")
-    }
+    val queryString by viewModel.searchQuery.collectAsStateWithLifecycle()
     
     // if the search bar is active or not
     var isActive by remember {
@@ -54,16 +60,12 @@ fun SearchScreen(modifier: Modifier = Modifier) {
     ) {
         SearchBar(
             query = queryString,
-            onQueryChange = {},
-            onSearch = {},
+            onQueryChange = viewModel::onSearchQueryChanged,
+            onSearch = { isActive = false },
             active = isActive,
             onActiveChange = {},
-            placeholder = {
-                Text(text = "Search")
-            },
-            leadingIcon = {
-                Icon(imageVector = Icons.Default.Search, contentDescription = null)
-            },
+            placeholder = { Text(text = stringResource(id = R.string.search)) },
+            leadingIcon = { Icon(imageVector = Icons.Default.Search, contentDescription = null) },
             trailingIcon = {
                 Icon(
                     painter = painterResource(id = R.drawable.baseline_filter_list_24),
@@ -72,17 +74,29 @@ fun SearchScreen(modifier: Modifier = Modifier) {
             },
             modifier = Modifier
                 .padding(dimensionResource(id = R.dimen.padding_medium))
-        ) {
+        ) {}
+        
+        when (uiState.value) {
+            SearchResultUiState.Loading,
+            SearchResultUiState.LoadFailed,
+            SearchResultUiState.EmptyQuery,
+            -> Unit
+            
+            is SearchResultUiState.Success -> {
+                if ((uiState.value as SearchResultUiState.Success).isEmpty()) {
+                    Text(text = stringResource(id = R.string.search_result_not_found, queryString))
+                } else {
+                    val items = (uiState.value as SearchResultUiState.Success).itemList
+                    ObjectList(objects = items)
+                }
+            }
+            
         }
-        ObjectList(
-            objects = listOf(
-                Item("Tondeuse", "Tondeuse à gazon"),
-                Item("Pelle", "Grosse pelle"),
-                Item("Rateau", "Evitez le rateau"),
-            )
-        )
+        
+        
     }
 }
+
 
 @Composable
 fun ObjectList(objects: List<Item>, modifier: Modifier = Modifier) {
@@ -140,9 +154,9 @@ fun ObjectCard(item: Item, modifier: Modifier = Modifier) {
 fun ObjectListPreview() {
     AppTheme {
         val fakeItems = listOf(
-            Item("Tondeuse", "Tondeuse à gazon"),
-            Item("Pelle", "Grosse pelle"),
-            Item("Rateau", "Evitez le rateau"),
+            Item(1, "Tondeuse", "Tondeuse à gazon", 1),
+            Item(2, "Pelle", "Grosse pelle", 1),
+            Item(3, "Rateau", "Evitez le rateau", 1),
         )
         ObjectList(fakeItems)
     }
@@ -152,7 +166,7 @@ fun ObjectListPreview() {
 @Composable
 fun ObjectCardPreview() {
     AppTheme {
-        val item = Item("Tondeuse", "Tondeuse à gazon")
+        val item = Item(1, "Tondeuse", "Tondeuse à gazon", 1)
         ObjectCard(item)
     }
 }

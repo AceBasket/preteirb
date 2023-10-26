@@ -51,12 +51,6 @@ val bottomNavItems = listOf(
     ),
 )
 
-enum class LoanScreen(@StringRes val nameRes: Int) {
-    Search(R.string.find_object),
-    Add(R.string.add),
-    Account(R.string.account),
-}
-
 
 @Composable
 fun BottomLoanAppBar(

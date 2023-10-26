@@ -1,70 +1,53 @@
 package com.example.preteirb.ui.screens
 
-import androidx.compose.foundation.Image
+import androidx.annotation.DrawableRes
+import androidx.annotation.StringRes
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import com.example.compose.AppTheme
 import com.example.preteirb.R
 
+data class ProfileScreenItems(
+    @StringRes val label: Int,
+    @DrawableRes val icon: Int,
+)
+
 @Composable
-fun ProfileScreen(modifier: Modifier = Modifier) {
+fun ProfileScreen(
+    menuItems: List<ProfileScreenItems>,
+    modifier: Modifier = Modifier,
+    onClickOnMenuItem: (ProfileScreenItems) -> Unit = {},
+) {
     Column(
         modifier = modifier
     ) {
-        IconAndLabelCard(
-            icon = {
-                Image(
-                    painter = painterResource(id = R.drawable.ic_broken_image),
-                    contentDescription = null
+        menuItems.forEach() { menuItem ->
+            Box(modifier = Modifier.clickable { onClickOnMenuItem(menuItem) }) {
+                IconAndLabelCard(
+                    icon = {
+                        Icon(
+                            painter = painterResource(id = menuItem.icon),
+                            contentDescription = null //TODO
+                        )
+                    },
+                    label = stringResource(id = menuItem.label),
+                    modifier = Modifier
+                        .padding(bottom = dimensionResource(id = R.dimen.padding_small))
                 )
-            },
-            label = "Username",
-            modifier = Modifier
-                .padding(bottom = dimensionResource(id = R.dimen.padding_small))
-        )
-        IconAndLabelCard(
-            icon = {
-                Icon(
-                    imageVector = Icons.Default.Settings,
-                    contentDescription = "Settings icon"
-                )
-            },
-            label = "Settings",
-            modifier = Modifier
-                .padding(bottom = dimensionResource(id = R.dimen.padding_small))
-        )
-        IconAndLabelCard(
-            icon = {
-                Icon(
-                    painter = painterResource(id = R.drawable.baseline_switch_account_24),
-                    contentDescription = "Switch account icon"
-                )
-            },
-            label = "Switch account",
-            modifier = Modifier
-                .padding(bottom = dimensionResource(id = R.dimen.padding_small))
-        )
-        IconAndLabelCard(
-            icon = {
-                Icon(
-                    painter = painterResource(id = R.drawable.baseline_logout_24),
-                    contentDescription = "Log out icon"
-                )
-            },
-            label = "Log out"
-        )
-        
+            }
+        }
     }
 }
 
@@ -90,6 +73,27 @@ fun IconAndLabelCard(
 @Composable
 fun ProfileScreenPreview() {
     AppTheme {
-        ProfileScreen()
+        val fakeProfileScreenItems = listOf(
+            ProfileScreenItems(
+                label = R.string.username,
+                icon = R.drawable.ic_broken_image
+            ),
+            ProfileScreenItems(
+                label = R.string.settings,
+                icon = R.drawable.baseline_settings_24
+            ),
+            ProfileScreenItems(
+                label = R.string.switch_account,
+                icon = R.drawable.baseline_switch_account_24
+            ),
+            ProfileScreenItems(
+                label = R.string.logout,
+                icon = R.drawable.baseline_logout_24
+            ),
+        )
+        ProfileScreen(
+            menuItems = fakeProfileScreenItems,
+            onClickOnMenuItem = { }
+        )
     }
 }
