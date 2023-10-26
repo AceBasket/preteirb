@@ -82,6 +82,13 @@ fun NewUsageScreen(
         itemUiState = itemViewModel.itemUiState,
         onUsageValueChange = usageViewModel::updateUiState,
         onItemValueChange = itemViewModel::updateUiState,
+        onItemSelectionValueChange = {
+            usageViewModel.updateUiState(
+                usageViewModel.uiState.usageDetails.copy(
+                    itemId = it
+                )
+            )
+        },
         onSaveClick = {
             coroutineScope.launch {
                 usageViewModel.saveUsage()
@@ -97,6 +104,7 @@ fun NewUsageForm(
     usageUiState: UsageUiState,
     itemUiState: ItemUiState,
     modifier: Modifier = Modifier,
+    onItemSelectionValueChange: (Int) -> Unit = {},
     onItemValueChange: (ItemDetails) -> Unit = {},
     onUsageValueChange: (UsageDetails) -> Unit = {},
     onSaveClick: () -> Unit = {},
@@ -105,13 +113,17 @@ fun NewUsageForm(
         mutableIntStateOf(1)
     }
     
+    var isShowObjectDialog by rememberSaveable {
+        mutableStateOf(false)
+    }
+    
     Column(
         modifier = modifier
     ) {
         ObjectSelection(
             objectList = emptyList(),
-            itemDetails = itemUiState.itemDetails,
-            onValueChange = onItemValueChange,
+            onValueChange = onItemSelectionValueChange,
+            onAddItem = { isShowObjectDialog = true },
         )
         repeat(usagesCount) {
             NewUsagePeriod(
@@ -145,6 +157,19 @@ fun NewUsageForm(
             }
         }
         
+        if (isShowObjectDialog) {
+            NewObjectDialog(
+                itemUiState = itemUiState,
+                onValueChange = onItemValueChange,
+                onSaveObject = {
+                    isShowObjectDialog = false
+                },
+                onDismissDialog = {
+                    isShowObjectDialog = false
+                },
+            )
+        }
+        
         
     }
 }
@@ -152,8 +177,8 @@ fun NewUsageForm(
 @Composable
 fun ObjectSelection(
     objectList: List<Item>,
-    itemDetails: ItemDetails,
-    onValueChange: (ItemDetails) -> Unit,
+    onValueChange: (Int) -> Unit,
+    onAddItem: () -> Unit,
     modifier: Modifier = Modifier
 ) {
     val scrollState = rememberScrollState()
@@ -175,12 +200,7 @@ fun ObjectSelection(
             value = selectedText,
             onValueChange = {
                 selectedText = it
-                onValueChange(
-                    itemDetails.copy(
-                        // should never return 0 because list created from objectList
-                        id = objectList.find { item -> item.name == it }?.itemId ?: 0
-                    )
-                )
+                onValueChange(objectList.find { item -> item.name == it }?.itemId ?: 0)
             },
             modifier = Modifier
                 .fillMaxWidth()
@@ -217,7 +237,7 @@ fun ObjectSelection(
             // last item is a button to add an object
             DropdownMenuItem(
                 text = { Text(stringResource(id = R.string.add_object)) },
-                onClick = { /*TODO*/ }
+                onClick = onAddItem
             )
         }
     }
@@ -351,12 +371,12 @@ fun UsagePeriodPickerDialog(
 
 @Composable
 fun NewObjectDialog(
+    itemUiState: ItemUiState,
+    onValueChange: (ItemDetails) -> Unit,
+    onSaveObject: () -> Unit,
+    onDismissDialog: () -> Unit,
     modifier: Modifier = Modifier,
-    onSaveObject: () -> Unit = {},
-    onDismissDialog: () -> Unit = {},
 ) {
-    var name by rememberSaveable { mutableStateOf("") }
-    var description by rememberSaveable { mutableStateOf("") }
     // full screen dialog
     Dialog(
         onDismissRequest = onDismissDialog,
@@ -389,15 +409,15 @@ fun NewObjectDialog(
                     }
                 }
                 OutlinedTextField(
-                    value = name,
-                    onValueChange = { name = it },
+                    value = itemUiState.itemDetails.name,
+                    onValueChange = { onValueChange(itemUiState.itemDetails.copy(name = it)) },
                     label = { Text(stringResource(id = R.string.title)) },
                     singleLine = true,
                     modifier = Modifier.fillMaxWidth()
                 )
                 OutlinedTextField(
-                    value = description,
-                    onValueChange = { description = it },
+                    value = itemUiState.itemDetails.description,
+                    onValueChange = { onValueChange(itemUiState.itemDetails.copy(description = it)) },
                     label = { Text(stringResource(id = R.string.description)) },
                     minLines = 3,
                     modifier = Modifier.fillMaxWidth()
@@ -432,8 +452,8 @@ fun ObjectSelectionPreview() {
         )
         ObjectSelection(
             objectList = fakeObjectList,
-            itemDetails = ItemDetails(),
             onValueChange = {},
+            onAddItem = {},
         )
     }
 }
@@ -468,6 +488,11 @@ fun UsagePeriodPickerDialogPreview() {
 @Composable
 fun NewObjectDialogPreview() {
     AppTheme {
-        NewObjectDialog()
+        NewObjectDialog(
+            itemUiState = ItemUiState(),
+            onValueChange = {},
+            onSaveObject = {},
+            onDismissDialog = {},
+        )
     }
 }

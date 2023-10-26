@@ -40,6 +40,20 @@ object AppViewModelProvider {
                 preteirbApplication().container.usersRepository
             )
         }
+        
+        // Initializer for ItemEntryViewModel
+        initializer {
+            ItemEntryViewModel(
+                preteirbApplication().container.itemsRepository
+            )
+        }
+        
+        // Initializer for ItemSelectionViewModel
+        initializer {
+            ItemSelectionViewModel(
+                preteirbApplication().container.itemsRepository
+            )
+        }
     }
 }
 

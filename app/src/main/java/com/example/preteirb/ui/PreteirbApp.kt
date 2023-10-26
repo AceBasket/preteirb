@@ -114,7 +114,6 @@ fun PreteirbApp(modifier: Modifier = Modifier) {
             
             composable(route = PreteirbScreen.New.name) {
                 NewUsageScreen(
-                    onValidateForm = {}, //TODO: footnote saying object was created
                     modifier = Modifier
                         .fillMaxSize()
                         .padding(innerPadding)
@@ -146,7 +145,7 @@ fun PreteirbApp(modifier: Modifier = Modifier) {
 
 @Preview
 @Composable
-fun PreteibAppPreview() {
+fun PreteirbAppPreview() {
     AppTheme {
         PreteirbApp()
     }
