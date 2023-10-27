@@ -17,6 +17,11 @@ interface ItemsRepository {
     fun getItemStream(id: Int): Flow<Item?>
     
     /**
+     * Retrieves an item and all the usages associated with it.
+     */
+    fun getItemAndUsagesStream(id: Int): Flow<ItemAndUsages?>
+    
+    /**
      * Insert item in the data source
      */
     suspend fun insertItem(item: Item): Long

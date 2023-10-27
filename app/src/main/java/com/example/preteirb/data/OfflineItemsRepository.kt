@@ -7,6 +7,9 @@ class OfflineItemsRepository(private val itemDao: ItemDao) : ItemsRepository {
     
     override fun getItemStream(id: Int): Flow<Item?> = itemDao.getItem(id);
     
+    override fun getItemAndUsagesStream(id: Int): Flow<ItemAndUsages?> =
+        itemDao.getItemAndUsages(id);
+    
     override suspend fun insertItem(item: Item) = itemDao.insert(item);
     
     override suspend fun deleteItem(item: Item) = itemDao.delete(item);

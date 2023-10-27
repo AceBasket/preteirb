@@ -31,12 +31,12 @@ data class Profile(
 )
 
 @Composable
-fun ChooseProfileScreen(
+fun ProfileSelectionScreen(
     profileList: List<Profile>,
     modifier: Modifier = Modifier,
     onClickOnProfile: (Profile) -> Unit = {},
     onClickOnAddAccount: () -> Unit = {},
-    ) {
+) {
     Column(
         modifier = modifier
     ) {
@@ -110,7 +110,7 @@ fun AddAccountDialog(
 
 @Preview(showBackground = true)
 @Composable
-fun ChooseProfileScreenPreview() {
+fun ProfileSelectionScreenPreview() {
     AppTheme {
         val fakeProfileList = listOf(
             Profile(username = "John"),
@@ -118,10 +118,10 @@ fun ChooseProfileScreenPreview() {
             Profile(username = "Bob"),
             Profile(username = "Alice"),
         )
-        ChooseProfileScreen(
+        ProfileSelectionScreen(
             profileList = fakeProfileList,
-            onClickOnProfile = {  },
-            onClickOnAddAccount = {  }
+            onClickOnProfile = { },
+            onClickOnAddAccount = { }
         )
     }
 }
@@ -131,8 +131,8 @@ fun ChooseProfileScreenPreview() {
 fun AddAccountDialogPreview() {
     AppTheme {
         AddAccountDialog(
-            onDismissRequest = {  },
-            onAddAccount = {  }
+            onDismissRequest = { },
+            onAddAccount = { }
         )
     }
 }

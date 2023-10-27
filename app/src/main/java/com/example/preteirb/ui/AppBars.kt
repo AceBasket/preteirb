@@ -35,18 +35,18 @@ data class BottomNavItem(
 
 val bottomNavItems = listOf(
     BottomNavItem(
-        name = "Search",
-        route = "search",
+        name = PreteirbScreen.Search.name,
+        route = PreteirbScreen.Search.name,
         icon = Icons.Rounded.Search,
     ),
     BottomNavItem(
-        name = "New",
-        route = "add",
+        name = PreteirbScreen.New.name,
+        route = PreteirbScreen.New.name,
         icon = Icons.Rounded.AddCircle,
     ),
     BottomNavItem(
-        name = "Account",
-        route = "account",
+        name = PreteirbScreen.Account.name,
+        route = PreteirbScreen.Account.name,
         icon = Icons.Rounded.AccountCircle,
     ),
 )

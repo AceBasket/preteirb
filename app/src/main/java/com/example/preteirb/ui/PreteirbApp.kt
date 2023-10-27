@@ -4,7 +4,6 @@ import androidx.annotation.StringRes
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -17,12 +16,11 @@ import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.example.compose.AppTheme
 import com.example.preteirb.R
-import com.example.preteirb.ui.screens.ChooseProfileScreen
-import com.example.preteirb.ui.screens.NewUsageScreen
 import com.example.preteirb.ui.screens.Profile
 import com.example.preteirb.ui.screens.ProfileScreen
-import com.example.preteirb.ui.screens.ProfileScreenItems
+import com.example.preteirb.ui.screens.ProfileSelectionScreen
 import com.example.preteirb.ui.screens.SearchScreen
+import com.example.preteirb.ui.screens.newitemusage.NewUsageScreen
 
 
 enum class PreteirbScreen(@StringRes val nameRes: Int) {
@@ -33,7 +31,6 @@ enum class PreteirbScreen(@StringRes val nameRes: Int) {
     SelectProfile(R.string.select_profile),
 }
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun PreteirbApp(modifier: Modifier = Modifier) {
     //Create NavController
@@ -76,35 +73,10 @@ fun PreteirbApp(modifier: Modifier = Modifier) {
                 )
             }
             
-            val fakeProfileScreenItems = listOf(
-                ProfileScreenItems(
-                    label = R.string.username,
-                    icon = R.drawable.ic_broken_image
-                ),
-                ProfileScreenItems(
-                    label = R.string.settings,
-                    icon = R.drawable.baseline_settings_24
-                ),
-                ProfileScreenItems(
-                    label = R.string.switch_account,
-                    icon = R.drawable.baseline_switch_account_24
-                ),
-                ProfileScreenItems(
-                    label = R.string.logout,
-                    icon = R.drawable.baseline_logout_24
-                ),
-            )
+            
             composable(route = PreteirbScreen.Account.name) {
                 ProfileScreen(
-                    menuItems = fakeProfileScreenItems,
-                    onClickOnMenuItem = {
-                        when (it.label) {
-                            R.string.username -> {}
-                            R.string.settings -> {}
-                            R.string.switch_account -> navController.navigate(PreteirbScreen.SelectProfile.name)
-                            R.string.logout -> navController.navigate(PreteirbScreen.SelectProfile.name)
-                        }
-                    },
+                    navigateToSelectProfile = { navController.navigate(PreteirbScreen.SelectProfile.name) },
                     modifier = Modifier
                         .fillMaxSize()
                         .padding(innerPadding)
@@ -128,7 +100,7 @@ fun PreteirbApp(modifier: Modifier = Modifier) {
                 Profile(username = "Alice"),
             )
             composable(route = PreteirbScreen.SelectProfile.name) {
-                ChooseProfileScreen(
+                ProfileSelectionScreen(
                     profileList = fakeProfileList,
                     onClickOnProfile = { navController.navigate(PreteirbScreen.Search.name) }, //TODO: footnote saying welcome username
                     onClickOnAddAccount = { navController.navigate(PreteirbScreen.Search.name) }, //TODO: footnote saying account was created
