@@ -4,8 +4,8 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
-import com.example.preteirb.data.Item
-import com.example.preteirb.data.ItemsRepository
+import com.example.preteirb.data.item.Item
+import com.example.preteirb.data.item.ItemsRepository
 
 class ItemEntryViewModel(private val itemsRepository: ItemsRepository) : ViewModel() {
     var itemUiState by mutableStateOf(ItemUiState())

@@ -66,7 +66,11 @@ fun ProfileScreen(
         Spacer(modifier = Modifier.padding(dimensionResource(id = R.dimen.padding_medium)))
         var isExpanded by remember { mutableStateOf(false) }
         SettingsSection(isExpanded = isExpanded, onHeaderClick = { isExpanded = !isExpanded })
-        Row {
+        Row(
+            modifier = Modifier
+                .fillMaxWidth()
+                .clickable { navigateToSelectProfile() }
+        ) {
             Icon(
                 painter = painterResource(id = R.drawable.baseline_logout_24),
                 contentDescription = "Logout icon"

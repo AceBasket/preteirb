@@ -27,7 +27,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.toSize
 import com.example.compose.AppTheme
 import com.example.preteirb.R
-import com.example.preteirb.data.Item
+import com.example.preteirb.data.item.Item
 
 @Composable
 fun ObjectSelection(

@@ -34,7 +34,7 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.compose.AppTheme
 import com.example.preteirb.R
-import com.example.preteirb.data.Item
+import com.example.preteirb.data.item.Item
 import com.example.preteirb.model.AppViewModelProvider
 import com.example.preteirb.model.SearchResultUiState
 import com.example.preteirb.model.SearchViewModel

@@ -4,8 +4,8 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
-import com.example.preteirb.data.Usage
-import com.example.preteirb.data.UsagesRepository
+import com.example.preteirb.data.usage.Usage
+import com.example.preteirb.data.usage.UsagesRepository
 import java.text.DateFormat
 
 class UsageEntryViewModel(

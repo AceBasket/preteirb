@@ -1,10 +1,11 @@
-package com.example.preteirb.data
+package com.example.preteirb.data.item
 
 import androidx.room.Dao
 import androidx.room.Delete
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
+import androidx.room.Transaction
 import androidx.room.Update
 import kotlinx.coroutines.flow.Flow
 
@@ -28,6 +29,7 @@ interface ItemDao {
     @Query("SELECT * from items ORDER BY name ASC")
     fun getAllItems(): Flow<List<Item>>;
     
+    @Transaction
     @Query("SELECT * from items WHERE itemId = :id")
     fun getItemAndUsages(id: Int): Flow<ItemAndUsages>;
 }

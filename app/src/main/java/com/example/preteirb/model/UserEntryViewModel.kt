@@ -4,8 +4,8 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
-import com.example.preteirb.data.User
-import com.example.preteirb.data.UsersRepository
+import com.example.preteirb.data.user.User
+import com.example.preteirb.data.user.UsersRepository
 
 class UserEntryViewModel(private val usersRepository: UsersRepository) : ViewModel() {
     /**

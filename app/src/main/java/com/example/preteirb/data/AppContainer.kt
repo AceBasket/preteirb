@@ -1,6 +1,15 @@
 package com.example.preteirb.data
 
 import android.content.Context
+import androidx.datastore.preferences.preferencesDataStore
+import com.example.preteirb.data.item.ItemsRepository
+import com.example.preteirb.data.item.OfflineItemsRepository
+import com.example.preteirb.data.usage.OfflineUsagesRepository
+import com.example.preteirb.data.usage.UsagesRepository
+import com.example.preteirb.data.user.OfflineUsersRepository
+import com.example.preteirb.data.user.UsersRepository
+
+private const val USER_PREFERENCES_NAME = "user_preferences"
 
 /**
  * App container for Dependency injection.
@@ -9,6 +18,7 @@ interface AppContainer {
     val usersRepository: UsersRepository
     val itemsRepository: ItemsRepository
     val usagesRepository: UsagesRepository
+    val settingsRepository: SettingsRepository
 }
 
 /**
@@ -40,5 +50,15 @@ class AppDataContainer(private val context: Context) : AppContainer {
         OfflineUsagesRepository(
             PreteirbDatabase.getDatabase(context).usageDao(),
         )
+    }
+    
+    /**
+     * Implementation for [SettingsRepository]
+     */
+    private val Context.dataStore by preferencesDataStore(
+        name = USER_PREFERENCES_NAME,
+    )
+    override val settingsRepository: SettingsRepository by lazy {
+        SettingsRepository(context.dataStore)
     }
 }

@@ -77,7 +77,7 @@ fun AddAccountDialog(
     var username by rememberSaveable { mutableStateOf("") }
     
     Dialog(
-        onDismissRequest = { /*TODO*/ }
+        onDismissRequest = { onDismissRequest() }
     ) {
         Column(
             modifier = modifier,
@@ -94,12 +94,12 @@ fun AddAccountDialog(
                     .fillMaxWidth()
             ) {
                 TextButton(
-                    onClick = { /*TODO*/ }
+                    onClick = { onDismissRequest() }
                 ) {
                     Text(stringResource(id = R.string.cancel))
                 }
                 TextButton(
-                    onClick = { /*TODO*/ }
+                    onClick = { onAddAccount(username) }
                 ) {
                     Text(stringResource(id = R.string.add))
                 }

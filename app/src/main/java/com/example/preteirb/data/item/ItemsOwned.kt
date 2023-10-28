@@ -1,8 +1,8 @@
-package com.example.preteirb.data
+package com.example.preteirb.data.item
 
 import androidx.room.Embedded
 import androidx.room.Relation
-
+import com.example.preteirb.data.user.User
 
 data class ItemsOwned(
     @Embedded

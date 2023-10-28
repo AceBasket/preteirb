@@ -1,4 +1,4 @@
-package com.example.preteirb.data
+package com.example.preteirb.data.usage
 
 import androidx.room.Dao
 import androidx.room.Delete

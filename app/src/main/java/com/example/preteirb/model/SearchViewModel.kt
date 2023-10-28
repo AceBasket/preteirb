@@ -3,8 +3,8 @@ package com.example.preteirb.model
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.preteirb.data.Item
-import com.example.preteirb.data.ItemsRepository
+import com.example.preteirb.data.item.Item
+import com.example.preteirb.data.item.ItemsRepository
 import com.example.preteirb.utils.Result
 import com.example.preteirb.utils.asResult
 import kotlinx.coroutines.flow.SharingStarted
@@ -17,6 +17,7 @@ import kotlinx.coroutines.flow.stateIn
 /**
  * ViewModel to retrieve all items in the Room database according to filters.
  */
+@OptIn(kotlinx.coroutines.ExperimentalCoroutinesApi::class)
 class SearchViewModel(
     private val savedStateHandle: SavedStateHandle,
     private val itemsRepository: ItemsRepository

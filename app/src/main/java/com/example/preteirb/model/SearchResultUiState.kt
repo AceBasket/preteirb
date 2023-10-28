@@ -1,6 +1,6 @@
 package com.example.preteirb.model
 
-import com.example.preteirb.data.Item
+import com.example.preteirb.data.item.Item
 
 sealed interface SearchResultUiState {
     data object Loading : SearchResultUiState

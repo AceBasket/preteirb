@@ -2,8 +2,8 @@ package com.example.preteirb.model
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.preteirb.data.User
-import com.example.preteirb.data.UsersRepository
+import com.example.preteirb.data.user.User
+import com.example.preteirb.data.user.UsersRepository
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.map

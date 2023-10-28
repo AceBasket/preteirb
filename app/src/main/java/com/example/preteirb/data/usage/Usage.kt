@@ -1,8 +1,10 @@
-package com.example.preteirb.data
+package com.example.preteirb.data.usage
 
 import androidx.room.Entity
 import androidx.room.ForeignKey
 import androidx.room.Index
+import com.example.preteirb.data.item.Item
+import com.example.preteirb.data.user.User
 
 @Entity(
     tableName = "usages",

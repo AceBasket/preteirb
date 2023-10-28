@@ -1,4 +1,4 @@
-package com.example.preteirb.data
+package com.example.preteirb.data.user
 
 import androidx.room.Dao
 import androidx.room.Delete
@@ -7,6 +7,7 @@ import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import androidx.room.Transaction
 import androidx.room.Update
+import com.example.preteirb.data.item.ItemsOwned
 import kotlinx.coroutines.flow.Flow
 
 @Dao

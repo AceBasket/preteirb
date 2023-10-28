@@ -1,4 +1,4 @@
-package com.example.preteirb.data
+package com.example.preteirb.data.user
 
 import androidx.room.Entity
 import androidx.room.PrimaryKey

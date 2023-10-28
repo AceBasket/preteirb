@@ -1,4 +1,4 @@
-package com.example.preteirb.data
+package com.example.preteirb.data.usage
 
 import kotlinx.coroutines.flow.Flow
 
@@ -14,7 +14,7 @@ interface UsagesRepository {
     /**
      * Retrieves an usage from the given data source that matches with the [id].
      */
-    fun getUsageStream(userId: Int, itemId: Int): Flow<Usage?>
+    fun getUsageStream(itemId: Int, userId: Int): Flow<Usage?>
     
     /**
      * Insert usage in the data source

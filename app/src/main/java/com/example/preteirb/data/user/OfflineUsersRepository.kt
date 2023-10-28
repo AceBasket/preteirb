@@ -1,5 +1,6 @@
-package com.example.preteirb.data
+package com.example.preteirb.data.user
 
+import com.example.preteirb.data.item.ItemsOwned
 import kotlinx.coroutines.flow.Flow
 
 
