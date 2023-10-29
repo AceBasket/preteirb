@@ -23,7 +23,8 @@ object AppViewModelProvider {
         // Initializer for ChooseProfileViewModel
         initializer {
             ChooseProfileViewModel(
-                preteirbApplication().container.usersRepository
+                preteirbApplication().container.usersRepository,
+                preteirbApplication().container.settingsRepository
             )
         }
         
@@ -52,6 +53,14 @@ object AppViewModelProvider {
         initializer {
             ItemSelectionViewModel(
                 preteirbApplication().container.itemsRepository
+            )
+        }
+        
+        // Initializer for UserProfileViewModel
+        initializer {
+            UserProfileViewModel(
+                preteirbApplication().container.settingsRepository,
+                preteirbApplication().container.usersRepository
             )
         }
     }

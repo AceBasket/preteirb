@@ -19,6 +19,7 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -33,55 +34,81 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.compose.AppTheme
 import com.example.preteirb.R
+import com.example.preteirb.model.AppViewModelProvider
+import com.example.preteirb.model.UserDetails
+import com.example.preteirb.model.UserProfileUiState
+import com.example.preteirb.model.UserProfileViewModel
 
 @Composable
 fun ProfileScreen(
     navigateToSelectProfile: () -> Unit,
+    viewModel: UserProfileViewModel = viewModel(factory = AppViewModelProvider.Factory),
     modifier: Modifier = Modifier,
 ) {
+    
+    val uiState = viewModel.userProfileUiState.collectAsState()
     Column(
         modifier = modifier
     ) {
-        Row(
-            horizontalArrangement = Arrangement.Center,
-            verticalAlignment = Alignment.CenterVertically,
-            modifier = Modifier
-                .fillMaxWidth()
-        ) {
-            Image(
-                painter = painterResource(id = R.drawable.ic_broken_image),
-                contentDescription = "Profile picture",
-                contentScale = ContentScale.Crop, // crop the image if it's not a square
-                modifier = Modifier
-                    .clip(CircleShape) // clip to the circle shape
-                    .border(2.dp, Color.Gray, CircleShape) // add a border (optional)
-            )
-            Text(
-                text = "Username",
-                style = MaterialTheme.typography.headlineLarge,
-            )
-        }
+        HeaderUserProfile(userProfileUiState = uiState.value)
         Spacer(modifier = Modifier.padding(dimensionResource(id = R.dimen.padding_medium)))
         var isExpanded by remember { mutableStateOf(false) }
         SettingsSection(isExpanded = isExpanded, onHeaderClick = { isExpanded = !isExpanded })
-        Row(
-            modifier = Modifier
-                .fillMaxWidth()
-                .clickable { navigateToSelectProfile() }
-        ) {
-            Icon(
-                painter = painterResource(id = R.drawable.baseline_logout_24),
-                contentDescription = "Logout icon"
-            )
-            Spacer(modifier = Modifier.padding(start = dimensionResource(id = R.dimen.padding_small)))
-            Text(
-                text = stringResource(id = R.string.logout)
-            )
-        }
+        LogoutSection(onLogOut = { navigateToSelectProfile() })
     }
 }
+
+@Composable
+fun HeaderUserProfile(
+    userProfileUiState: UserProfileUiState,
+    modifier: Modifier = Modifier
+) {
+    Row(
+        horizontalArrangement = Arrangement.Center,
+        verticalAlignment = Alignment.CenterVertically,
+        modifier = modifier
+            .fillMaxWidth()
+    ) {
+        Image(
+            painter = painterResource(id = R.drawable.ic_broken_image),
+            contentDescription = "Profile picture",
+            contentScale = ContentScale.Crop, // crop the image if it's not a square
+            modifier = Modifier
+                .clip(CircleShape) // clip to the circle shape
+                .border(2.dp, Color.Gray, CircleShape) // add a border (optional)
+        )
+        Spacer(modifier = Modifier.padding(dimensionResource(id = R.dimen.padding_small)))
+        Text(
+            text = userProfileUiState.userDetails.username,
+            style = MaterialTheme.typography.headlineLarge,
+        )
+    }
+}
+
+@Composable
+fun LogoutSection(
+    onLogOut: () -> Unit,
+    modifier: Modifier = Modifier,
+) {
+    Row(
+        modifier = modifier
+            .fillMaxWidth()
+            .clickable { onLogOut() }
+    ) {
+        Icon(
+            painter = painterResource(id = R.drawable.baseline_logout_24),
+            contentDescription = "Logout icon"
+        )
+        Spacer(modifier = Modifier.padding(start = dimensionResource(id = R.dimen.padding_small)))
+        Text(
+            text = stringResource(id = R.string.logout)
+        )
+    }
+}
+
 
 @Composable
 fun IconAndLabelCard(
@@ -103,10 +130,20 @@ fun IconAndLabelCard(
 
 @Preview(showBackground = true)
 @Composable
-fun ProfileScreenPreview() {
+fun LogoutSectionPreview() {
     AppTheme {
-        ProfileScreen(
-            navigateToSelectProfile = { }
+        LogoutSection(onLogOut = { })
+    }
+}
+
+@Preview(showBackground = true)
+@Composable
+fun HeaderUserProfilePreview() {
+    AppTheme {
+        HeaderUserProfile(
+            userProfileUiState = UserProfileUiState(
+                userDetails = UserDetails(username = "Test user")
+            )
         )
     }
 }

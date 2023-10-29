@@ -24,6 +24,6 @@ class ItemSelectionViewModel(private val itemsRepository: ItemsRepository) : Vie
 }
 
 /**
- * Ui State for item selection dropdown menu in [NewUsageScreen]
+ * Ui State for item selection dropdown menu in [UsageEntryScreen]
  */
 data class ItemSelectionUiState(val itemList: List<Item> = listOf())
