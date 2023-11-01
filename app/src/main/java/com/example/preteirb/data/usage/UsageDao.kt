@@ -23,7 +23,7 @@ interface UsageDao {
     suspend fun update(usage: Usage);
     
     @Query("SELECT * from usages WHERE userId = :userId AND itemId = :itemId")
-    fun getUsage(userId: Int, itemId: Int): Flow<Usage>;
+    fun getUsage(itemId: Int, userId: Int): Flow<Usage>;
     
     @Query("SELECT * from usages")
     fun getAllUsages(): Flow<List<Usage>>;

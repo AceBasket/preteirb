@@ -54,11 +54,12 @@ val bottomNavItems = listOf(
 
 @Composable
 fun BottomLoanAppBar(
-    modifier: Modifier = Modifier,
     navController: NavController,
-    backStackEntry: NavBackStackEntry?
+    backStackEntry: NavBackStackEntry?,
+    modifier: Modifier = Modifier,
+    isDisplayBottomAppBar: Boolean = true,
 ) {
-    
+    if (!isDisplayBottomAppBar) return
     NavigationBar(
         containerColor = MaterialTheme.colorScheme.primaryContainer,
         modifier = modifier,

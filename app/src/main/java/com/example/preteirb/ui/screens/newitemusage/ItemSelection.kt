@@ -32,7 +32,8 @@ import com.example.preteirb.data.item.Item
 @Composable
 fun ObjectSelection(
     objectList: List<Item>,
-    onValueChange: (Int) -> Unit,
+    //itemSelected: ItemDetails,
+    onValueChange: (String) -> Unit,
     onAddItem: () -> Unit,
     modifier: Modifier = Modifier
 ) {
@@ -55,7 +56,7 @@ fun ObjectSelection(
             value = selectedText,
             onValueChange = {
                 selectedText = it
-                onValueChange(objectList.find { item -> item.name == it }?.itemId ?: 0)
+                onValueChange(it)
             },
             modifier = Modifier
                 .fillMaxWidth()
@@ -96,6 +97,7 @@ fun ObjectSelection(
             )
         }
     }
+    
 }
 
 @Preview(showBackground = true)

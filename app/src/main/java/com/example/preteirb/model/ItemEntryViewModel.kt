@@ -4,10 +4,15 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
+import com.example.preteirb.data.SettingsRepository
 import com.example.preteirb.data.item.Item
 import com.example.preteirb.data.item.ItemsRepository
+import kotlinx.coroutines.flow.first
 
-class ItemEntryViewModel(private val itemsRepository: ItemsRepository) : ViewModel() {
+class ItemEntryViewModel(
+    private val itemsRepository: ItemsRepository,
+    private val settingsRepository: SettingsRepository
+) : ViewModel() {
     var itemUiState by mutableStateOf(ItemUiState())
         private set
     
@@ -22,7 +27,8 @@ class ItemEntryViewModel(private val itemsRepository: ItemsRepository) : ViewMod
         }
     }
     
-    suspend fun saveItem(userOwnerId: Int) {
+    suspend fun saveItem() {
+        val userOwnerId = settingsRepository.getUserId().first()
         if (validateInput()) {
             itemsRepository.insertItem(itemUiState.itemDetails.toItem(userOwnerId))
         }

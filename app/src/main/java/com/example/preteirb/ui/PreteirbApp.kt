@@ -16,7 +16,6 @@ import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.example.compose.AppTheme
 import com.example.preteirb.R
-import com.example.preteirb.ui.screens.Profile
 import com.example.preteirb.ui.screens.ProfileScreen
 import com.example.preteirb.ui.screens.ProfileSelectionScreen
 import com.example.preteirb.ui.screens.SearchScreen
@@ -57,12 +56,13 @@ fun PreteirbApp(modifier: Modifier = Modifier) {
             BottomLoanAppBar(
                 navController = navController,
                 backStackEntry = null,
+                isDisplayBottomAppBar = navController.currentDestination?.route != PreteirbScreen.SelectProfile.name,
             )
         }
     ) { innerPadding ->
         NavHost(
             navController = navController,
-            startDestination = PreteirbScreen.Search.name
+            startDestination = PreteirbScreen.SelectProfile.name
         ) {
             composable(route = PreteirbScreen.Search.name) {
                 SearchScreen(
@@ -93,17 +93,13 @@ fun PreteirbApp(modifier: Modifier = Modifier) {
                 )
             }
             
-            val fakeProfileList = listOf(
-                Profile(username = "John"),
-                Profile(username = "Jane"),
-                Profile(username = "Bob"),
-                Profile(username = "Alice"),
-            )
             composable(route = PreteirbScreen.SelectProfile.name) {
                 ProfileSelectionScreen(
-                    profileList = fakeProfileList,
-                    onClickOnProfile = { navController.navigate(PreteirbScreen.Search.name) }, //TODO: footnote saying welcome username
-                    onClickOnAddAccount = { navController.navigate(PreteirbScreen.Search.name) }, //TODO: footnote saying account was created
+                    navigateToSearch = {
+                        // pop back stack till and including the given route
+                        navController.popBackStack(PreteirbScreen.SelectProfile.name, true)
+                        navController.navigate(PreteirbScreen.Search.name)
+                    }, //TODO: footnote saying account was created
                     modifier = Modifier
                         .fillMaxSize()
                         .padding(innerPadding)

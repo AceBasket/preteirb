@@ -9,7 +9,7 @@ import androidx.room.PrimaryKey
 data class Item(
     @PrimaryKey(autoGenerate = true)
     val itemId: Int = 1,
-    val name: String,
+    var name: String,
     val description: String,
     val userOwnerId: Int,
 )

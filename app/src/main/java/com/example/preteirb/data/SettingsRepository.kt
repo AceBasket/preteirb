@@ -17,7 +17,7 @@ class SettingsRepository(private val dataStore: DataStore<Preferences>) {
     
     suspend fun storeUserId(userId: Int) {
         dataStore.edit { preferences ->
-            preferences[PreferencesKeys.USER_ID] = userId
+            preferences[USER_ID] = userId
         }
     }
     

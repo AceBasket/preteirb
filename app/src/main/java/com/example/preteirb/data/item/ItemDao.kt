@@ -23,13 +23,13 @@ interface ItemDao {
     @Query("SELECT * from items WHERE itemId = :id")
     fun getItem(id: Int): Flow<Item>;
     
-    @Query("SELECT * from items WHERE name = :name")
-    fun getItem(name: String): Flow<Item>;
+    //@Query("SELECT * from items WHERE name = :name")
+    //fun getItem(name: String): Flow<Item>;
     
     @Query("SELECT * from items ORDER BY name ASC")
     fun getAllItems(): Flow<List<Item>>;
     
     @Transaction
-    @Query("SELECT * from items WHERE itemId = :id")
-    fun getItemAndUsages(id: Int): Flow<ItemAndUsages>;
+    @Query("SELECT * from items WHERE itemId = :itemId")
+    fun getItemAndUsages(itemId: Int): Flow<ItemAndUsages>;
 }

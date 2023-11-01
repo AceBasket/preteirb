@@ -8,6 +8,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Button
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
@@ -25,6 +26,7 @@ import com.example.preteirb.model.AppViewModelProvider
 import com.example.preteirb.model.ItemDetails
 import com.example.preteirb.model.ItemEntryViewModel
 import com.example.preteirb.model.ItemUiState
+import com.example.preteirb.model.ItemsOwnedUiState
 import com.example.preteirb.model.UsageDetails
 import com.example.preteirb.model.UsageEntryViewModel
 import com.example.preteirb.model.UsageUiState
@@ -33,26 +35,35 @@ import kotlinx.coroutines.launch
 @Composable
 fun NewUsageScreen(
     modifier: Modifier = Modifier,
-    //onValidateForm: () -> Unit = {},
     usageViewModel: UsageEntryViewModel = viewModel(factory = AppViewModelProvider.Factory),
     itemViewModel: ItemEntryViewModel = viewModel(factory = AppViewModelProvider.Factory),
 ) {
     val coroutineScope = rememberCoroutineScope()
+    val itemsOwnedUiState by usageViewModel.itemsOwnedUiState.collectAsState()
     NewUsageForm(
         usageUiState = usageViewModel.uiState,
         itemUiState = itemViewModel.itemUiState,
+        itemsOwnedUiState = itemsOwnedUiState,
         onUsageValueChange = usageViewModel::updateUiState,
         onItemValueChange = itemViewModel::updateUiState,
         onItemSelectionValueChange = {
             usageViewModel.updateUiState(
+                // find item with same name and get id from it
                 usageViewModel.uiState.usageDetails.copy(
-                    itemId = it
+                    itemId = itemsOwnedUiState.itemsOwned.find { item ->
+                        item.name == it
+                    }?.itemId ?: 0
                 )
             )
         },
-        onSaveClick = {
+        onSaveUsageClick = {
             coroutineScope.launch {
                 usageViewModel.saveUsage()
+            }
+        },
+        onSaveItem = {
+            coroutineScope.launch {
+                itemViewModel.saveItem()
             }
         },
         modifier = modifier
@@ -64,11 +75,13 @@ fun NewUsageScreen(
 fun NewUsageForm(
     usageUiState: UsageUiState,
     itemUiState: ItemUiState,
+    itemsOwnedUiState: ItemsOwnedUiState,
+    onItemSelectionValueChange: (String) -> Unit,
+    onItemValueChange: (ItemDetails) -> Unit,
+    onUsageValueChange: (UsageDetails) -> Unit,
+    onSaveUsageClick: () -> Unit,
+    onSaveItem: () -> Unit,
     modifier: Modifier = Modifier,
-    onItemSelectionValueChange: (Int) -> Unit = {},
-    onItemValueChange: (ItemDetails) -> Unit = {},
-    onUsageValueChange: (UsageDetails) -> Unit = {},
-    onSaveClick: () -> Unit = {},
 ) {
     var usagesCount by rememberSaveable {
         mutableIntStateOf(1)
@@ -78,11 +91,12 @@ fun NewUsageForm(
         mutableStateOf(false)
     }
     
+    
     Column(
         modifier = modifier
     ) {
         ObjectSelection(
-            objectList = emptyList(),
+            objectList = itemsOwnedUiState.itemsOwned,
             onValueChange = onItemSelectionValueChange,
             onAddItem = { isShowObjectDialog = true },
         )
@@ -111,7 +125,7 @@ fun NewUsageForm(
                 .padding(top = dimensionResource(id = R.dimen.padding_small))
         ) {
             Button(
-                onClick = onSaveClick,
+                onClick = onSaveUsageClick,
                 enabled = usageUiState.isEntryValid && itemUiState.isEntryValid,
             ) {
                 Text(text = stringResource(id = R.string.post))
@@ -123,6 +137,7 @@ fun NewUsageForm(
                 itemUiState = itemUiState,
                 onValueChange = onItemValueChange,
                 onSaveObject = {
+                    onSaveItem()
                     isShowObjectDialog = false
                 },
                 onDismissDialog = {
@@ -143,6 +158,12 @@ fun NewUsageFormPreview() {
         NewUsageForm(
             usageUiState = UsageUiState(),
             itemUiState = ItemUiState(),
+            itemsOwnedUiState = ItemsOwnedUiState(),
+            onItemSelectionValueChange = {},
+            onItemValueChange = {},
+            onUsageValueChange = {},
+            onSaveUsageClick = {},
+            onSaveItem = {},
         )
     }
 }

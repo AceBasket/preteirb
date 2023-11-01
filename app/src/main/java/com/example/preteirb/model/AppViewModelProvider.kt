@@ -20,18 +20,12 @@ object AppViewModelProvider {
             )
         }
         
-        // Initializer for ChooseProfileViewModel
-        initializer {
-            ChooseProfileViewModel(
-                preteirbApplication().container.usersRepository,
-                preteirbApplication().container.settingsRepository
-            )
-        }
-        
         // Initializer for UsageEntryViewModel
         initializer {
             UsageEntryViewModel(
-                preteirbApplication().container.usagesRepository
+                preteirbApplication().container.usagesRepository,
+                preteirbApplication().container.usersRepository,
+                preteirbApplication().container.settingsRepository
             )
         }
         
@@ -45,7 +39,8 @@ object AppViewModelProvider {
         // Initializer for ItemEntryViewModel
         initializer {
             ItemEntryViewModel(
-                preteirbApplication().container.itemsRepository
+                preteirbApplication().container.itemsRepository,
+                preteirbApplication().container.settingsRepository
             )
         }
         
@@ -59,8 +54,16 @@ object AppViewModelProvider {
         // Initializer for UserProfileViewModel
         initializer {
             UserProfileViewModel(
+                preteirbApplication().container.usersRepository,
                 preteirbApplication().container.settingsRepository,
-                preteirbApplication().container.usersRepository
+            )
+        }
+        
+        // Initializer for ProfileSelectionViewModel
+        initializer {
+            ProfileSelectionViewModel(
+                preteirbApplication().container.usersRepository,
+                preteirbApplication().container.settingsRepository,
             )
         }
     }
