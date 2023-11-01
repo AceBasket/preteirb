@@ -20,24 +20,24 @@ import org.mockito.junit.MockitoJUnitRunner
 class ProfileSelectionViewModelTest {
     private lateinit var usersRepository: UsersRepository
     private lateinit var settingsRepository: SettingsRepository
-    private lateinit var viewModel: ChooseProfileViewModel
+    private lateinit var viewModel: ProfileSelectionViewModel
     
     @Before
     fun setUp() {
         usersRepository = Mockito.mock(UsersRepository::class.java)
         settingsRepository = Mockito.mock(SettingsRepository::class.java)
-        viewModel = ChooseProfileViewModel(usersRepository, settingsRepository)
+        viewModel = ProfileSelectionViewModel(usersRepository, settingsRepository)
     }
     
     // Test that the initial ui state is empty
     @Test
     fun testInitialUiState() = runBlocking {
-        val uiState = viewModel.chooseProfileUiState.first()
-        assertEquals(ChooseProfileUiState(), uiState)
+        val uiState = viewModel.uiState.first()
+        assertEquals(ProfileSelectionUiState(), uiState)
     }
     
     // Test that the ui state reflects the users stream from the repository
-    @Test
+    @Test // TODO : test doesn't work for unknown reasons
     fun testUiStateWithUsersStream() = runTest {
         // Create a fake users stream using a mutable state flow
         val usersStream = MutableStateFlow(listOf<User>())
@@ -62,17 +62,19 @@ class ProfileSelectionViewModelTest {
     
     // Test that setting the current user calls the repository storeUserId method
     @Test
-    fun testSetCurrentUser() = runBlocking {
+    fun testLogIn() = runBlocking {
         val fakeUser = User(1, "Alice", "alice@example.com")
-        viewModel.setCurrentUser(fakeUser)
+        viewModel.logIn(fakeUser)
         verify(settingsRepository).storeUserId(fakeUser.userId)
+        verify(settingsRepository).storeIsLoggedIn(true)
     }
     
     // Test that setting whether the user is logged in calls the repository storeIsLoggedIn method
     @Test
-    fun testSetIsLoggedIn() = runBlocking {
-        viewModel.setIsLoggedIn(true)
-        verify(settingsRepository).storeIsLoggedIn(true)
+    fun testRegisterUser(): Unit = runBlocking {
+        val fakeUser = User(1, "Alice", "alice@example.com")
+        viewModel.registerUser(fakeUser)
+        verify(usersRepository).insertUser(fakeUser)
     }
     
 }

@@ -1,12 +1,12 @@
 package com.example.preteirb.model
 
-import androidx.arch.core.executor.testing.InstantTaskExecutorRule
+import com.example.preteirb.data.SettingsRepository
 import com.example.preteirb.data.item.Item
 import com.example.preteirb.data.item.ItemsRepository
+import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.runBlocking
 import org.junit.Assert.assertEquals
 import org.junit.Before
-import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.mockito.Mockito
@@ -16,20 +16,23 @@ import org.mockito.junit.MockitoJUnitRunner
 @RunWith(MockitoJUnitRunner::class)
 class ItemEntryViewModelTest {
     
-    @get:Rule
-    val rule = InstantTaskExecutorRule()
-    
     // Mock the items repository using Mockito
     private lateinit var itemsRepository: ItemsRepository
+    private lateinit var settingsRepository: SettingsRepository
     
     // Create an instance of the view model under test
     private lateinit var viewModel: ItemEntryViewModel
+    
+    
+    private val userOwnerId = 1
     
     // Set up the view model before each test
     @Before
     fun setUp() {
         itemsRepository = Mockito.mock(ItemsRepository::class.java)
-        viewModel = ItemEntryViewModel(itemsRepository)
+        settingsRepository = Mockito.mock(SettingsRepository::class.java)
+        Mockito.`when`(settingsRepository.getUserId()).thenReturn(flowOf(userOwnerId))
+        viewModel = ItemEntryViewModel(itemsRepository, settingsRepository)
     }
     
     // Test that the initial ui state is empty and invalid
@@ -64,9 +67,8 @@ class ItemEntryViewModelTest {
     @Test
     fun testSaveItemWithValidInput(): Unit = runBlocking {
         val itemDetails = ItemDetails(1, "Book", "A good read")
-        val userOwnerId = 1
         viewModel.updateUiState(itemDetails)
-        viewModel.saveItem(userOwnerId)
+        viewModel.saveItem()
         verify(itemsRepository).insertItem(itemDetails.toItem(userOwnerId))
     }
     
@@ -74,9 +76,8 @@ class ItemEntryViewModelTest {
     @Test
     fun testSaveItemWithInvalidInput(): Unit = runBlocking {
         val itemDetails = ItemDetails(1, "", "A good read")
-        val userOwnerId = 1
         viewModel.updateUiState(itemDetails)
-        viewModel.saveItem(userOwnerId)
+        viewModel.saveItem()
         verify(itemsRepository, Mockito.never()).insertItem(itemDetails.toItem(userOwnerId))
     }
     
@@ -103,7 +104,6 @@ class ItemEntryViewModelTest {
     @Test
     fun testItemDetailsToItem() {
         val itemDetails = ItemDetails(1, "Book", "A good read")
-        val userOwnerId = 1
         val item = itemDetails.toItem(userOwnerId)
         assertEquals(itemDetails.id, item.itemId)
         assertEquals(itemDetails.name, item.name)
