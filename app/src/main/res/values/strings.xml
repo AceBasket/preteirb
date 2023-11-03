@@ -22,5 +22,8 @@
     <string name="save">Save</string>
     <string name="search_result_not_found">Sorry, there is no content found for your search \"%1$s\"</string>
     <string name="add_usage_period">Add a new usage period</string>
+    <string name="edit_usage_period">Edit this usage period</string>
+    <string name="confirm_edit_usage_period">Confirm edition of this usage period</string>
+    <string name="delete_usage_period">Delete this usage period</string>
     <string name="confirm">Confirm</string>
 </resources>

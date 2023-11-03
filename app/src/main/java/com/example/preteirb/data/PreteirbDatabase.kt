@@ -13,7 +13,7 @@ import com.example.preteirb.data.user.UserDao
 
 @Database(
     entities = [User::class, Item::class, Usage::class],
-    version = 1,
+    version = 2,
     exportSchema = false
 )
 abstract class PreteirbDatabase : RoomDatabase() {
@@ -31,9 +31,10 @@ abstract class PreteirbDatabase : RoomDatabase() {
                     context,
                     PreteirbDatabase::class.java,
                     "preteirb_database"
-                ).build().also {
-                    INSTANCE = it
-                }
+                ).fallbackToDestructiveMigration()
+                    .build().also {
+                        INSTANCE = it
+                    }
             }
         }
     }

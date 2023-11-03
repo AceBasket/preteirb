@@ -1,5 +1,6 @@
 package com.example.preteirb.ui.screens.newitemusage
 
+import android.util.Log
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -10,6 +11,9 @@ import androidx.compose.material.icons.filled.KeyboardArrowDown
 import androidx.compose.material.icons.filled.KeyboardArrowUp
 import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.DropdownMenuItem
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.ExposedDropdownMenuBox
+import androidx.compose.material3.ExposedDropdownMenuDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
@@ -29,6 +33,7 @@ import com.example.compose.AppTheme
 import com.example.preteirb.R
 import com.example.preteirb.data.item.Item
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ObjectSelection(
     objectList: List<Item>,
@@ -53,6 +58,7 @@ fun ObjectSelection(
         // Create an Outlined Text Field
         // with icon and not expanded
         OutlinedTextField(
+            readOnly = true,
             value = selectedText,
             onValueChange = {
                 selectedText = it
@@ -69,6 +75,9 @@ fun ObjectSelection(
             trailingIcon = {
                 Icon(dropdownIcon, "contentDescription",
                     Modifier.clickable { isExpanded = !isExpanded })
+                ExposedDropdownMenuDefaults.TrailingIcon(
+                    expanded = isExpanded
+                )
             }
         )
         
@@ -98,6 +107,77 @@ fun ObjectSelection(
         }
     }
     
+}
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+fun ExposedDropdownObjectSelection(
+    objectList: List<Item>,
+    onValueChange: (String) -> Unit,
+    modifier: Modifier = Modifier
+) {
+    var isExpanded by remember { mutableStateOf(false) }
+    var selectedOptionText by remember { mutableStateOf("Select an object") }
+    ExposedDropdownMenuBox(
+        expanded = isExpanded,
+        onExpandedChange = { isExpanded = it },
+        modifier = modifier
+    ) {
+        OutlinedTextField(
+            readOnly = true,
+            value = selectedOptionText,
+            onValueChange = { },
+            trailingIcon = {
+                ExposedDropdownMenuDefaults.TrailingIcon(
+                    expanded = isExpanded
+                )
+            },
+            colors = ExposedDropdownMenuDefaults.textFieldColors(),
+            modifier = Modifier.menuAnchor()
+        )
+        
+        ExposedDropdownMenu(
+            expanded = isExpanded,
+            onDismissRequest = {
+                isExpanded = false
+            }
+        ) {
+            Log.d(
+                "ExposedDropdownObjectSelection",
+                "ExposedDropdownMenu: ${objectList.size} items : $objectList"
+            )
+            objectList.forEach { item ->
+                DropdownMenuItem(
+                    text = { Text(text = item.name) },
+                    onClick = {
+                        selectedOptionText = item.name
+                        isExpanded = false
+                        onValueChange(item.name)
+                    },
+                    contentPadding = ExposedDropdownMenuDefaults.ItemContentPadding,
+                )
+            }
+        }
+    }
+}
+
+@Preview(showBackground = true)
+@Composable
+fun ExposedDropdownObjectSelectionPreview() {
+    AppTheme {
+        val fakeObjectList = listOf(
+            Item(1, "Item 1", "Description 1", 1),
+            Item(2, "Item 2", "Description 2", 1),
+            Item(3, "Item 3", "Description 3", 1),
+            Item(4, "Item 4", "Description 4", 1),
+            Item(5, "Item 5", "Description 5", 1),
+            Item(6, "Item 6", "Description 6", 1),
+        )
+        ExposedDropdownObjectSelection(
+            objectList = fakeObjectList,
+            onValueChange = {},
+        )
+    }
 }
 
 @Preview(showBackground = true)

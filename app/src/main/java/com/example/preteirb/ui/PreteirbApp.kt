@@ -86,6 +86,11 @@ fun PreteirbApp(modifier: Modifier = Modifier) {
             
             composable(route = PreteirbScreen.New.name) {
                 NewUsageScreen(
+                    navigateToHomeScreen = {
+                        // pop back stack till and including the given route
+                        navController.popBackStack(PreteirbScreen.New.name, true)
+                        navController.navigate(PreteirbScreen.Search.name)
+                    },
                     modifier = Modifier
                         .fillMaxSize()
                         .padding(innerPadding)

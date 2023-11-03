@@ -20,6 +20,6 @@ import com.example.preteirb.data.user.User
 data class Usage(
     val itemId: Int,
     val userId: Int,
-    val startDateTime: String,
-    val endDateTime: String
+    val startDateTime: Long,
+    val endDateTime: Long
 )

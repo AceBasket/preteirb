@@ -1,5 +1,6 @@
 package com.example.preteirb.ui.screens.newitemusage
 
+import android.util.Log
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -29,11 +30,13 @@ import com.example.preteirb.model.ItemUiState
 import com.example.preteirb.model.ItemsOwnedUiState
 import com.example.preteirb.model.UsageDetails
 import com.example.preteirb.model.UsageEntryViewModel
+import com.example.preteirb.model.UsagePeriod
 import com.example.preteirb.model.UsageUiState
 import kotlinx.coroutines.launch
 
 @Composable
 fun NewUsageScreen(
+    navigateToHomeScreen: () -> Unit,
     modifier: Modifier = Modifier,
     usageViewModel: UsageEntryViewModel = viewModel(factory = AppViewModelProvider.Factory),
     itemViewModel: ItemEntryViewModel = viewModel(factory = AppViewModelProvider.Factory),
@@ -47,6 +50,7 @@ fun NewUsageScreen(
         onUsageValueChange = usageViewModel::updateUiState,
         onItemValueChange = itemViewModel::updateUiState,
         onItemSelectionValueChange = {
+            Log.d("NewUsageScreen", "onItemSelectionValueChange: $it")
             usageViewModel.updateUiState(
                 // find item with same name and get id from it
                 usageViewModel.uiState.usageDetails.copy(
@@ -55,11 +59,16 @@ fun NewUsageScreen(
                     }?.itemId ?: 0
                 )
             )
+            Log.d(
+                "NewUsageScreen",
+                "onItemSelectionValueChange: ${usageViewModel.uiState.usageDetails}"
+            )
         },
         onSaveUsageClick = {
             coroutineScope.launch {
                 usageViewModel.saveUsage()
             }
+            navigateToHomeScreen()
         },
         onSaveItem = {
             coroutineScope.launch {
@@ -95,25 +104,91 @@ fun NewUsageForm(
     Column(
         modifier = modifier
     ) {
-        ObjectSelection(
+        ExposedDropdownObjectSelection(
             objectList = itemsOwnedUiState.itemsOwned,
             onValueChange = onItemSelectionValueChange,
-            onAddItem = { isShowObjectDialog = true },
+            //onAddItem = { isShowObjectDialog = true },
         )
-        repeat(usagesCount) {
+        /* usageUiState.usageDetails.period.forEachIndexed { index, usagePeriod ->
             NewUsagePeriod(
-                onAddUsagePeriod = {
+                initialStartDateTime = usagePeriod.start,
+                initialEndDateTime = usagePeriod.end,
+                onNewUsagePeriodSelected = {
                     if (it.first != null && it.second != null) {
-                        usagesCount++
+                        val periodAdded = usageUiState.usageDetails.period
+                        periodAdded.add(index, UsagePeriod(it.first!!, it.second!!))
+                        
                         onUsageValueChange(
                             usageUiState.usageDetails.copy(
-                                period = usageUiState.usageDetails.period + Pair(
-                                    it.first!!,
-                                    it.second!!
-                                )
+                                period = periodAdded
                             )
                         )
                     }
+                },
+                isLastUsagePeriodEntry = index == usagesCount - 1,
+                onUpdateUsagePeriod = {
+                    if (it.first != null && it.second != null) {
+                        val periodUpdated = usageUiState.usageDetails.period
+                        periodUpdated[index] = UsagePeriod(it.first!!, it.second!!)
+                        
+                        onUsageValueChange(
+                            usageUiState.usageDetails.copy(
+                                period = periodUpdated
+                            )
+                        )
+                    }
+                },
+                onDeleteUsagePeriod = {
+                    val periodRemoved = usageUiState.usageDetails.period
+                    periodRemoved.removeAt(index)
+                    onUsageValueChange(
+                        usageUiState.usageDetails.copy(
+                            period = periodRemoved
+                        )
+                    )
+                    usagesCount--
+                },
+                onAddUsagePeriod = { usagesCount++ },
+            )
+            
+        } */
+        repeat(usagesCount) { index ->
+            NewUsagePeriod(
+                onAddUsagePeriod = { usagesCount++ },
+                onNewUsagePeriodSelected = {
+                    if (it.first != null && it.second != null) {
+                        val periodAdded = usageUiState.usageDetails.period
+                        periodAdded.add(index, UsagePeriod(it.first!!, it.second!!))
+                        
+                        onUsageValueChange(
+                            usageUiState.usageDetails.copy(
+                                period = periodAdded
+                            )
+                        )
+                    }
+                },
+                isLastUsagePeriodEntry = index == usagesCount - 1,
+                onUpdateUsagePeriod = {
+                    if (it.first != null && it.second != null) {
+                        val periodUpdated = usageUiState.usageDetails.period
+                        periodUpdated[index] = UsagePeriod(it.first!!, it.second!!)
+                        
+                        onUsageValueChange(
+                            usageUiState.usageDetails.copy(
+                                period = periodUpdated
+                            )
+                        )
+                    }
+                },
+                onDeleteUsagePeriod = {
+                    val periodRemoved = usageUiState.usageDetails.period
+                    periodRemoved.removeAt(index)
+                    onUsageValueChange(
+                        usageUiState.usageDetails.copy(
+                            period = periodRemoved
+                        )
+                    )
+                    usagesCount--
                 },
             )
         }
@@ -126,7 +201,7 @@ fun NewUsageForm(
         ) {
             Button(
                 onClick = onSaveUsageClick,
-                enabled = usageUiState.isEntryValid && itemUiState.isEntryValid,
+                enabled = usageUiState.isEntryValid,
             ) {
                 Text(text = stringResource(id = R.string.post))
             }

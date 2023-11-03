@@ -14,10 +14,11 @@ import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.filterNotNull
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
-import java.text.DateFormat
+import kotlinx.coroutines.launch
 
 class UsageEntryViewModel(
     private val usagesRepository: UsagesRepository,
@@ -49,8 +50,12 @@ class UsageEntryViewModel(
     
     // init with userId from settings
     init {
-        settingsRepository.getUserId().map {
-            updateUiState(uiState.usageDetails.copy(userId = it))
+        viewModelScope.launch {
+            uiState = UsageUiState(
+                usageDetails = UsageDetails(
+                    userId = settingsRepository.getUserId().first()
+                )
+            )
         }
     }
     
@@ -65,7 +70,7 @@ class UsageEntryViewModel(
     
     private fun validateInput(uiState: UsageDetails = this.uiState.usageDetails): Boolean {
         return with(uiState) {
-            userId > 0 && itemId > 0 && period.isNotEmpty() && period.all { it.first < it.second }
+            userId > 0 && itemId > 0 && period.isNotEmpty() && period.all { it.start < it.end }
         }
     }
     
@@ -93,14 +98,20 @@ data class ItemsOwnedUiState(
 data class UsageDetails(
     val userId: Int = 0,
     val itemId: Int = 0,
-    val period: List<Pair<Long, Long>> = emptyList()
+    val period: MutableList<UsagePeriod> = mutableListOf()
 )
 
-fun UsageDetails.toUsages(): List<Usage> = period.map {
+data class UsagePeriod(
+    val start: Long,
+    val end: Long,
+)
+
+fun UsageDetails.toUsages(): List<Usage> = period.map { usagePeriod ->
     Usage(
         userId = userId,
         itemId = itemId,
-        startDateTime = DateFormat.getDateTimeInstance().format(it.first),
-        endDateTime = DateFormat.getDateTimeInstance().format(it.second)
+        //TODO: might need to change this (0 would be a really bad value)
+        startDateTime = usagePeriod.start,
+        endDateTime = usagePeriod.end,
     )
 }
