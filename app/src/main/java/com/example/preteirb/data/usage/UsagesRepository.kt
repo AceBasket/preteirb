@@ -14,7 +14,7 @@ interface UsagesRepository {
     /**
      * Retrieves an usage from the given data source that matches with the [id].
      */
-    fun getUsageStream(itemId: Int, userId: Int): Flow<Usage?>
+    fun getUsageStream(id: Int): Flow<Usage?>
     
     /**
      * Insert usage in the data source

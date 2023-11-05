@@ -6,6 +6,8 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.material3.Button
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -47,6 +49,9 @@ fun NewUsageScreen(
         usageUiState = usageViewModel.uiState,
         itemUiState = itemViewModel.itemUiState,
         itemsOwnedUiState = itemsOwnedUiState,
+        usagePeriodsCount = usageViewModel.usagePeriodsCount,
+        onAddUsagePeriod = usageViewModel::addUsagePeriod,
+        onDeleteUsagePeriod = usageViewModel::deleteUsagePeriod,
         onUsageValueChange = usageViewModel::updateUiState,
         onItemValueChange = itemViewModel::updateUiState,
         onItemSelectionValueChange = {
@@ -85,6 +90,9 @@ fun NewUsageForm(
     usageUiState: UsageUiState,
     itemUiState: ItemUiState,
     itemsOwnedUiState: ItemsOwnedUiState,
+    usagePeriodsCount: List<Int>,
+    onAddUsagePeriod: () -> Unit,
+    onDeleteUsagePeriod: (Int) -> Unit,
     onItemSelectionValueChange: (String) -> Unit,
     onItemValueChange: (ItemDetails) -> Unit,
     onUsageValueChange: (UsageDetails) -> Unit,
@@ -107,91 +115,93 @@ fun NewUsageForm(
         ExposedDropdownObjectSelection(
             objectList = itemsOwnedUiState.itemsOwned,
             onValueChange = onItemSelectionValueChange,
-            //onAddItem = { isShowObjectDialog = true },
+            onAddItem = { isShowObjectDialog = true },
         )
-        /* usageUiState.usageDetails.period.forEachIndexed { index, usagePeriod ->
-            NewUsagePeriod(
-                initialStartDateTime = usagePeriod.start,
-                initialEndDateTime = usagePeriod.end,
-                onNewUsagePeriodSelected = {
-                    if (it.first != null && it.second != null) {
-                        val periodAdded = usageUiState.usageDetails.period
-                        periodAdded.add(index, UsagePeriod(it.first!!, it.second!!))
-                        
+        
+        LazyColumn {
+            itemsIndexed(usagePeriodsCount) { index, usagePeriodId ->
+                NewUsagePeriod(
+                    onNewUsagePeriodSelected = {
+                        if (it.first != null && it.second != null) {
+                            val periodAdded = usageUiState.usageDetails.period
+                            periodAdded.add(UsagePeriod(it.first!!, it.second!!))
+                            
+                            onUsageValueChange(
+                                usageUiState.usageDetails.copy(
+                                    period = periodAdded
+                                )
+                            )
+                        }
+                    },
+                    onAddUsagePeriod = {
+                        onAddUsagePeriod()
+                    },
+                    onDeleteUsagePeriod = {
+                        val periodRemoved = usageUiState.usageDetails.period
+                        periodRemoved.removeAt(index)
                         onUsageValueChange(
                             usageUiState.usageDetails.copy(
-                                period = periodAdded
+                                period = periodRemoved
                             )
                         )
-                    }
-                },
-                isLastUsagePeriodEntry = index == usagesCount - 1,
-                onUpdateUsagePeriod = {
-                    if (it.first != null && it.second != null) {
-                        val periodUpdated = usageUiState.usageDetails.period
-                        periodUpdated[index] = UsagePeriod(it.first!!, it.second!!)
-                        
-                        onUsageValueChange(
-                            usageUiState.usageDetails.copy(
-                                period = periodUpdated
+                        onDeleteUsagePeriod(usagePeriodId)
+                    },
+                    onUpdateUsagePeriod = {
+                        if (it.first != null && it.second != null) {
+                            val periodUpdated = usageUiState.usageDetails.period
+                            periodUpdated[index] = UsagePeriod(it.first!!, it.second!!)
+                            
+                            onUsageValueChange(
+                                usageUiState.usageDetails.copy(
+                                    period = periodUpdated
+                                )
                             )
-                        )
-                    }
-                },
-                onDeleteUsagePeriod = {
-                    val periodRemoved = usageUiState.usageDetails.period
-                    periodRemoved.removeAt(index)
-                    onUsageValueChange(
-                        usageUiState.usageDetails.copy(
-                            period = periodRemoved
-                        )
-                    )
-                    usagesCount--
-                },
-                onAddUsagePeriod = { usagesCount++ },
-            )
-            
-        } */
-        repeat(usagesCount) { index ->
-            NewUsagePeriod(
-                onAddUsagePeriod = { usagesCount++ },
-                onNewUsagePeriodSelected = {
-                    if (it.first != null && it.second != null) {
-                        val periodAdded = usageUiState.usageDetails.period
-                        periodAdded.add(index, UsagePeriod(it.first!!, it.second!!))
-                        
-                        onUsageValueChange(
-                            usageUiState.usageDetails.copy(
-                                period = periodAdded
-                            )
-                        )
-                    }
-                },
-                isLastUsagePeriodEntry = index == usagesCount - 1,
-                onUpdateUsagePeriod = {
-                    if (it.first != null && it.second != null) {
-                        val periodUpdated = usageUiState.usageDetails.period
-                        periodUpdated[index] = UsagePeriod(it.first!!, it.second!!)
-                        
-                        onUsageValueChange(
-                            usageUiState.usageDetails.copy(
-                                period = periodUpdated
-                            )
-                        )
-                    }
-                },
-                onDeleteUsagePeriod = {
-                    val periodRemoved = usageUiState.usageDetails.period
-                    periodRemoved.removeAt(index)
-                    onUsageValueChange(
-                        usageUiState.usageDetails.copy(
-                            period = periodRemoved
-                        )
-                    )
-                    usagesCount--
-                },
-            )
+                        }
+                    },
+                    isLastUsagePeriodEntry = index == usagePeriodsCount.lastIndex,
+                )
+            }
         }
+        /* repeat(usagesCount) { index ->
+            NewUsagePeriod(
+                onAddUsagePeriod = { usagesCount++ },
+                onNewUsagePeriodSelected = {
+                    if (it.first != null && it.second != null) {
+                        val periodAdded = usageUiState.usageDetails.period
+                        periodAdded.add(index, UsagePeriod(it.first!!, it.second!!))
+                        
+                        onUsageValueChange(
+                            usageUiState.usageDetails.copy(
+                                period = periodAdded
+                            )
+                        )
+                    }
+                },
+                isLastUsagePeriodEntry = index == usagesCount - 1,
+                onUpdateUsagePeriod = {
+                    if (it.first != null && it.second != null) {
+                        val periodUpdated = usageUiState.usageDetails.period
+                        periodUpdated[index] = UsagePeriod(it.first!!, it.second!!)
+                        
+                        onUsageValueChange(
+                            usageUiState.usageDetails.copy(
+                                period = periodUpdated
+                            )
+                        )
+                    }
+                },
+                onDeleteUsagePeriod = {
+                    val periodRemoved = usageUiState.usageDetails.period
+                    periodRemoved.removeAt(index)
+                    onUsageValueChange(
+                        usageUiState.usageDetails.copy(
+                            period = periodRemoved
+                        )
+                    )
+                    usagesCount--
+                },
+            )
+        } */
         
         Row(
             horizontalArrangement = Arrangement.SpaceEvenly,
@@ -234,11 +244,14 @@ fun NewUsageFormPreview() {
             usageUiState = UsageUiState(),
             itemUiState = ItemUiState(),
             itemsOwnedUiState = ItemsOwnedUiState(),
+            usagePeriodsCount = listOf(0),
             onItemSelectionValueChange = {},
             onItemValueChange = {},
             onUsageValueChange = {},
             onSaveUsageClick = {},
             onSaveItem = {},
+            onAddUsagePeriod = {},
+            onDeleteUsagePeriod = {},
         )
     }
 }

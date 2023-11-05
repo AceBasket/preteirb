@@ -18,8 +18,8 @@ import com.example.compose.AppTheme
 import com.example.preteirb.R
 import com.example.preteirb.ui.screens.ProfileScreen
 import com.example.preteirb.ui.screens.ProfileSelectionScreen
-import com.example.preteirb.ui.screens.SearchScreen
 import com.example.preteirb.ui.screens.newitemusage.NewUsageScreen
+import com.example.preteirb.ui.screens.search.SearchScreen
 
 
 enum class PreteirbScreen(@StringRes val nameRes: Int) {

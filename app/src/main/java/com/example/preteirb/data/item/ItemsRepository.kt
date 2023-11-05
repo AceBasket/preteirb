@@ -22,6 +22,11 @@ interface ItemsRepository {
     fun getItemAndUsagesStream(id: Int): Flow<ItemAndUsages?>
     
     /**
+     * Retrieves all the items from the given data source that matches with the [query].
+     */
+    fun getItemsFromQueryStream(query: String): Flow<List<Item>>
+    
+    /**
      * Insert item in the data source
      */
     suspend fun insertItem(item: Item): Long

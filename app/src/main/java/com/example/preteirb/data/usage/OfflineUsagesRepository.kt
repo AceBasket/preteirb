@@ -5,8 +5,7 @@ import kotlinx.coroutines.flow.Flow
 class OfflineUsagesRepository(private val usageDao: UsageDao) : UsagesRepository {
     override fun getAllUsagesStream(): Flow<List<Usage>> = usageDao.getAllUsages();
     
-    override fun getUsageStream(itemId: Int, userId: Int): Flow<Usage?> =
-        usageDao.getUsage(itemId, userId);
+    override fun getUsageStream(id: Int): Flow<Usage?> = usageDao.getUsage(id);
     
     override suspend fun insertUsage(usage: Usage) = usageDao.insert(usage);
     

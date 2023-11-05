@@ -22,8 +22,8 @@ interface UsageDao {
     @Update
     suspend fun update(usage: Usage);
     
-    @Query("SELECT * from usages WHERE userId = :userId AND itemId = :itemId")
-    fun getUsage(itemId: Int, userId: Int): Flow<Usage>;
+    @Query("SELECT * from usages WHERE usageId = :usageId")
+    fun getUsage(usageId: Int): Flow<Usage>;
     
     @Query("SELECT * from usages")
     fun getAllUsages(): Flow<List<Usage>>;

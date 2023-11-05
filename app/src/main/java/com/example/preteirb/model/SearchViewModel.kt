@@ -30,7 +30,7 @@ class SearchViewModel(
             if (query.length < SEARCH_QUERY_MIN_LENGTH) {
                 flowOf(SearchResultUiState.EmptyQuery)
             } else {
-                itemsRepository.getAllItemsStream()
+                itemsRepository.getItemsFromQueryStream(searchQuery.value)
                     .asResult()
                     .map { result ->
                         when (result) {

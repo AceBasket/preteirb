@@ -41,7 +41,6 @@ import java.time.format.DateTimeFormatter
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun NewUsagePeriod(
-    //usagePeriod: UsagePeriod,
     onNewUsagePeriodSelected: (Pair<Long?, Long?>) -> Unit,
     onAddUsagePeriod: () -> Unit,
     onDeleteUsagePeriod: () -> Unit,
@@ -159,7 +158,8 @@ fun NewUsagePeriod(
             }
             IconButton(
                 onClick = { onDeleteUsagePeriod() },
-                colors = IconButtonDefaults.iconButtonColors(containerColor = MaterialTheme.colorScheme.primaryContainer)
+                colors = IconButtonDefaults.iconButtonColors(containerColor = MaterialTheme.colorScheme.primaryContainer),
+                enabled = false
             ) {
                 Icon(
                     imageVector = Icons.Default.Delete,

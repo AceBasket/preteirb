@@ -3,6 +3,7 @@ package com.example.preteirb.model
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
+import androidx.compose.runtime.toMutableStateList
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.preteirb.data.SettingsRepository
@@ -30,6 +31,10 @@ class UsageEntryViewModel(
      */
     var uiState by mutableStateOf(UsageUiState())
         private set
+    
+    private val _usagePeriodsCount = listOf(0).toMutableStateList()
+    val usagePeriodsCount: List<Int>
+        get() = _usagePeriodsCount
     
     @OptIn(ExperimentalCoroutinesApi::class)
     val itemsOwnedUiState: StateFlow<ItemsOwnedUiState> = settingsRepository
@@ -80,6 +85,14 @@ class UsageEntryViewModel(
         }
     }
     
+    fun addUsagePeriod() {
+        _usagePeriodsCount.add(usagePeriodsCount[usagePeriodsCount.lastIndex] + 1)
+    }
+    
+    fun deleteUsagePeriod(usagePeriodId: Int) {
+        _usagePeriodsCount.remove(usagePeriodId)
+    }
+    
     companion object {
         private const val TIMEOUT_MILLIS = 5_000L
     }
@@ -96,6 +109,7 @@ data class ItemsOwnedUiState(
 )
 
 data class UsageDetails(
+    val usageId: Int = 0,
     val userId: Int = 0,
     val itemId: Int = 0,
     val period: MutableList<UsagePeriod> = mutableListOf()
@@ -108,6 +122,7 @@ data class UsagePeriod(
 
 fun UsageDetails.toUsages(): List<Usage> = period.map { usagePeriod ->
     Usage(
+        usageId = usageId,
         userId = userId,
         itemId = itemId,
         //TODO: might need to change this (0 would be a really bad value)

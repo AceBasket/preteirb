@@ -71,6 +71,8 @@ dependencies {
     implementation("androidx.room:room-ktx:${rootProject.extra["room_version"]}")
     //Datastore
     implementation("androidx.datastore:datastore-preferences:1.0.0")
+    // wheel date-time picker
+    implementation("com.github.commandiron:WheelPickerCompose:1.1.11")
     
     testImplementation("junit:junit:4.13.2")
     testImplementation("org.mockito:mockito-core:5.4.0")

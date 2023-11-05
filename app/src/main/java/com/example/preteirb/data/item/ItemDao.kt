@@ -20,16 +20,24 @@ interface ItemDao {
     @Delete
     suspend fun delete(item: Item);
     
-    @Query("SELECT * from items WHERE itemId = :id")
+    @Query("SELECT * FROM items WHERE itemId = :id")
     fun getItem(id: Int): Flow<Item>;
     
-    //@Query("SELECT * from items WHERE name = :name")
-    //fun getItem(name: String): Flow<Item>;
+    @Query(
+        "SELECT * FROM items " +
+                "WHERE name " +
+                "LIKE '%' || :query || '%' " +
+                "ORDER BY (" +
+                "CASE WHEN name = :query THEN 1 " +
+                "WHEN name LIKE :query || '%' THEN 2 " +
+                "ELSE 3 END)"
+    )
+    fun getItemsFromQuery(query: String): Flow<List<Item>>;
     
-    @Query("SELECT * from items ORDER BY name ASC")
+    @Query("SELECT * FROM items ORDER BY name ASC")
     fun getAllItems(): Flow<List<Item>>;
     
     @Transaction
-    @Query("SELECT * from items WHERE itemId = :itemId")
+    @Query("SELECT * FROM items WHERE itemId = :itemId")
     fun getItemAndUsages(itemId: Int): Flow<ItemAndUsages>;
 }

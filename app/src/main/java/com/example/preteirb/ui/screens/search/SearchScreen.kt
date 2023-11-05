@@ -1,4 +1,4 @@
-package com.example.preteirb.ui.screens
+package com.example.preteirb.ui.screens.search
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Column
@@ -13,6 +13,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Search
 import androidx.compose.material3.Card
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.SearchBar
@@ -66,12 +67,6 @@ fun SearchScreen(
             onActiveChange = {},
             placeholder = { Text(text = stringResource(id = R.string.search)) },
             leadingIcon = { Icon(imageVector = Icons.Default.Search, contentDescription = null) },
-            trailingIcon = {
-                Icon(
-                    painter = painterResource(id = R.drawable.baseline_filter_list_24),
-                    contentDescription = null
-                )
-            },
             modifier = Modifier
                 .padding(dimensionResource(id = R.dimen.padding_medium))
         ) {}
@@ -92,8 +87,12 @@ fun SearchScreen(
             }
             
         }
-        
-        
+    
+        FloatingActionButton(
+            onClick = { /* TODO */ },
+        ) {
+            Icon(painterResource(id = R.drawable.baseline_filter_list_24), "Floating action button.")
+        }
     }
 }
 

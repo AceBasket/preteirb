@@ -114,6 +114,7 @@ fun ObjectSelection(
 fun ExposedDropdownObjectSelection(
     objectList: List<Item>,
     onValueChange: (String) -> Unit,
+    onAddItem: () -> Unit,
     modifier: Modifier = Modifier
 ) {
     var isExpanded by remember { mutableStateOf(false) }
@@ -157,6 +158,12 @@ fun ExposedDropdownObjectSelection(
                     contentPadding = ExposedDropdownMenuDefaults.ItemContentPadding,
                 )
             }
+            
+            DropdownMenuItem(
+                text = { Text(text = stringResource(id = R.string.add_object)) },
+                onClick = onAddItem,
+                contentPadding = ExposedDropdownMenuDefaults.ItemContentPadding,
+            )
         }
     }
 }
@@ -176,6 +183,7 @@ fun ExposedDropdownObjectSelectionPreview() {
         ExposedDropdownObjectSelection(
             objectList = fakeObjectList,
             onValueChange = {},
+            onAddItem = {},
         )
     }
 }
