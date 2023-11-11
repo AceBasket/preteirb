@@ -20,15 +20,6 @@ object AppViewModelProvider {
             )
         }
         
-        // Initializer for UsageEntryViewModel
-        initializer {
-            UsageEntryViewModel(
-                preteirbApplication().container.usagesRepository,
-                preteirbApplication().container.usersRepository,
-                preteirbApplication().container.settingsRepository
-            )
-        }
-        
         // Initializer for UserEntryViewModel
         initializer {
             UserEntryViewModel(
@@ -64,6 +55,32 @@ object AppViewModelProvider {
             ProfileSelectionViewModel(
                 preteirbApplication().container.usersRepository,
                 preteirbApplication().container.settingsRepository,
+            )
+        }
+        
+        // Initializer for PreteirbAppViewModel
+        initializer {
+            PreteirbAppViewModel(
+                preteirbApplication().container.settingsRepository
+            )
+        }
+        
+        // Initializer for ItemsOwnedUsageEntryViewModel
+        initializer {
+            ItemsOwnedUsageEntryViewModel(
+                preteirbApplication().container.usersRepository,
+                preteirbApplication().container.usagesRepository,
+                preteirbApplication().container.settingsRepository,
+            )
+        }
+        
+        // Initializer for BookItemsViewModel
+        initializer {
+            BookItemsViewModel(
+                this.createSavedStateHandle(),
+                preteirbApplication().container.usagesRepository,
+                preteirbApplication().container.itemsRepository,
+                preteirbApplication().container.settingsRepository
             )
         }
     }

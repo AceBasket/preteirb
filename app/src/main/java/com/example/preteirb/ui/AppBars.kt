@@ -26,27 +26,30 @@ import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import com.example.compose.AppTheme
 import com.example.preteirb.R
+import com.example.preteirb.ui.screens.ProfileDestination
+import com.example.preteirb.ui.screens.newitemusage.ItemOwnedUsageEntryDestination
+import com.example.preteirb.ui.screens.search.SearchDestination
 
 data class BottomNavItem(
-    val name: String,
+    @StringRes val nameRes: Int,
     val route: String,
     val icon: ImageVector,
 )
 
 val bottomNavItems = listOf(
     BottomNavItem(
-        name = PreteirbScreen.Search.name,
-        route = PreteirbScreen.Search.name,
+        nameRes = SearchDestination.titleRes,
+        route = SearchDestination.route,
         icon = Icons.Rounded.Search,
     ),
     BottomNavItem(
-        name = PreteirbScreen.New.name,
-        route = PreteirbScreen.New.name,
+        nameRes = ItemOwnedUsageEntryDestination.titleRes,
+        route = ItemOwnedUsageEntryDestination.route,
         icon = Icons.Rounded.AddCircle,
     ),
     BottomNavItem(
-        name = PreteirbScreen.Account.name,
-        route = PreteirbScreen.Account.name,
+        nameRes = ProfileDestination.titleRes,
+        route = ProfileDestination.route,
         icon = Icons.Rounded.AccountCircle,
     ),
 )
@@ -72,14 +75,14 @@ fun BottomLoanAppBar(
                 onClick = { navController.navigate(item.route) },
                 label = {
                     Text(
-                        text = item.name,
+                        text = stringResource(id = item.nameRes),
                         fontWeight = FontWeight.SemiBold,
                     )
                 },
                 icon = {
                     Icon(
                         imageVector = item.icon,
-                        contentDescription = "${item.name} Icon",
+                        contentDescription = "${stringResource(item.nameRes)} Icon",
                     )
                 }
             )

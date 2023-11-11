@@ -10,20 +10,11 @@ import com.example.preteirb.data.SettingsRepository
 import com.example.preteirb.data.item.Item
 import com.example.preteirb.data.usage.Usage
 import com.example.preteirb.data.usage.UsagesRepository
-import com.example.preteirb.data.user.UsersRepository
-import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.flow.SharingStarted
-import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.filterNotNull
 import kotlinx.coroutines.flow.first
-import kotlinx.coroutines.flow.flatMapLatest
-import kotlinx.coroutines.flow.map
-import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 
-class UsageEntryViewModel(
+abstract class UsageEntryViewModel(
     private val usagesRepository: UsagesRepository,
-    private val usersRepository: UsersRepository,
     private val settingsRepository: SettingsRepository
 ) : ViewModel() {
     /**
@@ -36,33 +27,18 @@ class UsageEntryViewModel(
     val usagePeriodsCount: List<Int>
         get() = _usagePeriodsCount
     
-    @OptIn(ExperimentalCoroutinesApi::class)
-    val itemsOwnedUiState: StateFlow<ItemsOwnedUiState> = settingsRepository
-        .getUserId()
-        .flatMapLatest { userId ->
-            usersRepository
-                .getItemsOwnedByUserStream(userId)
-                .filterNotNull()
-                .map { itemsOwned ->
-                    ItemsOwnedUiState(itemsOwned = itemsOwned.items)
-                }
-        }
-        .stateIn(
-            scope = viewModelScope,
-            started = SharingStarted.WhileSubscribed(TIMEOUT_MILLIS),
-            initialValue = ItemsOwnedUiState()
-        )
-    
     // init with userId from settings
     init {
         viewModelScope.launch {
             uiState = UsageUiState(
                 usageDetails = UsageDetails(
-                    userId = settingsRepository.getUserId().first()
+                    userId = settingsRepository.getUserId().first(),
                 )
             )
         }
     }
+    
+    //abstract fun getItemId(): Int
     
     /**
      * Updates the [uiState] with the value provided in the argument. This method also triggers
@@ -75,7 +51,19 @@ class UsageEntryViewModel(
     
     private fun validateInput(uiState: UsageDetails = this.uiState.usageDetails): Boolean {
         return with(uiState) {
-            userId > 0 && itemId > 0 && period.isNotEmpty() && period.all { it.start < it.end }
+            userId > 0 && itemId > 0 && period.isNotEmpty() && period.all { it.start < it.end } && period.none {
+                isPeriodOverlapping(
+                    it
+                )
+            }
+        }
+    }
+    
+    private fun isPeriodOverlapping(period: UsagePeriod): Boolean {
+        return uiState.usageDetails.period.any {
+            period.start < it.end && period.end > it.start && period != it
+        } || uiState.bookedPeriods.any {
+            period.start < it.end && period.end > it.start
         }
     }
     
@@ -92,15 +80,11 @@ class UsageEntryViewModel(
     fun deleteUsagePeriod(usagePeriodId: Int) {
         _usagePeriodsCount.remove(usagePeriodId)
     }
-    
-    companion object {
-        private const val TIMEOUT_MILLIS = 5_000L
-    }
 }
 
 data class UsageUiState(
-    val itemSelected: ItemDetails = ItemDetails(),
     val usageDetails: UsageDetails = UsageDetails(),
+    val bookedPeriods: List<UsagePeriod> = listOf(),
     val isEntryValid: Boolean = false
 )
 

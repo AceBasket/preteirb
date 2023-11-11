@@ -1,7 +1,5 @@
 package com.example.preteirb.model
 
-import com.example.preteirb.data.item.Item
-
 sealed interface SearchResultUiState {
     data object Loading : SearchResultUiState
     
@@ -12,7 +10,7 @@ sealed interface SearchResultUiState {
      */
     data object EmptyQuery : SearchResultUiState
     data object LoadFailed : SearchResultUiState
-    data class Success(val itemList: List<Item> = emptyList()) : SearchResultUiState {
+    data class Success(val itemList: List<ItemDetails> = emptyList()) : SearchResultUiState {
         fun isEmpty() = itemList.isEmpty()
     }
 }

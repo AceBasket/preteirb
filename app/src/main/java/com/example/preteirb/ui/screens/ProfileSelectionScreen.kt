@@ -5,10 +5,12 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Icon
 import androidx.compose.material3.OutlinedTextField
+import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
@@ -30,9 +32,15 @@ import com.example.compose.AppTheme
 import com.example.preteirb.R
 import com.example.preteirb.data.user.User
 import com.example.preteirb.model.AppViewModelProvider
+import com.example.preteirb.model.ProfileSelectionUiState
 import com.example.preteirb.model.ProfileSelectionViewModel
+import com.example.preteirb.ui.navigation.NavigationDestination
 import kotlinx.coroutines.launch
 
+object ProfileSelectionDestination : NavigationDestination {
+    override val route = "profile_selection"
+    override val titleRes = R.string.select_profile
+}
 
 @Composable
 fun ProfileSelectionScreen(
@@ -42,40 +50,63 @@ fun ProfileSelectionScreen(
 ) {
     val uiState by viewModel.uiState.collectAsState()
     val coroutine = rememberCoroutineScope()
+    
+    ProfileSelection(
+        uiState = uiState,
+        navigateToSearch = navigateToSearch,
+        onAddAccount = { username ->
+            coroutine.launch {
+                viewModel.registerUser(
+                    User(
+                        userId = 0,
+                        username = username,
+                        location = "location",
+                    )
+                )
+            }
+        },
+        onClickOnProfile = {
+            coroutine.launch {
+                viewModel.logIn(it)
+            }
+            navigateToSearch()
+        },
+        modifier = modifier
+    )
+}
+
+@Composable
+fun ProfileSelection(
+    uiState: ProfileSelectionUiState,
+    navigateToSearch: () -> Unit,
+    onAddAccount: (String) -> Unit,
+    onClickOnProfile: (User) -> Unit,
+    modifier: Modifier = Modifier,
+) {
     var isShowAddAccountDialog by rememberSaveable { mutableStateOf(false) }
     Column(
+        verticalArrangement = Arrangement.Center,
+        horizontalAlignment = Alignment.CenterHorizontally,
         modifier = modifier
     ) {
         ProfileList(
             profileList = uiState.users,
-            onClickOnProfile = {
-                coroutine.launch {
-                    viewModel.logIn(it)
-                }
-                navigateToSearch()
-            }
+            onClickOnProfile = onClickOnProfile,
         )
         Row(modifier = Modifier.clickable { isShowAddAccountDialog = true }) {
             Icon(
                 painter = painterResource(id = R.drawable.baseline_person_add_24),
                 contentDescription = null
             )
+            Spacer(modifier = Modifier.padding(dimensionResource(id = R.dimen.padding_extra_small)))
             Text(text = stringResource(id = R.string.add_account))
         }
         
         if (isShowAddAccountDialog) {
             AddAccountDialog(
                 onDismissRequest = { isShowAddAccountDialog = false },
-                onAddAccount = { username ->
-                    coroutine.launch {
-                        viewModel.registerUser(
-                            User(
-                                userId = 0,
-                                username = username,
-                                location = "location",
-                            )
-                        )
-                    }
+                onAddAccount = {
+                    onAddAccount(it)
                     isShowAddAccountDialog = false
                 }
             )
@@ -97,7 +128,7 @@ fun ProfileList(
             Row(
                 modifier = Modifier
                     .clickable { onClickOnProfile(profile) }
-                    .fillMaxWidth()
+                    //.fillMaxWidth()
             ) {
                 Icon(
                     painter = painterResource(id = R.drawable.baseline_account_circle_24),
@@ -146,6 +177,44 @@ fun AddAccountDialog(
                     Text(stringResource(id = R.string.add))
                 }
             }
+        }
+    }
+}
+
+@Preview(showBackground = true)
+@Composable
+fun ProfileSelectionPreview() {
+    AppTheme {
+        Surface(
+            modifier = Modifier
+                .fillMaxSize()
+        ) {
+        
+        val fakeProfileList = listOf(
+            User(
+                userId = 1,
+                username = "username1",
+                location = "location1",
+            ),
+            User(
+                userId = 2,
+                username = "username2",
+                location = "location2",
+            ),
+            User(
+                userId = 3,
+                username = "username3",
+                location = "location3",
+            ),
+        )
+        ProfileSelection(
+            uiState = ProfileSelectionUiState(
+                users = fakeProfileList
+            ),
+            navigateToSearch = { },
+            onAddAccount = { },
+            onClickOnProfile = { }
+        )
         }
     }
 }

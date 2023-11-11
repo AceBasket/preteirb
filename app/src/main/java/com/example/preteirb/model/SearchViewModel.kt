@@ -3,7 +3,6 @@ package com.example.preteirb.model
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.preteirb.data.item.Item
 import com.example.preteirb.data.item.ItemsRepository
 import com.example.preteirb.utils.Result
 import com.example.preteirb.utils.asResult
@@ -35,7 +34,14 @@ class SearchViewModel(
                     .map { result ->
                         when (result) {
                             is Result.Success -> SearchResultUiState.Success(
-                                itemList = result.data
+                                // transform list of items to list of item details
+                                itemList = result.data.map { item ->
+                                    ItemDetails(
+                                        id = item.itemId,
+                                        name = item.name,
+                                        description = item.description,
+                                    )
+                                }
                             )
                             
                             is Result.Loading -> SearchResultUiState.Loading
@@ -65,5 +71,5 @@ private const val SEARCH_QUERY_MIN_LENGTH = 2
 private const val SEARCH_QUERY = "searchQuery"
 
 data class SearchResultsUiState(
-    val itemList: List<Item> = listOf()
+    val itemList: List<ItemDetails> = listOf()
 )

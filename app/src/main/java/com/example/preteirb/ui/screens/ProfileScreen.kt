@@ -41,6 +41,12 @@ import com.example.preteirb.model.AppViewModelProvider
 import com.example.preteirb.model.UserDetails
 import com.example.preteirb.model.UserProfileUiState
 import com.example.preteirb.model.UserProfileViewModel
+import com.example.preteirb.ui.navigation.NavigationDestination
+
+object ProfileDestination : NavigationDestination {
+    override val route = "profile"
+    override val titleRes = R.string.profile
+}
 
 @Composable
 fun ProfileScreen(
