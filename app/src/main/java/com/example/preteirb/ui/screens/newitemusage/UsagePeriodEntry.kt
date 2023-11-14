@@ -20,6 +20,7 @@ import androidx.compose.material3.IconButton
 import androidx.compose.material3.IconButtonDefaults
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedButton
+import androidx.compose.material3.SelectableDates
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.material3.rememberDateRangePickerState
@@ -35,7 +36,9 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.example.compose.AppTheme
 import com.example.preteirb.R
+import com.example.preteirb.model.UsagePeriod
 import java.time.Instant
+import java.time.ZoneId
 import java.time.format.DateTimeFormatter
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -46,6 +49,7 @@ fun NewUsagePeriod(
     onDeleteUsagePeriod: () -> Unit,
     onUpdateUsagePeriod: (Pair<Long?, Long?>) -> Unit,
     isLastUsagePeriodEntry: Boolean,
+    notSelectablePeriods: List<UsagePeriod>,
     modifier: Modifier = Modifier,
 ) {
     var startDateTime: Long? by rememberSaveable {
@@ -175,6 +179,22 @@ fun NewUsagePeriod(
             dateRangePickerState = rememberDateRangePickerState(
                 initialSelectedStartDateMillis = startDateTime,
                 initialSelectedEndDateMillis = endDateTime,
+                selectableDates = object : SelectableDates {
+                    override fun isSelectableDate(utcTimeMillis: Long): Boolean {
+                        // block if date is in notSelectablePeriods
+                        val date =
+                            Instant.ofEpochMilli(utcTimeMillis).atZone(ZoneId.systemDefault())
+                                .toLocalDate()
+                        return notSelectablePeriods.none { usagePeriod ->
+                            val startDate = Instant.ofEpochMilli(usagePeriod.start)
+                                .atZone(ZoneId.systemDefault()).toLocalDate()
+                            val endDate =
+                                Instant.ofEpochMilli(usagePeriod.end).atZone(ZoneId.systemDefault())
+                                    .toLocalDate()
+                            date in startDate..endDate
+                        }
+                    }
+                }
             ),
             onDismissDialog = { isShowDatePicker = false },
             onConfirmSelection = {
@@ -236,6 +256,7 @@ fun NewUsagePeriodPreview() {
             onDeleteUsagePeriod = {},
             onUpdateUsagePeriod = {},
             isLastUsagePeriodEntry = false,
+            notSelectablePeriods = listOf(),
         )
     }
 }

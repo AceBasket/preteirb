@@ -63,8 +63,8 @@ dependencies {
     implementation("androidx.compose.ui:ui-graphics")
     implementation("androidx.compose.ui:ui-tooling-preview")
     implementation("androidx.compose.material3:material3:1.2.0-alpha10")
-    implementation("androidx.navigation:navigation-compose:2.7.4")
-    implementation("androidx.lifecycle:lifecycle-runtime-compose:2.7.0-alpha03")
+    implementation("androidx.navigation:navigation-compose:2.7.5")
+    implementation("androidx.lifecycle:lifecycle-runtime-compose:2.7.0-beta01")
     //Room
     implementation("androidx.room:room-runtime:${rootProject.extra["room_version"]}")
     ksp("androidx.room:room-compiler:${rootProject.extra["room_version"]}")
@@ -73,6 +73,14 @@ dependencies {
     implementation("androidx.datastore:datastore-preferences:1.0.0")
     // wheel date-time picker
     implementation("com.github.commandiron:WheelPickerCompose:1.1.11")
+    // kalendar library
+    implementation("org.jetbrains.kotlinx:kotlinx-datetime:0.4.1")
+    implementation("com.himanshoe:kalendar-endlos:1.3.2")
+    //implementation("com.himanshoe:kalendar:1.3.2")
+    //implementation("io.github.boguszpawlowski.composecalendar:composecalendar:1.1.0")
+    //implementation("io.github.boguszpawlowski.composecalendar:kotlinx-datetime:1.1.0")
+    implementation("io.github.epicarchitect:calendar-compose-ranges:1.0.5")
+    implementation("io.github.epicarchitect:calendar-compose-pager:1.0.5")
     
     testImplementation("junit:junit:4.13.2")
     testImplementation("org.mockito:mockito-core:5.4.0")

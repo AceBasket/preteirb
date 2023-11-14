@@ -3,7 +3,6 @@
     <string name="home">Home</string>
     <string name="add_object">Add object</string>
     <string name="account">Account</string>
-    <!--    <string name="choose_profile">Choose a profile</string>-->
     <string name="find_object">Find an object</string>
     <string name="add_account">Add account</string>
     <string name="cancel">Cancel</string>
@@ -29,4 +28,7 @@
     <string name="items_owned_new_usages">Add usages to your items</string>
     <string name="profile">Profile</string>
     <string name="book_item">Book item</string>
+    <string name="profile_image">Profile image of %1s</string>
+    <string name="booked_periods">Booked periods</string>
+    <string name="your_objects">Your objects</string>
 </resources>

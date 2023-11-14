@@ -5,6 +5,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.rounded.AccountCircle
 import androidx.compose.material.icons.rounded.AddCircle
+import androidx.compose.material.icons.rounded.List
 import androidx.compose.material.icons.rounded.Search
 import androidx.compose.material3.CenterAlignedTopAppBar
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -26,7 +27,7 @@ import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import com.example.compose.AppTheme
 import com.example.preteirb.R
-import com.example.preteirb.ui.screens.ProfileDestination
+import com.example.preteirb.ui.screens.list.ListItemsDestination
 import com.example.preteirb.ui.screens.newitemusage.ItemOwnedUsageEntryDestination
 import com.example.preteirb.ui.screens.search.SearchDestination
 
@@ -48,9 +49,9 @@ val bottomNavItems = listOf(
         icon = Icons.Rounded.AddCircle,
     ),
     BottomNavItem(
-        nameRes = ProfileDestination.titleRes,
-        route = ProfileDestination.route,
-        icon = Icons.Rounded.AccountCircle,
+        nameRes = ListItemsDestination.titleRes,
+        route = ListItemsDestination.route,
+        icon = Icons.Rounded.List,
     ),
 )
 
@@ -113,6 +114,14 @@ fun LoanAppTopBar(
                         contentDescription = null
                     )
                 }
+            }
+        },
+        actions = {
+            IconButton(onClick = { /*TODO*/ }) {
+                Icon(
+                    imageVector = Icons.Rounded.AccountCircle,
+                    contentDescription = null,
+                )
             }
         }
     )

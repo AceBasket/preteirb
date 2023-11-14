@@ -83,6 +83,22 @@ object AppViewModelProvider {
                 preteirbApplication().container.settingsRepository
             )
         }
+        
+        // Initializer for ListItemsViewModel
+        initializer {
+            ListItemsViewModel(
+                preteirbApplication().container.usersRepository,
+                preteirbApplication().container.settingsRepository
+            )
+        }
+        
+        // Initializer for ItemAndUsagesDetailsViewModel
+        initializer {
+            ItemAndUsagesDetailsViewModel(
+                this.createSavedStateHandle(),
+                preteirbApplication().container.itemsRepository
+            )
+        }
     }
 }
 

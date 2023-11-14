@@ -242,6 +242,7 @@ fun AddUsages(
                     }
                 },
                 isLastUsagePeriodEntry = index == usagePeriodsCount.lastIndex,
+                notSelectablePeriods = usageUiState.bookedPeriods,
             )
         }
     }

@@ -31,6 +31,10 @@ import com.example.preteirb.ui.screens.ProfileSelectionDestination
 import com.example.preteirb.ui.screens.ProfileSelectionScreen
 import com.example.preteirb.ui.screens.booking.BookItemDestination
 import com.example.preteirb.ui.screens.booking.BookItemScreen
+import com.example.preteirb.ui.screens.list.ItemAndUsagesDetailsDestination
+import com.example.preteirb.ui.screens.list.ItemAndUsagesDetailsScreen
+import com.example.preteirb.ui.screens.list.ListItemsDestination
+import com.example.preteirb.ui.screens.list.ListItemsScreen
 import com.example.preteirb.ui.screens.newitemusage.ItemOwnedUsageEntryDestination
 import com.example.preteirb.ui.screens.newitemusage.NewUsageScreen
 import com.example.preteirb.ui.screens.search.SearchDestination
@@ -88,6 +92,10 @@ fun PreteirbApp(
             )
         }
     ) { innerPadding ->
+        val screenModifier =Modifier
+            .fillMaxSize()
+            .padding(innerPadding)
+            .padding(horizontal = dimensionResource(id = R.dimen.padding_medium))
         NavHost(
             navController = navController,
             startDestination = startDestination
@@ -95,21 +103,14 @@ fun PreteirbApp(
             composable(route = SearchDestination.route) {
                 SearchScreen(
                     navigateToBookItem = { navController.navigate("${BookItemDestination.route}/${it}") },
-                    modifier = Modifier
-                        .fillMaxSize()
-                        .padding(innerPadding)
-                        .padding(horizontal = dimensionResource(id = R.dimen.padding_medium))
+                    modifier =screenModifier
                 )
             }
-            
             
             composable(route = ProfileDestination.route) {
                 ProfileScreen(
                     navigateToSelectProfile = { navController.navigate(ProfileSelectionDestination.route) },
-                    modifier = Modifier
-                        .fillMaxSize()
-                        .padding(innerPadding)
-                        .padding(horizontal = dimensionResource(id = R.dimen.padding_medium))
+                    modifier = screenModifier
                 )
             }
             
@@ -120,10 +121,7 @@ fun PreteirbApp(
                         navController.popBackStack(ItemOwnedUsageEntryDestination.route, true)
                         navController.navigate(SearchDestination.route)
                     },
-                    modifier = Modifier
-                        .fillMaxSize()
-                        .padding(innerPadding)
-                        .padding(horizontal = dimensionResource(id = R.dimen.padding_medium))
+                    modifier = screenModifier
                 )
             }
             
@@ -134,10 +132,7 @@ fun PreteirbApp(
                         navController.popBackStack(ProfileSelectionDestination.route, true)
                         navController.navigate(SearchDestination.route)
                     }, //TODO: footnote saying account was created
-                    modifier = Modifier
-                        .fillMaxSize()
-                        .padding(innerPadding)
-                        .padding(horizontal = dimensionResource(id = R.dimen.padding_medium))
+                    modifier = screenModifier
                 )
             }
             
@@ -153,12 +148,25 @@ fun PreteirbApp(
                         navController.popBackStack(BookItemDestination.route, true)
                         navController.navigate(SearchDestination.route)
                     },
-                    modifier = Modifier
-                        .fillMaxSize()
-                        .padding(innerPadding)
-                        .padding(horizontal = dimensionResource(id = R.dimen.padding_medium))
+                    modifier = screenModifier
                 )
             }
+            
+            composable(route = ListItemsDestination.route) {
+                ListItemsScreen(
+                    navigateToItemDetails = { navController.navigate("${ItemAndUsagesDetailsDestination.route}/${it}") },
+                    modifier = screenModifier
+                )
+            }
+            
+            composable(
+                route = ItemAndUsagesDetailsDestination.routeWithArgs,
+                arguments = listOf(navArgument(ItemAndUsagesDetailsDestination.itemIdArg) {
+                    type = NavType.IntType
+                })
+            ) {
+                    ItemAndUsagesDetailsScreen(modifier = screenModifier)
+                }
         }
         
     }

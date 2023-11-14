@@ -27,6 +27,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.window.Dialog
+import androidx.compose.ui.window.DialogProperties
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.compose.AppTheme
 import com.example.preteirb.R
@@ -35,6 +36,7 @@ import com.example.preteirb.model.AppViewModelProvider
 import com.example.preteirb.model.ProfileSelectionUiState
 import com.example.preteirb.model.ProfileSelectionViewModel
 import com.example.preteirb.ui.navigation.NavigationDestination
+import com.example.preteirb.ui.screens.profileselection.ProfileSelectionCarousel
 import kotlinx.coroutines.launch
 
 object ProfileSelectionDestination : NavigationDestination {
@@ -51,19 +53,20 @@ fun ProfileSelectionScreen(
     val uiState by viewModel.uiState.collectAsState()
     val coroutine = rememberCoroutineScope()
     
+    
+    
     ProfileSelection(
         uiState = uiState,
-        navigateToSearch = navigateToSearch,
         onAddAccount = { username ->
             coroutine.launch {
-                viewModel.registerUser(
+                viewModel.registerUserAndLogIn(
                     User(
-                        userId = 0,
                         username = username,
                         location = "location",
                     )
                 )
             }
+            navigateToSearch()
         },
         onClickOnProfile = {
             coroutine.launch {
@@ -78,39 +81,27 @@ fun ProfileSelectionScreen(
 @Composable
 fun ProfileSelection(
     uiState: ProfileSelectionUiState,
-    navigateToSearch: () -> Unit,
     onAddAccount: (String) -> Unit,
     onClickOnProfile: (User) -> Unit,
     modifier: Modifier = Modifier,
 ) {
     var isShowAddAccountDialog by rememberSaveable { mutableStateOf(false) }
-    Column(
-        verticalArrangement = Arrangement.Center,
-        horizontalAlignment = Alignment.CenterHorizontally,
+    
+    ProfileSelectionCarousel(
+        list = uiState.users,
+        onClickOnProfile = onClickOnProfile,
+        onClickOnAddProfile = { isShowAddAccountDialog = true },
         modifier = modifier
-    ) {
-        ProfileList(
-            profileList = uiState.users,
-            onClickOnProfile = onClickOnProfile,
+    )
+    
+    if (isShowAddAccountDialog) {
+        AddAccountDialog(
+            onDismissRequest = { isShowAddAccountDialog = false },
+            onAddAccount = {
+                onAddAccount(it)
+                isShowAddAccountDialog = false
+            }
         )
-        Row(modifier = Modifier.clickable { isShowAddAccountDialog = true }) {
-            Icon(
-                painter = painterResource(id = R.drawable.baseline_person_add_24),
-                contentDescription = null
-            )
-            Spacer(modifier = Modifier.padding(dimensionResource(id = R.dimen.padding_extra_small)))
-            Text(text = stringResource(id = R.string.add_account))
-        }
-        
-        if (isShowAddAccountDialog) {
-            AddAccountDialog(
-                onDismissRequest = { isShowAddAccountDialog = false },
-                onAddAccount = {
-                    onAddAccount(it)
-                    isShowAddAccountDialog = false
-                }
-            )
-        }
     }
 }
 
@@ -128,7 +119,6 @@ fun ProfileList(
             Row(
                 modifier = Modifier
                     .clickable { onClickOnProfile(profile) }
-                    //.fillMaxWidth()
             ) {
                 Icon(
                     painter = painterResource(id = R.drawable.baseline_account_circle_24),
@@ -150,7 +140,11 @@ fun AddAccountDialog(
     var username by rememberSaveable { mutableStateOf("") }
     
     Dialog(
-        onDismissRequest = { onDismissRequest() }
+        onDismissRequest = { onDismissRequest() },
+        properties = DialogProperties(
+            dismissOnBackPress = true,
+            dismissOnClickOutside = true
+        )
     ) {
         Column(
             modifier = modifier,
@@ -189,32 +183,31 @@ fun ProfileSelectionPreview() {
             modifier = Modifier
                 .fillMaxSize()
         ) {
-        
-        val fakeProfileList = listOf(
-            User(
-                userId = 1,
-                username = "username1",
-                location = "location1",
-            ),
-            User(
-                userId = 2,
-                username = "username2",
-                location = "location2",
-            ),
-            User(
-                userId = 3,
-                username = "username3",
-                location = "location3",
-            ),
-        )
-        ProfileSelection(
-            uiState = ProfileSelectionUiState(
-                users = fakeProfileList
-            ),
-            navigateToSearch = { },
-            onAddAccount = { },
-            onClickOnProfile = { }
-        )
+            
+            val fakeProfileList = listOf(
+                User(
+                    userId = 1,
+                    username = "username1",
+                    location = "location1",
+                ),
+                User(
+                    userId = 2,
+                    username = "username2",
+                    location = "location2",
+                ),
+                User(
+                    userId = 3,
+                    username = "username3",
+                    location = "location3",
+                ),
+            )
+            ProfileSelection(
+                uiState = ProfileSelectionUiState(
+                    users = fakeProfileList
+                ),
+                onAddAccount = { },
+                onClickOnProfile = { }
+            )
         }
     }
 }
