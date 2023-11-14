@@ -30,13 +30,13 @@ class ProfileSelectionViewModel(
         settingsRepository.storeIsLoggedIn(true)
     }
     
-    private suspend fun registerUser(user: User) {
-        usersRepository.insertUser(user)
+    private suspend fun registerUser(user: User): Long {
+        return usersRepository.insertUser(user)
     }
     
     suspend fun registerUserAndLogIn(user: User) {
-        registerUser(user)
-        logIn(user)
+        val userId = registerUser(user).toInt()
+        logIn(user.copy(userId = userId))
     }
     
     companion object {

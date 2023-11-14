@@ -59,6 +59,9 @@ fun PreteirbApp(
             ProfileDestination.route -> ProfileDestination
             ProfileSelectionDestination.route -> ProfileSelectionDestination
             ItemOwnedUsageEntryDestination.route -> ItemOwnedUsageEntryDestination
+            BookItemDestination.route -> BookItemDestination
+            ListItemsDestination.route -> ListItemsDestination
+            ItemAndUsagesDetailsDestination.route -> ItemAndUsagesDetailsDestination
             else -> null
         }
     } ?: SearchDestination
@@ -78,8 +81,16 @@ fun PreteirbApp(
         topBar = {
             LoanAppTopBar(
                 currentScreenTitle = currentScreen.titleRes,
-                canNavigateBack = navController.previousBackStackEntry != null,
+                canNavigateBack = navController.previousBackStackEntry != null && !listOf(
+                    SearchDestination.route,
+                    ItemOwnedUsageEntryDestination.route,
+                    ListItemsDestination.route,
+                    ProfileSelectionDestination.route,
+                ).contains(currentScreen.route),
                 navigateUp = { navController.navigateUp() },
+                navigateToProfileSelection = {
+                    navController.navigate(ProfileSelectionDestination.route)
+                },
                 modifier = Modifier
                     .fillMaxWidth()
             )
@@ -92,7 +103,7 @@ fun PreteirbApp(
             )
         }
     ) { innerPadding ->
-        val screenModifier =Modifier
+        val screenModifier = Modifier
             .fillMaxSize()
             .padding(innerPadding)
             .padding(horizontal = dimensionResource(id = R.dimen.padding_medium))
@@ -103,7 +114,7 @@ fun PreteirbApp(
             composable(route = SearchDestination.route) {
                 SearchScreen(
                     navigateToBookItem = { navController.navigate("${BookItemDestination.route}/${it}") },
-                    modifier =screenModifier
+                    modifier = screenModifier
                 )
             }
             
@@ -165,8 +176,8 @@ fun PreteirbApp(
                     type = NavType.IntType
                 })
             ) {
-                    ItemAndUsagesDetailsScreen(modifier = screenModifier)
-                }
+                ItemAndUsagesDetailsScreen(modifier = screenModifier)
+            }
         }
         
     }

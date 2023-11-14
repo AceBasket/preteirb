@@ -38,7 +38,6 @@ import com.example.compose.AppTheme
 import com.example.preteirb.R
 import com.example.preteirb.model.UsagePeriod
 import java.time.Instant
-import java.time.ZoneId
 import java.time.format.DateTimeFormatter
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -181,17 +180,10 @@ fun NewUsagePeriod(
                 initialSelectedEndDateMillis = endDateTime,
                 selectableDates = object : SelectableDates {
                     override fun isSelectableDate(utcTimeMillis: Long): Boolean {
-                        // block if date is in notSelectablePeriods
-                        val date =
-                            Instant.ofEpochMilli(utcTimeMillis).atZone(ZoneId.systemDefault())
-                                .toLocalDate()
-                        return notSelectablePeriods.none { usagePeriod ->
-                            val startDate = Instant.ofEpochMilli(usagePeriod.start)
-                                .atZone(ZoneId.systemDefault()).toLocalDate()
-                            val endDate =
-                                Instant.ofEpochMilli(usagePeriod.end).atZone(ZoneId.systemDefault())
-                                    .toLocalDate()
-                            date in startDate..endDate
+                        // is selectable if it's not in any of the notSelectablePeriods
+                        return utcTimeMillis > System.currentTimeMillis()
+                                && notSelectablePeriods.none { usagePeriod ->
+                            utcTimeMillis in usagePeriod.start..usagePeriod.end
                         }
                     }
                 }
@@ -270,7 +262,8 @@ fun UsagePeriodPickerDialogPreview() {
             dateRangePickerState = rememberDateRangePickerState(
                 initialSelectedStartDateMillis = null,
                 initialSelectedEndDateMillis = null,
-            ),
+                
+                ),
             onDismissDialog = {},
             onConfirmSelection = {},
         )

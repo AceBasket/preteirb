@@ -53,7 +53,7 @@ fun ObjectSelection(
         Icons.Filled.KeyboardArrowDown
     
     Column(
-        modifier = modifier
+        modifier = modifier.fillMaxWidth()
     ) {
         // Create an Outlined Text Field
         // with icon and not expanded
@@ -122,7 +122,7 @@ fun ExposedDropdownObjectSelection(
     ExposedDropdownMenuBox(
         expanded = isExpanded,
         onExpandedChange = { isExpanded = it },
-        modifier = modifier
+        modifier = modifier.fillMaxWidth()
     ) {
         OutlinedTextField(
             readOnly = true,
@@ -134,7 +134,7 @@ fun ExposedDropdownObjectSelection(
                 )
             },
             colors = ExposedDropdownMenuDefaults.textFieldColors(),
-            modifier = Modifier.menuAnchor()
+            modifier = Modifier.menuAnchor().fillMaxWidth()
         )
         
         ExposedDropdownMenu(
