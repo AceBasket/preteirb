@@ -51,8 +51,8 @@ object ProfileDestination : NavigationDestination {
 @Composable
 fun ProfileScreen(
     navigateToSelectProfile: () -> Unit,
-    viewModel: UserProfileViewModel = viewModel(factory = AppViewModelProvider.Factory),
     modifier: Modifier = Modifier,
+    viewModel: UserProfileViewModel = viewModel(factory = AppViewModelProvider.Factory),
 ) {
     
     val uiState = viewModel.userProfileUiState.collectAsState()

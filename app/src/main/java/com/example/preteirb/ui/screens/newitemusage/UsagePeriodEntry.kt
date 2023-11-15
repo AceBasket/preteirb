@@ -1,8 +1,11 @@
 package com.example.preteirb.ui.screens.newitemusage
 
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.RowScope
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -39,6 +42,260 @@ import com.example.preteirb.R
 import com.example.preteirb.model.UsagePeriod
 import java.time.Instant
 import java.time.format.DateTimeFormatter
+
+@Composable
+fun EmptyNewUsagePeriod(
+    notSelectablePeriods: List<UsagePeriod>,
+    onAddUsagePeriod: (Pair<Long?, Long?>) -> Unit,
+    modifier: Modifier = Modifier,
+) {
+    Box(modifier = modifier.fillMaxWidth()) {
+        var startPeriod: Long? by rememberSaveable { mutableStateOf(null) }
+        var endPeriod: Long? by rememberSaveable { mutableStateOf(null) }
+        NewUsagePeriodV2(
+            onNewUsagePeriodSelected = {
+                startPeriod = it.first
+                endPeriod = it.second
+            },
+            notSelectablePeriods = notSelectablePeriods,
+            isModifiable = true,
+            trailingButtons = {
+                IconButton(
+                    onClick = { onAddUsagePeriod(Pair(startPeriod, endPeriod)) },
+                    colors = IconButtonDefaults.iconButtonColors(containerColor = MaterialTheme.colorScheme.primaryContainer),
+                ) {
+                    Icon(
+                        imageVector = Icons.Default.Add,
+                        contentDescription = stringResource(id = R.string.add_usage_period)
+                    )
+                }
+                
+            }
+        )
+        
+    }
+}
+
+@Preview(showBackground = true)
+@Composable
+fun EmptyNewUsagePeriodPreview() {
+    AppTheme {
+        EmptyNewUsagePeriod(
+            notSelectablePeriods = listOf(),
+            onAddUsagePeriod = {},
+        )
+    }
+}
+
+@Composable
+fun UsagePeriodListItem(
+    onNewUsagePeriodSelected: (Pair<Long?, Long?>) -> Unit,
+    notSelectablePeriods: List<UsagePeriod>,
+    usagePeriod: UsagePeriod,
+    onDeleteUsagePeriod: () -> Unit,
+    modifier: Modifier = Modifier
+) {
+    Row(modifier = modifier) {
+        var isModifiable by rememberSaveable { mutableStateOf(false) }
+        NewUsagePeriodV2(
+            onNewUsagePeriodSelected = onNewUsagePeriodSelected,
+            notSelectablePeriods = notSelectablePeriods,
+            isModifiable = isModifiable,
+            initialValues = Pair(usagePeriod.start, usagePeriod.end),
+            trailingButtons = {
+                if (isModifiable) {
+                    ValidateEditionUsagePeriodButton(
+                        onClick = { isModifiable = false },
+                        modifier = Modifier.padding(start = dimensionResource(id = R.dimen.padding_small))
+                    )
+                } else {
+                    EditUsagePeriodButton(
+                        onClick = { isModifiable = true },
+                        modifier = Modifier.padding(start = dimensionResource(id = R.dimen.padding_small))
+                    )
+                }
+                
+                DeleteUsagePeriodButton(
+                    onClick = onDeleteUsagePeriod,
+                    modifier = Modifier.padding(start = dimensionResource(id = R.dimen.padding_small))
+                )
+                
+            }
+        )
+        
+        
+    }
+}
+
+@Preview(showBackground = true)
+@Composable
+fun UsagePeriodListItemPreview() {
+    AppTheme {
+        UsagePeriodListItem(
+            onNewUsagePeriodSelected = {},
+            notSelectablePeriods = listOf(),
+            usagePeriod = UsagePeriod(0L, 0L),
+            onDeleteUsagePeriod = {},
+        )
+    }
+}
+
+@Composable
+fun ValidateEditionUsagePeriodButton(
+    onClick: () -> Unit,
+    modifier: Modifier = Modifier,
+) {
+    IconButton(
+        onClick = onClick,
+        colors = IconButtonDefaults.iconButtonColors(containerColor = MaterialTheme.colorScheme.primaryContainer),
+        modifier = modifier
+    ) {
+        Icon(
+            imageVector = Icons.Default.Check,
+            contentDescription = stringResource(id = R.string.confirm_edit_usage_period)
+        )
+    }
+}
+
+@Composable
+fun EditUsagePeriodButton(
+    onClick: () -> Unit,
+    modifier: Modifier = Modifier,
+) {
+    IconButton(
+        onClick = onClick,
+        colors = IconButtonDefaults.iconButtonColors(containerColor = MaterialTheme.colorScheme.primaryContainer),
+        modifier = modifier
+    ) {
+        Icon(
+            imageVector = Icons.Default.Edit,
+            contentDescription = stringResource(id = R.string.edit_usage_period)
+        )
+    }
+}
+
+@Composable
+fun DeleteUsagePeriodButton(
+    onClick: () -> Unit,
+    modifier: Modifier = Modifier,
+) {
+    IconButton(
+        onClick = onClick,
+        colors = IconButtonDefaults.iconButtonColors(containerColor = MaterialTheme.colorScheme.primaryContainer),
+        modifier = modifier
+    ) {
+        Icon(
+            imageVector = Icons.Default.Delete,
+            contentDescription = stringResource(id = R.string.delete_usage_period)
+        )
+    }
+}
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+fun NewUsagePeriodV2(
+    onNewUsagePeriodSelected: (Pair<Long?, Long?>) -> Unit,
+    notSelectablePeriods: List<UsagePeriod>,
+    isModifiable: Boolean,
+    trailingButtons: @Composable RowScope.() -> Unit,
+    modifier: Modifier = Modifier,
+    initialValues: Pair<Long?, Long?> = Pair(null, null),
+) {
+    var startDateTime: Long? by rememberSaveable {
+        mutableStateOf(initialValues.first)
+    }
+    
+    var endDateTime: Long? by rememberSaveable {
+        mutableStateOf(initialValues.second)
+    }
+    
+    var isShowDatePicker by rememberSaveable {
+        mutableStateOf(false)
+    }
+    
+    var isSelectEndDate by rememberSaveable {
+        mutableStateOf(false)
+    }
+    
+    Row(
+        modifier = modifier.padding(top = dimensionResource(id = R.dimen.padding_small))
+    ) {
+        OutlinedButton(
+            onClick = { isShowDatePicker = true },
+            shape = RoundedCornerShape(dimensionResource(id = R.dimen.corner_radius_small)),
+            modifier = Modifier.weight(0.5f),
+            enabled = isModifiable
+        ) {
+            Column {
+                Text(
+                    text = "Start date:",
+                    style = MaterialTheme.typography.bodySmall
+                )
+                Text(
+                    text = if (startDateTime == 0L || startDateTime == null) ""
+                    else DateTimeFormatter.ISO_INSTANT.format(
+                        Instant.ofEpochMilli(
+                            startDateTime ?: 0L
+                        )
+                    )
+                )
+            }
+        }
+        Spacer(modifier = Modifier.padding(dimensionResource(id = R.dimen.padding_extra_small)))
+        OutlinedButton(
+            onClick = {
+                isShowDatePicker = true
+                isSelectEndDate = true
+            },
+            shape = RoundedCornerShape(dimensionResource(id = R.dimen.corner_radius_small)),
+            modifier = Modifier.weight(0.5f),
+            enabled = isModifiable
+        ) {
+            Column {
+                Text(
+                    text = "End date:",
+                    style = MaterialTheme.typography.bodySmall
+                )
+                Text(
+                    text = if (endDateTime == 0L || endDateTime == null) ""
+                    else DateTimeFormatter.ISO_INSTANT.format(
+                        Instant.ofEpochMilli(
+                            endDateTime ?: 0L
+                        )
+                    )
+                )
+            }
+        }
+        Spacer(modifier = Modifier.padding(dimensionResource(id = R.dimen.padding_extra_small)))
+        trailingButtons()
+    }
+    
+    if (isShowDatePicker) {
+        UsagePeriodPickerDialog(
+            dateRangePickerState = rememberDateRangePickerState(
+                initialSelectedStartDateMillis = startDateTime,
+                initialSelectedEndDateMillis = endDateTime,
+                selectableDates = object : SelectableDates {
+                    override fun isSelectableDate(utcTimeMillis: Long): Boolean {
+                        // is selectable if it's not in any of the notSelectablePeriods
+                        return utcTimeMillis > System.currentTimeMillis()
+                                && notSelectablePeriods.none { usagePeriod ->
+                            utcTimeMillis in usagePeriod.start..usagePeriod.end
+                        }
+                    }
+                }
+            ),
+            onDismissDialog = { isShowDatePicker = false },
+            onConfirmSelection = {
+                startDateTime = it.selectedStartDateMillis
+                endDateTime = it.selectedEndDateMillis
+                isShowDatePicker = false
+                onNewUsagePeriodSelected(Pair(startDateTime, endDateTime))
+            },
+            isSelectEndDate = isSelectEndDate,
+        )
+    }
+}
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable

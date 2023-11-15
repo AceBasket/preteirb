@@ -76,9 +76,6 @@ dependencies {
     // kalendar library
     implementation("org.jetbrains.kotlinx:kotlinx-datetime:0.4.1")
     implementation("com.himanshoe:kalendar-endlos:1.3.2")
-    //implementation("com.himanshoe:kalendar:1.3.2")
-    //implementation("io.github.boguszpawlowski.composecalendar:composecalendar:1.1.0")
-    //implementation("io.github.boguszpawlowski.composecalendar:kotlinx-datetime:1.1.0")
     implementation("io.github.epicarchitect:calendar-compose-ranges:1.0.5")
     implementation("io.github.epicarchitect:calendar-compose-pager:1.0.5")
     

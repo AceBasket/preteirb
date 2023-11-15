@@ -1,9 +1,10 @@
 package com.example.preteirb.model
 
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
-import androidx.compose.runtime.toMutableStateList
+import androidx.compose.runtime.snapshots.SnapshotStateList
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.preteirb.data.SettingsRepository
@@ -23,9 +24,9 @@ abstract class UsageEntryViewModel(
     var uiState by mutableStateOf(UsageUiState())
         private set
     
-    private val _usagePeriodsCount = listOf(0).toMutableStateList()
-    val usagePeriodsCount: List<Int>
-        get() = _usagePeriodsCount
+    //private val _usagePeriods = uiState.usageDetails.period.toMutableStateList()
+    //val usagePeriods: SnapshotStateList<UsagePeriod>
+    //    get() = _usagePeriods
     
     // init with userId from settings
     init {
@@ -72,14 +73,6 @@ abstract class UsageEntryViewModel(
             usagesRepository.insertUsageList(uiState.usageDetails.toUsages())
         }
     }
-    
-    fun addUsagePeriod() {
-        _usagePeriodsCount.add(usagePeriodsCount[usagePeriodsCount.lastIndex] + 1)
-    }
-    
-    fun deleteUsagePeriod(usagePeriodId: Int) {
-        _usagePeriodsCount.remove(usagePeriodId)
-    }
 }
 
 data class UsageUiState(
@@ -96,7 +89,7 @@ data class UsageDetails(
     val usageId: Int = 0,
     val userId: Int = 0,
     val itemId: Int = 0,
-    val period: MutableList<UsagePeriod> = mutableListOf()
+    val period: SnapshotStateList<UsagePeriod> = mutableStateListOf(),
 )
 
 data class UsagePeriod(

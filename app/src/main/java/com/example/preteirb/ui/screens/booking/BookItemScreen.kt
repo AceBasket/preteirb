@@ -12,7 +12,7 @@ import com.example.preteirb.model.AppViewModelProvider
 import com.example.preteirb.model.BookItemsViewModel
 import com.example.preteirb.model.ItemDetails
 import com.example.preteirb.ui.navigation.NavigationDestination
-import com.example.preteirb.ui.screens.newitemusage.AddUsages
+import com.example.preteirb.ui.screens.newitemusage.AddUsagesV2
 import com.example.preteirb.ui.screens.search.ObjectCard
 import kotlinx.coroutines.launch
 
@@ -38,11 +38,8 @@ fun BookItemScreen(
             colors = CardDefaults.elevatedCardColors(),
             elevation = CardDefaults.elevatedCardElevation(),
         )
-        AddUsages(
+        AddUsagesV2(
             usageUiState = bookItemsViewModel.uiState,
-            usagePeriodsCount = bookItemsViewModel.usagePeriodsCount,
-            onAddUsagePeriod = bookItemsViewModel::addUsagePeriod,
-            onDeleteUsagePeriod = bookItemsViewModel::deleteUsagePeriod,
             onUsageValueChange = bookItemsViewModel::updateUiState,
             onSaveUsageClick = {
                 coroutineScope.launch {
@@ -54,33 +51,3 @@ fun BookItemScreen(
         )
     }
 }
-
-/* @Composable
-fun ItemDetailsCard(
-    item: ItemDetails,
-    modifier: Modifier = Modifier
-) {
-    ElevatedCard(
-        modifier = modifier,
-        elevation = CardDefaults.cardElevation(
-            defaultElevation = 6.dp
-        ),
-    ) {
-        Row(
-            //modifier = Modifier
-            //.padding(dimensionResource(id = R.dimen.spacing_medium))
-            //.fillMaxWidth(),
-            verticalAlignment = androidx.compose.ui.Alignment.CenterVertically
-        ) {
-            Image(
-                painter = painterResource(id = R.drawable.ic_broken_image),
-                contentDescription = "Item Image"
-            )
-            Spacer(modifier = Modifier.padding(dimensionResource(id = R.dimen.padding_extra_small)))
-            Column {
-                Text(text = item.name)
-                Text(text = item.description)
-            }
-        }
-    }
-} */

@@ -13,7 +13,6 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.saveable.rememberSaveable
@@ -55,9 +54,6 @@ fun NewUsageScreen(
         usageUiState = itemsOwnedUsagesViewModel.uiState,
         itemUiState = itemViewModel.itemUiState,
         itemsOwnedUiState = itemsOwnedUiState,
-        usagePeriodsCount = itemsOwnedUsagesViewModel.usagePeriodsCount,
-        onAddUsagePeriod = itemsOwnedUsagesViewModel::addUsagePeriod,
-        onDeleteUsagePeriod = itemsOwnedUsagesViewModel::deleteUsagePeriod,
         onUsageValueChange = itemsOwnedUsagesViewModel::updateUiState,
         onItemValueChange = itemViewModel::updateUiState,
         onItemSelectionValueChange = {
@@ -96,9 +92,6 @@ fun NewUsageForm(
     usageUiState: UsageUiState,
     itemUiState: ItemUiState,
     itemsOwnedUiState: ItemsOwnedUiState,
-    usagePeriodsCount: List<Int>,
-    onAddUsagePeriod: () -> Unit,
-    onDeleteUsagePeriod: (Int) -> Unit,
     onItemSelectionValueChange: (String) -> Unit,
     onItemValueChange: (ItemDetails) -> Unit,
     onUsageValueChange: (UsageDetails) -> Unit,
@@ -106,10 +99,6 @@ fun NewUsageForm(
     onSaveItem: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
-    var usagesCount by rememberSaveable {
-        mutableIntStateOf(1)
-    }
-    
     var isShowObjectDialog by rememberSaveable {
         mutableStateOf(false)
     }
@@ -123,55 +112,11 @@ fun NewUsageForm(
             onValueChange = onItemSelectionValueChange,
             onAddItem = { isShowObjectDialog = true },
         )
-        AddUsages(
+        AddUsagesV2(
             usageUiState = usageUiState,
-            usagePeriodsCount = usagePeriodsCount,
-            onAddUsagePeriod = onAddUsagePeriod,
-            onDeleteUsagePeriod = onDeleteUsagePeriod,
             onUsageValueChange = onUsageValueChange,
             onSaveUsageClick = onSaveUsageClick,
         )
-        
-        /* repeat(usagesCount) { index ->
-            NewUsagePeriod(
-                onAddUsagePeriod = { usagesCount++ },
-                onNewUsagePeriodSelected = {
-                    if (it.first != null && it.second != null) {
-                        val periodAdded = usageUiState.usageDetails.period
-                        periodAdded.add(index, UsagePeriod(it.first!!, it.second!!))
-                        
-                        onUsageValueChange(
-                            usageUiState.usageDetails.copy(
-                                period = periodAdded
-                            )
-                        )
-                    }
-                },
-                isLastUsagePeriodEntry = index == usagesCount - 1,
-                onUpdateUsagePeriod = {
-                    if (it.first != null && it.second != null) {
-                        val periodUpdated = usageUiState.usageDetails.period
-                        periodUpdated[index] = UsagePeriod(it.first!!, it.second!!)
-                        
-                        onUsageValueChange(
-                            usageUiState.usageDetails.copy(
-                                period = periodUpdated
-                            )
-                        )
-                    }
-                },
-                onDeleteUsagePeriod = {
-                    val periodRemoved = usageUiState.usageDetails.period
-                    periodRemoved.removeAt(index)
-                    onUsageValueChange(
-                        usageUiState.usageDetails.copy(
-                            period = periodRemoved
-                        )
-                    )
-                    usagesCount--
-                },
-            )
-        } */
         
         if (isShowObjectDialog) {
             NewObjectDialog(
@@ -192,44 +137,18 @@ fun NewUsageForm(
 }
 
 @Composable
-fun AddUsages(
+fun AddUsagesV2(
     usageUiState: UsageUiState,
-    usagePeriodsCount: List<Int>,
-    onAddUsagePeriod: () -> Unit,
-    onDeleteUsagePeriod: (Int) -> Unit,
     onUsageValueChange: (UsageDetails) -> Unit,
     onSaveUsageClick: () -> Unit,
     modifier: Modifier = Modifier
 ) {
     LazyColumn(modifier = modifier) {
-        itemsIndexed(usagePeriodsCount) { index, usagePeriodId ->
-            NewUsagePeriod(
+        itemsIndexed(
+            items = usageUiState.usageDetails.period,
+        ) { index, item ->
+            UsagePeriodListItem(
                 onNewUsagePeriodSelected = {
-                    if (it.first != null && it.second != null) {
-                        val periodAdded = usageUiState.usageDetails.period
-                        periodAdded.add(UsagePeriod(it.first!!, it.second!!))
-                        
-                        onUsageValueChange(
-                            usageUiState.usageDetails.copy(
-                                period = periodAdded
-                            )
-                        )
-                    }
-                },
-                onAddUsagePeriod = {
-                    onAddUsagePeriod()
-                },
-                onDeleteUsagePeriod = {
-                    val periodRemoved = usageUiState.usageDetails.period
-                    periodRemoved.removeAt(index)
-                    onUsageValueChange(
-                        usageUiState.usageDetails.copy(
-                            period = periodRemoved
-                        )
-                    )
-                    onDeleteUsagePeriod(usagePeriodId)
-                },
-                onUpdateUsagePeriod = {
                     if (it.first != null && it.second != null) {
                         val periodUpdated = usageUiState.usageDetails.period
                         periodUpdated[index] = UsagePeriod(it.first!!, it.second!!)
@@ -241,8 +160,35 @@ fun AddUsages(
                         )
                     }
                 },
-                isLastUsagePeriodEntry = index == usagePeriodsCount.lastIndex,
-                notSelectablePeriods = usageUiState.bookedPeriods,
+                notSelectablePeriods = usageUiState.bookedPeriods + usageUiState.usageDetails.period,
+                usagePeriod = item,
+                onDeleteUsagePeriod = {
+                    val periodRemoved = usageUiState.usageDetails.period
+                    periodRemoved.removeAt(index)
+                    onUsageValueChange(
+                        usageUiState.usageDetails.copy(
+                            period = periodRemoved
+                        )
+                    )
+                    //onDeleteUsagePeriod(index)
+                },
+            )
+        }
+        item {
+            EmptyNewUsagePeriod(
+                notSelectablePeriods = usageUiState.bookedPeriods + usageUiState.usageDetails.period,
+                onAddUsagePeriod = {
+                    if (it.first != null && it.second != null) {
+                        val periodAdded = usageUiState.usageDetails.period
+                        periodAdded.add(UsagePeriod(it.first!!, it.second!!))
+                        
+                        onUsageValueChange(
+                            usageUiState.usageDetails.copy(
+                                period = periodAdded
+                            )
+                        )
+                    }
+                }
             )
         }
     }
@@ -271,14 +217,11 @@ fun NewUsageFormPreview() {
             usageUiState = UsageUiState(),
             itemUiState = ItemUiState(),
             itemsOwnedUiState = ItemsOwnedUiState(),
-            usagePeriodsCount = listOf(0),
             onItemSelectionValueChange = {},
             onItemValueChange = {},
             onUsageValueChange = {},
             onSaveUsageClick = {},
             onSaveItem = {},
-            onAddUsagePeriod = {},
-            onDeleteUsagePeriod = {},
         )
     }
 }
