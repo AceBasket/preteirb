@@ -4,7 +4,7 @@ import android.content.Context
 import androidx.room.Room
 import androidx.test.core.app.ApplicationProvider
 import androidx.test.ext.junit.runners.AndroidJUnit4
-import com.example.preteirb.data.PreteirbDatabase
+import com.example.preteirb.data.AppDatabase
 import com.example.preteirb.data.item.Item
 import com.example.preteirb.data.item.ItemDao
 import com.example.preteirb.data.user.User
@@ -23,25 +23,25 @@ class UsageDaoTest {
     private lateinit var usageDao: UsageDao;
     private lateinit var userDao: UserDao;
     private lateinit var itemDao: ItemDao;
-    private lateinit var preteirbDatabase: PreteirbDatabase;
+    private lateinit var appDatabase: AppDatabase;
     
     @Before
     fun createDb() {
         val context = ApplicationProvider.getApplicationContext<Context>();
-        preteirbDatabase =
-            Room.inMemoryDatabaseBuilder(context, PreteirbDatabase::class.java)
+        appDatabase =
+            Room.inMemoryDatabaseBuilder(context, AppDatabase::class.java)
                 // Allowing main thread queries, just for testing.
                 .allowMainThreadQueries()
                 .build();
-        usageDao = preteirbDatabase.usageDao();
-        userDao = preteirbDatabase.userDao();
-        itemDao = preteirbDatabase.itemDao();
+        usageDao = appDatabase.usageDao();
+        userDao = appDatabase.userDao();
+        itemDao = appDatabase.itemDao();
     }
     
     @After
     @Throws(IOException::class)
     fun closeDb() {
-        preteirbDatabase.close();
+        appDatabase.close();
     }
     
     private var user1 = User(1, "User 1", "location 1");

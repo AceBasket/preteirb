@@ -30,7 +30,7 @@ class AppDataContainer(private val context: Context) : AppContainer {
      */
     override val usersRepository: UsersRepository by lazy {
         OfflineUsersRepository(
-            PreteirbDatabase.getDatabase(context).userDao(),
+            AppDatabase.getDatabase(context).userDao(),
         )
     }
     
@@ -39,7 +39,7 @@ class AppDataContainer(private val context: Context) : AppContainer {
      */
     override val itemsRepository: ItemsRepository by lazy {
         OfflineItemsRepository(
-            PreteirbDatabase.getDatabase(context).itemDao(),
+            AppDatabase.getDatabase(context).itemDao(),
         )
     }
     
@@ -48,7 +48,7 @@ class AppDataContainer(private val context: Context) : AppContainer {
      */
     override val usagesRepository: UsagesRepository by lazy {
         OfflineUsagesRepository(
-            PreteirbDatabase.getDatabase(context).usageDao(),
+            AppDatabase.getDatabase(context).usageDao(),
         )
     }
     
@@ -59,6 +59,6 @@ class AppDataContainer(private val context: Context) : AppContainer {
         name = USER_PREFERENCES_NAME,
     )
     override val settingsRepository: SettingsRepository by lazy {
-        SettingsRepository(context.dataStore)
+        DataStoreSettingsRepository(context.dataStore)
     }
 }

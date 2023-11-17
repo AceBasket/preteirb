@@ -4,7 +4,7 @@ import android.content.Context
 import androidx.room.Room
 import androidx.test.core.app.ApplicationProvider
 import androidx.test.ext.junit.runners.AndroidJUnit4
-import com.example.preteirb.data.PreteirbDatabase
+import com.example.preteirb.data.AppDatabase
 import com.example.preteirb.data.item.Item
 import com.example.preteirb.data.usage.Usage
 import kotlinx.coroutines.flow.first
@@ -19,23 +19,23 @@ import java.io.IOException
 @RunWith(AndroidJUnit4::class)
 class UserDaoTest {
     private lateinit var userDao: UserDao;
-    private lateinit var preteirbDatabase: PreteirbDatabase;
+    private lateinit var appDatabase: AppDatabase;
     
     @Before
     fun createDb() {
         val context = ApplicationProvider.getApplicationContext<Context>();
-        preteirbDatabase =
-            Room.inMemoryDatabaseBuilder(context, PreteirbDatabase::class.java)
+        appDatabase =
+            Room.inMemoryDatabaseBuilder(context, AppDatabase::class.java)
                 // Allowing main thread queries, just for testing.
                 .allowMainThreadQueries()
                 .build();
-        userDao = preteirbDatabase.userDao();
+        userDao = appDatabase.userDao();
     }
     
     @After
     @Throws(IOException::class)
     fun closeDb() {
-        preteirbDatabase.close();
+        appDatabase.close();
     }
     
     private var user1 = User(1, "User 1", "location 1");
@@ -98,13 +98,13 @@ class UserDaoTest {
     @Throws(Exception::class)
     fun daoGetAllItemsOwnedByUser_returnsAllItemsOwnedByUserFromDB() = runBlocking {
         addAllUsersToDb()
-        val itemDao = preteirbDatabase.itemDao();
+        val itemDao = appDatabase.itemDao();
         val item1 = Item(1, "Item 1", "Item 1 description", 1);
         val item2 = Item(2, "Item 2", "Item 2 description", 1);
         itemDao.insert(item1)
         itemDao.insert(item2)
         
-        val usageDao = preteirbDatabase.usageDao();
+        val usageDao = appDatabase.usageDao();
         val usage1 = Usage(1, 1, "", "");
         val usage2 = Usage(2, 1, "", "");
         val usage3 = Usage(1, 2, "", "");

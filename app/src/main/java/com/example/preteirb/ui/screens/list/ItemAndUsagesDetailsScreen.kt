@@ -16,13 +16,12 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.hilt.navigation.compose.hiltViewModel
 import com.example.compose.AppTheme
 import com.example.preteirb.R
 import com.example.preteirb.data.item.Item
 import com.example.preteirb.data.item.ItemAndUsages
 import com.example.preteirb.data.usage.Usage
-import com.example.preteirb.model.AppViewModelProvider
 import com.example.preteirb.model.ItemAndUsagesDetailsViewModel
 import com.example.preteirb.model.toItemDetails
 import com.example.preteirb.ui.navigation.NavigationDestination
@@ -48,13 +47,15 @@ object ItemAndUsagesDetailsDestination : NavigationDestination {
 @Composable
 fun ItemAndUsagesDetailsScreen(
     modifier: Modifier = Modifier,
-    viewModel: ItemAndUsagesDetailsViewModel = viewModel(factory = AppViewModelProvider.Factory)
+    viewModel: ItemAndUsagesDetailsViewModel = hiltViewModel(),
 ) {
     ItemAndUsagesDetails(
         itemAndUsages = viewModel.itemAndUsages
-            .collectAsState(initial = ItemAndUsages(
-                Item(0, "", "", 0),
-                emptyList())
+            .collectAsState(
+                initial = ItemAndUsages(
+                    Item(0, "", "", 0),
+                    emptyList()
+                )
             ).value,
         modifier = modifier
     )
@@ -91,43 +92,44 @@ fun ItemBookedPeriods(
     usages: List<Usage>,
     modifier: Modifier = Modifier
 ) {
-   Column(modifier = modifier) {
-       val rangeUsages = usages.map { epochMilliToLocalDate(it.startDateTime)..epochMilliToLocalDate(it.endDateTime) }
-       val rangeColor = MaterialTheme.colorScheme.primaryContainer
-       val epicCalendarPagerState = rememberEpicCalendarPagerState(
-           config = rememberEpicCalendarPagerConfig(
-               basisConfig = rememberBasisEpicCalendarConfig(
-                   rowsSpacerHeight = 4.dp,
-                   dayOfWeekViewHeight = 40.dp,
-                   dayOfMonthViewHeight = 40.dp,
-                   columnWidth = 40.dp,
-                   dayOfWeekViewShape = RoundedCornerShape(16.dp),
-                   dayOfMonthViewShape = RoundedCornerShape(16.dp),
-                   contentPadding = PaddingValues(0.dp),
-                   contentColor = Color.Unspecified,
-                   displayDaysOfAdjacentMonths = true,
-                   displayDaysOfWeek = true
-               )
-           )
-       )
-       var monthDisplayed =epicCalendarPagerState.currentMonth.month.getDisplayName(
-           TextStyle.FULL, Locale.getDefault()
-       ) + " " + epicCalendarPagerState.currentMonth.year.toString()
-       Text(
-           text = monthDisplayed,
-           style = MaterialTheme.typography.headlineMedium,
-           modifier = Modifier.align(Alignment.CenterHorizontally)
-       )
-       EpicCalendarPager(
-           state = epicCalendarPagerState,
-           pageModifier = { page ->
-               Modifier.drawEpicRanges(
-                   ranges = rangeUsages,
-                   color = rangeColor
-               )
-           }
-       )
-   }
+    Column(modifier = modifier) {
+        val rangeUsages =
+            usages.map { epochMilliToLocalDate(it.startDateTime)..epochMilliToLocalDate(it.endDateTime) }
+        val rangeColor = MaterialTheme.colorScheme.primaryContainer
+        val epicCalendarPagerState = rememberEpicCalendarPagerState(
+            config = rememberEpicCalendarPagerConfig(
+                basisConfig = rememberBasisEpicCalendarConfig(
+                    rowsSpacerHeight = 4.dp,
+                    dayOfWeekViewHeight = 40.dp,
+                    dayOfMonthViewHeight = 40.dp,
+                    columnWidth = 40.dp,
+                    dayOfWeekViewShape = RoundedCornerShape(16.dp),
+                    dayOfMonthViewShape = RoundedCornerShape(16.dp),
+                    contentPadding = PaddingValues(0.dp),
+                    contentColor = Color.Unspecified,
+                    displayDaysOfAdjacentMonths = true,
+                    displayDaysOfWeek = true
+                )
+            )
+        )
+        var monthDisplayed = epicCalendarPagerState.currentMonth.month.getDisplayName(
+            TextStyle.FULL, Locale.getDefault()
+        ) + " " + epicCalendarPagerState.currentMonth.year.toString()
+        Text(
+            text = monthDisplayed,
+            style = MaterialTheme.typography.headlineMedium,
+            modifier = Modifier.align(Alignment.CenterHorizontally)
+        )
+        EpicCalendarPager(
+            state = epicCalendarPagerState,
+            pageModifier = { page ->
+                Modifier.drawEpicRanges(
+                    ranges = rangeUsages,
+                    color = rangeColor
+                )
+            }
+        )
+    }
 }
 
 
@@ -136,7 +138,12 @@ fun ItemBookedPeriods(
 fun ItemDetailsScreenDetails() {
     AppTheme {
         val fakeData: ItemAndUsages = ItemAndUsages(
-            item = Item(itemId = 1, name = "Item name", description = "Item description", userOwnerId = 1),
+            item = Item(
+                itemId = 1,
+                name = "Item name",
+                description = "Item description",
+                userOwnerId = 1
+            ),
             usages = listOf(
                 Usage(
                     usageId = 1,

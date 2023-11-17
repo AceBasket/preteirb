@@ -2,8 +2,11 @@ package com.example.preteirb.model
 
 import androidx.lifecycle.ViewModel
 import com.example.preteirb.data.SettingsRepository
+import dagger.hilt.android.lifecycle.HiltViewModel
+import javax.inject.Inject
 
-class PreteirbAppViewModel(settingsRepository: SettingsRepository) : ViewModel() {
+@HiltViewModel
+class PreteirbAppViewModel @Inject constructor(settingsRepository: SettingsRepository) : ViewModel() {
     
     var profileId = settingsRepository.getUserId()
         private set

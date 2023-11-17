@@ -28,11 +28,10 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.window.Dialog
 import androidx.compose.ui.window.DialogProperties
-import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.hilt.navigation.compose.hiltViewModel
 import com.example.compose.AppTheme
 import com.example.preteirb.R
 import com.example.preteirb.data.user.User
-import com.example.preteirb.model.AppViewModelProvider
 import com.example.preteirb.model.ProfileSelectionUiState
 import com.example.preteirb.model.ProfileSelectionViewModel
 import com.example.preteirb.ui.navigation.NavigationDestination
@@ -48,7 +47,7 @@ object ProfileSelectionDestination : NavigationDestination {
 fun ProfileSelectionScreen(
     navigateToSearch: () -> Unit,
     modifier: Modifier = Modifier,
-    viewModel: ProfileSelectionViewModel = viewModel(factory = AppViewModelProvider.Factory)
+    viewModel: ProfileSelectionViewModel = hiltViewModel()
 ) {
     val uiState by viewModel.uiState.collectAsState()
     val coroutine = rememberCoroutineScope()

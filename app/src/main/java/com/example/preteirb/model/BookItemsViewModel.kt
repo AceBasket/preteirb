@@ -6,14 +6,17 @@ import com.example.preteirb.data.SettingsRepository
 import com.example.preteirb.data.item.ItemsRepository
 import com.example.preteirb.data.usage.UsagesRepository
 import com.example.preteirb.ui.screens.booking.BookItemDestination
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.filterNotNull
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
-class BookItemsViewModel(
+@HiltViewModel
+class BookItemsViewModel @Inject constructor(
     savedStateHandle: SavedStateHandle,
     private val usagesRepository: UsagesRepository,
     private val itemsRepository: ItemsRepository,

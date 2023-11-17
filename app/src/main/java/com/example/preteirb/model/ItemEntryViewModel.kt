@@ -7,9 +7,12 @@ import androidx.lifecycle.ViewModel
 import com.example.preteirb.data.SettingsRepository
 import com.example.preteirb.data.item.Item
 import com.example.preteirb.data.item.ItemsRepository
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.first
+import javax.inject.Inject
 
-class ItemEntryViewModel(
+@HiltViewModel
+class ItemEntryViewModel @Inject constructor(
     private val itemsRepository: ItemsRepository,
     private val settingsRepository: SettingsRepository
 ) : ViewModel() {

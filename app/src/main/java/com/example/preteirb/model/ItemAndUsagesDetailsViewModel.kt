@@ -4,9 +4,12 @@ import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import com.example.preteirb.data.item.ItemsRepository
 import com.example.preteirb.ui.screens.list.ItemAndUsagesDetailsDestination
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.filterNotNull
+import javax.inject.Inject
 
-class ItemAndUsagesDetailsViewModel(
+@HiltViewModel
+class ItemAndUsagesDetailsViewModel @Inject constructor(
     savedStateHandle: SavedStateHandle,
     private val itemsRepository: ItemsRepository
 ) : ViewModel() {

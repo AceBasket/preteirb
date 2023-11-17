@@ -16,20 +16,20 @@ import com.example.preteirb.data.user.UserDao
     version = 3,
     exportSchema = false
 )
-abstract class PreteirbDatabase : RoomDatabase() {
+abstract class AppDatabase : RoomDatabase() {
     abstract fun userDao(): UserDao
     abstract fun itemDao(): ItemDao
     abstract fun usageDao(): UsageDao
     
     companion object {
         @Volatile
-        private var INSTANCE: PreteirbDatabase? = null
+        private var INSTANCE: AppDatabase? = null
         
-        fun getDatabase(context: Context): PreteirbDatabase {
+        fun getDatabase(context: Context): AppDatabase {
             return INSTANCE ?: synchronized(this) {
                 Room.databaseBuilder(
                     context,
-                    PreteirbDatabase::class.java,
+                    AppDatabase::class.java,
                     "preteirb_database"
                 ).fallbackToDestructiveMigration()
                     .build().also {

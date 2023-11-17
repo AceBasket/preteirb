@@ -4,12 +4,15 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.preteirb.data.item.Item
 import com.example.preteirb.data.item.ItemsRepository
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
+import javax.inject.Inject
 
-class ItemSelectionViewModel(private val itemsRepository: ItemsRepository) : ViewModel() {
+@HiltViewModel
+class ItemSelectionViewModel @Inject constructor(private val itemsRepository: ItemsRepository) : ViewModel() {
     val uiState: StateFlow<ItemSelectionUiState> =
         itemsRepository.getAllItemsStream().map { ItemSelectionUiState(it) }
             .stateIn(

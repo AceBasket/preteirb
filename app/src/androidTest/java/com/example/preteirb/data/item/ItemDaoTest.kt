@@ -4,7 +4,7 @@ import android.content.Context
 import androidx.room.Room
 import androidx.test.core.app.ApplicationProvider
 import androidx.test.ext.junit.runners.AndroidJUnit4
-import com.example.preteirb.data.PreteirbDatabase
+import com.example.preteirb.data.AppDatabase
 import com.example.preteirb.data.usage.Usage
 import com.example.preteirb.data.user.User
 import kotlinx.coroutines.flow.first
@@ -19,23 +19,23 @@ import java.io.IOException
 @RunWith(AndroidJUnit4::class)
 class ItemDaoTest {
     private lateinit var itemDao: ItemDao;
-    private lateinit var preteirbDatabase: PreteirbDatabase;
+    private lateinit var appDatabase: AppDatabase;
     
     @Before
     fun createDb() {
         val context = ApplicationProvider.getApplicationContext<Context>();
-        preteirbDatabase =
-            Room.inMemoryDatabaseBuilder(context, PreteirbDatabase::class.java)
+        appDatabase =
+            Room.inMemoryDatabaseBuilder(context, AppDatabase::class.java)
                 // Allowing main thread queries, just for testing.
                 .allowMainThreadQueries()
                 .build();
-        itemDao = preteirbDatabase.itemDao();
+        itemDao = appDatabase.itemDao();
     }
     
     @After
     @Throws(IOException::class)
     fun closeDb() {
-        preteirbDatabase.close();
+        appDatabase.close();
     }
     
     private var item1 = Item(1, "Item 1", "Item 1 description", 1);
@@ -113,16 +113,16 @@ class ItemDaoTest {
     
     private suspend fun addOneItemAndUsagesToDb() {
         itemDao.insert(itemAndUsages1.item)
-        val userDao = preteirbDatabase.userDao();
+        val userDao = appDatabase.userDao();
         userDao.insert(user1)
         userDao.insert(user2)
-        val usageDao = preteirbDatabase.usageDao();
+        val usageDao = appDatabase.usageDao();
         usageDao.insert(itemAndUsages1.usages)
     }
     
     private suspend fun addAllItemsAndUsagesToDb() {
-        val usageDao = preteirbDatabase.usageDao();
-        val userDao = preteirbDatabase.userDao();
+        val usageDao = appDatabase.usageDao();
+        val userDao = appDatabase.userDao();
         itemDao.insert(itemAndUsages1.item)
         itemDao.insert(itemAndUsages2.item)
         userDao.insert(user1)

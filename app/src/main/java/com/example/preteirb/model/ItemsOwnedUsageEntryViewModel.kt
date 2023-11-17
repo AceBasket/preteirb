@@ -4,9 +4,12 @@ import androidx.lifecycle.viewModelScope
 import com.example.preteirb.data.SettingsRepository
 import com.example.preteirb.data.usage.UsagesRepository
 import com.example.preteirb.data.user.UsersRepository
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.StateFlow
+import javax.inject.Inject
 
-class ItemsOwnedUsageEntryViewModel(
+@HiltViewModel
+class ItemsOwnedUsageEntryViewModel @Inject constructor(
     private val usersRepository: UsersRepository,
     private val usagesRepository: UsagesRepository,
     private val settingsRepository: SettingsRepository,

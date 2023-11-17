@@ -5,15 +5,18 @@ import androidx.lifecycle.viewModelScope
 import com.example.preteirb.data.SettingsRepository
 import com.example.preteirb.data.user.User
 import com.example.preteirb.data.user.UsersRepository
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
+import javax.inject.Inject
 
 /**
  * ViewModel to retrieve all users in the Room database.
  */
-class ProfileSelectionViewModel(
+@HiltViewModel
+class ProfileSelectionViewModel @Inject constructor(
     private val usersRepository: UsersRepository,
     private val settingsRepository: SettingsRepository,
 ) : ViewModel() {

@@ -6,18 +6,21 @@ import androidx.lifecycle.viewModelScope
 import com.example.preteirb.data.item.ItemsRepository
 import com.example.preteirb.utils.Result
 import com.example.preteirb.utils.asResult
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
+import javax.inject.Inject
 
 /**
  * ViewModel to retrieve all items in the Room database according to filters.
  */
 @OptIn(kotlinx.coroutines.ExperimentalCoroutinesApi::class)
-class SearchViewModel(
+@HiltViewModel
+class SearchViewModel @Inject constructor(
     private val savedStateHandle: SavedStateHandle,
     private val itemsRepository: ItemsRepository
 ) : ViewModel() {

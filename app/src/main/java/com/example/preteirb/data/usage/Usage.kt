@@ -14,7 +14,7 @@ import com.example.preteirb.data.user.User
         ForeignKey(entity = User::class, parentColumns = ["userId"], childColumns = ["userId"])
     ],
     indices = [
-        Index(value = ["userId"])
+        Index(value = ["userId"]), Index(value = ["itemId"])
     ]
 )
 data class Usage(

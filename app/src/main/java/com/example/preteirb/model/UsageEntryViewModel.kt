@@ -14,6 +14,7 @@ import com.example.preteirb.data.usage.UsagesRepository
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 
+
 abstract class UsageEntryViewModel(
     private val usagesRepository: UsagesRepository,
     private val settingsRepository: SettingsRepository
@@ -23,10 +24,6 @@ abstract class UsageEntryViewModel(
      */
     var uiState by mutableStateOf(UsageUiState())
         private set
-    
-    //private val _usagePeriods = uiState.usageDetails.period.toMutableStateList()
-    //val usagePeriods: SnapshotStateList<UsagePeriod>
-    //    get() = _usagePeriods
     
     // init with userId from settings
     init {
@@ -38,8 +35,6 @@ abstract class UsageEntryViewModel(
             )
         }
     }
-    
-    //abstract fun getItemId(): Int
     
     /**
      * Updates the [uiState] with the value provided in the argument. This method also triggers

@@ -2,9 +2,10 @@ package com.example.preteirb.data.user
 
 import com.example.preteirb.data.item.ItemsOwned
 import kotlinx.coroutines.flow.Flow
+import javax.inject.Inject
 
 
-class OfflineUsersRepository(private val userDao: UserDao) : UsersRepository {
+class OfflineUsersRepository @Inject constructor(private val userDao: UserDao) : UsersRepository {
     override fun getAllUsersStream(): Flow<List<User>> = userDao.getAllUsers();
     
     override fun getUserStream(id: Int): Flow<User?> = userDao.getUser(id);

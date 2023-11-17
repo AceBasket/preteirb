@@ -3,9 +3,8 @@ package com.example.preteirb.ui.screens.list
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Modifier
-import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.hilt.navigation.compose.hiltViewModel
 import com.example.preteirb.R
-import com.example.preteirb.model.AppViewModelProvider
 import com.example.preteirb.model.ListItemsViewModel
 import com.example.preteirb.model.toItemDetails
 import com.example.preteirb.ui.navigation.NavigationDestination
@@ -20,7 +19,7 @@ object ListItemsDestination : NavigationDestination {
 fun ListItemsScreen(
     navigateToItemDetails: (Int) -> Unit,
     modifier: Modifier = Modifier,
-    viewModel: ListItemsViewModel = viewModel(factory = AppViewModelProvider.Factory)
+    viewModel: ListItemsViewModel = hiltViewModel()
 ) {
     ObjectList(
         objects = viewModel.listItemsUiState.collectAsState().value.itemsOwned.map { it.toItemDetails() },

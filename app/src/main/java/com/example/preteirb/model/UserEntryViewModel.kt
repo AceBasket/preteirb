@@ -6,8 +6,11 @@ import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import com.example.preteirb.data.user.User
 import com.example.preteirb.data.user.UsersRepository
+import dagger.hilt.android.lifecycle.HiltViewModel
+import javax.inject.Inject
 
-class UserEntryViewModel(private val usersRepository: UsersRepository) : ViewModel() {
+@HiltViewModel
+class UserEntryViewModel @Inject constructor(private val usersRepository: UsersRepository) : ViewModel() {
     /**
      * Holds current user ui state
      */
