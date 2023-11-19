@@ -8,9 +8,6 @@ import androidx.datastore.preferences.core.PreferenceDataStoreFactory
 import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.core.emptyPreferences
 import androidx.datastore.preferences.preferencesDataStoreFile
-import com.example.preteirb.data.DataStoreSettingsRepository
-import com.example.preteirb.data.SettingsRepository
-import dagger.Binds
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -25,29 +22,25 @@ private const val USER_PREFERENCES_NAME = "user_preferences"
 
 @Module
 @InstallIn(SingletonComponent::class)
-abstract class SettingsModule {
-    companion object {
-        @Singleton
-        @Provides
-        fun provideDataStorePreferences(@ApplicationContext applicationContext: Context): DataStore<Preferences> {
-            return PreferenceDataStoreFactory.create(
-                corruptionHandler = ReplaceFileCorruptionHandler(
-                    produceNewData = { emptyPreferences() }
-                ),
-                migrations = listOf(
-                    SharedPreferencesMigration(
-                        applicationContext,
-                        USER_PREFERENCES_NAME
-                    )
-                ),
-                scope = CoroutineScope(Dispatchers.IO + SupervisorJob()),
-                produceFile = {
-                    applicationContext.preferencesDataStoreFile(USER_PREFERENCES_NAME)
-                }
-            )
-        }
-    }
+class SettingsModule {
     
-    @Binds
-    abstract fun bindSettingsRepository(dataStoreSettingsRepository: DataStoreSettingsRepository): SettingsRepository
+    @Singleton
+    @Provides
+    fun provideDataStorePreferences(@ApplicationContext applicationContext: Context): DataStore<Preferences> {
+        return PreferenceDataStoreFactory.create(
+            corruptionHandler = ReplaceFileCorruptionHandler(
+                produceNewData = { emptyPreferences() }
+            ),
+            migrations = listOf(
+                SharedPreferencesMigration(
+                    applicationContext,
+                    USER_PREFERENCES_NAME
+                )
+            ),
+            scope = CoroutineScope(SupervisorJob() + Dispatchers.IO),
+            produceFile = {
+                applicationContext.preferencesDataStoreFile(USER_PREFERENCES_NAME)
+            }
+        )
+    }
 }

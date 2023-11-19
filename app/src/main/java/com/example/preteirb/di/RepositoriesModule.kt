@@ -1,5 +1,7 @@
 package com.example.preteirb.di
 
+import com.example.preteirb.data.DataStoreSettingsRepository
+import com.example.preteirb.data.SettingsRepository
 import com.example.preteirb.data.item.ItemsRepository
 import com.example.preteirb.data.item.OfflineItemsRepository
 import com.example.preteirb.data.usage.OfflineUsagesRepository
@@ -22,4 +24,7 @@ abstract class RepositoriesModule {
     
     @Binds
     abstract fun bindUsersRepository(offlineUsersRepository: OfflineUsersRepository): UsersRepository
+    
+    @Binds
+    abstract fun bindSettingsRepository(dataStoreSettingsRepository: DataStoreSettingsRepository): SettingsRepository
 }
