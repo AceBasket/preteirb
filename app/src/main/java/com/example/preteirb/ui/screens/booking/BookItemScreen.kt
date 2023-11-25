@@ -6,8 +6,9 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
-import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.preteirb.R
+import com.example.preteirb.model.AppViewModelProvider
 import com.example.preteirb.model.BookItemsViewModel
 import com.example.preteirb.model.ItemDetails
 import com.example.preteirb.ui.navigation.NavigationDestination
@@ -26,7 +27,8 @@ object BookItemDestination : NavigationDestination {
 fun BookItemScreen(
     modifier: Modifier = Modifier,
     navigateToHomeScreen: () -> Unit,
-    bookItemsViewModel: BookItemsViewModel = hiltViewModel()
+    //bookItemsViewModel: BookItemsViewModel = hiltViewModel()
+    bookItemsViewModel: BookItemsViewModel = viewModel(factory = AppViewModelProvider.Factory)
 ) {
     val item: ItemDetails = bookItemsViewModel.itemToBookDetails.collectAsState().value
     val coroutineScope = rememberCoroutineScope()

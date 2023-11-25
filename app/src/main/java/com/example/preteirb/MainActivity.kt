@@ -9,9 +9,8 @@ import androidx.compose.material3.Surface
 import androidx.compose.ui.Modifier
 import com.example.compose.AppTheme
 import com.example.preteirb.ui.PreteirbApp
-import dagger.hilt.android.AndroidEntryPoint
 
-@AndroidEntryPoint
+//@AndroidEntryPoint
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

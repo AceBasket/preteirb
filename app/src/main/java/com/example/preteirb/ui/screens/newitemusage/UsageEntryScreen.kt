@@ -21,9 +21,10 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.compose.AppTheme
 import com.example.preteirb.R
+import com.example.preteirb.model.AppViewModelProvider
 import com.example.preteirb.model.ItemDetails
 import com.example.preteirb.model.ItemEntryViewModel
 import com.example.preteirb.model.ItemUiState
@@ -44,8 +45,10 @@ object ItemOwnedUsageEntryDestination : NavigationDestination {
 fun NewUsageScreen(
     navigateToHomeScreen: () -> Unit,
     modifier: Modifier = Modifier,
-    itemViewModel: ItemEntryViewModel = hiltViewModel(),
-    itemsOwnedUsagesViewModel: ItemsOwnedUsageEntryViewModel = hiltViewModel(),
+    //itemViewModel: ItemEntryViewModel = hiltViewModel(),
+    itemViewModel: ItemEntryViewModel = viewModel(factory = AppViewModelProvider.Factory),
+    //itemsOwnedUsagesViewModel: ItemsOwnedUsageEntryViewModel = hiltViewModel(),x
+    itemsOwnedUsagesViewModel: ItemsOwnedUsageEntryViewModel = viewModel(factory = AppViewModelProvider.Factory),
 ) {
     val coroutineScope = rememberCoroutineScope()
     val itemsOwnedUiState by itemsOwnedUsagesViewModel.itemsOwnedUiState.collectAsState()

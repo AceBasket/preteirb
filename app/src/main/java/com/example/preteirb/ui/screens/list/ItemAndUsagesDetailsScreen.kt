@@ -16,12 +16,13 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.compose.AppTheme
 import com.example.preteirb.R
 import com.example.preteirb.data.item.Item
 import com.example.preteirb.data.item.ItemAndUsages
 import com.example.preteirb.data.usage.Usage
+import com.example.preteirb.model.AppViewModelProvider
 import com.example.preteirb.model.ItemAndUsagesDetailsViewModel
 import com.example.preteirb.model.toItemDetails
 import com.example.preteirb.ui.navigation.NavigationDestination
@@ -47,7 +48,8 @@ object ItemAndUsagesDetailsDestination : NavigationDestination {
 @Composable
 fun ItemAndUsagesDetailsScreen(
     modifier: Modifier = Modifier,
-    viewModel: ItemAndUsagesDetailsViewModel = hiltViewModel(),
+    //viewModel: ItemAndUsagesDetailsViewModel = hiltViewModel(),
+    viewModel: ItemAndUsagesDetailsViewModel = viewModel(factory = AppViewModelProvider.Factory),
 ) {
     ItemAndUsagesDetails(
         itemAndUsages = viewModel.itemAndUsages

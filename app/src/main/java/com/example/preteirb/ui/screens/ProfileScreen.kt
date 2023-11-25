@@ -34,9 +34,10 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.compose.AppTheme
 import com.example.preteirb.R
+import com.example.preteirb.model.AppViewModelProvider
 import com.example.preteirb.model.UserDetails
 import com.example.preteirb.model.UserProfileUiState
 import com.example.preteirb.model.UserProfileViewModel
@@ -51,7 +52,8 @@ object ProfileDestination : NavigationDestination {
 fun ProfileScreen(
     navigateToSelectProfile: () -> Unit,
     modifier: Modifier = Modifier,
-    viewModel: UserProfileViewModel = hiltViewModel(),
+    //viewModel: UserProfileViewModel = hiltViewModel(),
+    viewModel: UserProfileViewModel = viewModel(factory = AppViewModelProvider.Factory),
 ) {
     
     val uiState = viewModel.userProfileUiState.collectAsState()
