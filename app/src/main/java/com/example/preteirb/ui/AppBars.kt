@@ -65,7 +65,7 @@ val bottomNavItems = listOf(
 
 
 @Composable
-fun BottomLoanAppBar(
+fun BottomAppBar(
     navController: NavController,
     backStackEntry: NavBackStackEntry?,
     modifier: Modifier = Modifier,
@@ -101,7 +101,7 @@ fun BottomLoanAppBar(
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun LoanAppTopBar(
+fun AppTopBar(
     @StringRes currentScreenTitle: Int,
     canNavigateBack: Boolean,
     navigateUp: () -> Unit,
@@ -161,7 +161,7 @@ fun LoanAppTopBar(
 @Composable
 fun BottomAppBarPreview() {
     AppTheme {
-        BottomLoanAppBar(
+        BottomAppBar(
             navController = rememberNavController(),
             backStackEntry = null
         )
@@ -172,7 +172,7 @@ fun BottomAppBarPreview() {
 @Composable
 fun TopAppBarPreview() {
     AppTheme {
-        LoanAppTopBar(
+        AppTopBar(
             currentScreenTitle = R.string.app_name,
             canNavigateBack = false,
             navigateUp = {},

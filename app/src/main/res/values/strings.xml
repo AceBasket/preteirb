@@ -1,4 +1,7 @@
 <resources>
+    <!-- Common -->
+    <string name="generic_error">Something wrong happened. Please try again.</string>
+
     <string name="app_name">PRET\'EIRB</string>
     <string name="home">Home</string>
     <string name="add_object">Add object</string>
