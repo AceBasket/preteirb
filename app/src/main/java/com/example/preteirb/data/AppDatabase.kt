@@ -13,18 +13,18 @@ import com.example.preteirb.data.user.UserDao
 
 @Database(
     entities = [User::class, Item::class, Usage::class],
-    version = 3,
+    version = 4,
     exportSchema = false
 )
 abstract class AppDatabase : RoomDatabase() {
     abstract fun userDao(): UserDao
     abstract fun itemDao(): ItemDao
     abstract fun usageDao(): UsageDao
-    
+
     companion object {
         @Volatile
         private var INSTANCE: AppDatabase? = null
-        
+
         fun getDatabase(context: Context): AppDatabase {
             return INSTANCE ?: synchronized(this) {
                 Room.databaseBuilder(

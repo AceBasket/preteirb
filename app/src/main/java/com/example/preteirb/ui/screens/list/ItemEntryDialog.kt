@@ -69,7 +69,6 @@ fun NewObjectDialog(
                     value = itemUiState.itemDetails.name,
                     onValueChange = { onValueChange(itemUiState.itemDetails.copy(name = it)) },
                     label = { Text(stringResource(id = R.string.title)) },
-                    singleLine = true,
                     modifier = Modifier.fillMaxWidth()
                 )
                 OutlinedTextField(
