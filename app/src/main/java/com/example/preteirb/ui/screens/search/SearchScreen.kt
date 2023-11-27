@@ -35,7 +35,6 @@ import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.compose.AppTheme
@@ -59,12 +58,12 @@ fun SearchScreen(
     //viewModel: SearchViewModel = hiltViewModel(),
     viewModel: SearchViewModel = viewModel(factory = AppViewModelProvider.Factory),
 ) {
-    
+
     val uiState = viewModel.uiState.collectAsState()
-    
+
     // this is the text users enter
     val queryString by viewModel.searchQuery.collectAsStateWithLifecycle()
-    
+
     // if the search bar is active or not
     var isActive by remember {
         mutableStateOf(false)
@@ -83,13 +82,13 @@ fun SearchScreen(
             modifier = Modifier
                 .padding(dimensionResource(id = R.dimen.padding_medium))
         ) {}
-        
+
         when (uiState.value) {
             SearchResultUiState.Loading,
             SearchResultUiState.LoadFailed,
             SearchResultUiState.EmptyQuery,
             -> Unit
-            
+
             is SearchResultUiState.Success -> {
                 if ((uiState.value as SearchResultUiState.Success).isEmpty()) {
                     Text(text = stringResource(id = R.string.search_result_not_found, queryString))
@@ -98,9 +97,9 @@ fun SearchScreen(
                     ObjectList(objects = items, onItemClick = navigateToBookItem)
                 }
             }
-            
+
         }
-        
+
         //FloatingActionButton(
         //    onClick = { /* TODO */ },
         //) {
@@ -161,7 +160,7 @@ fun ObjectCard(
             Image(
                 painter = painterResource(id = R.drawable.ic_broken_image),
                 contentDescription = null,
-                modifier = Modifier.size(64.dp)
+                modifier = Modifier.size(dimensionResource(id = R.dimen.image_size_medium))
             )
             Column {
                 Text(

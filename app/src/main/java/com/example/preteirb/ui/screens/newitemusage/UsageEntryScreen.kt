@@ -1,22 +1,13 @@
 package com.example.preteirb.ui.screens.newitemusage
 
 import android.util.Log
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.material3.Button
 import androidx.compose.material3.Text
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.*
 import androidx.compose.runtime.saveable.rememberSaveable
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.stringResource
@@ -24,16 +15,9 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.compose.AppTheme
 import com.example.preteirb.R
-import com.example.preteirb.model.AppViewModelProvider
-import com.example.preteirb.model.ItemDetails
-import com.example.preteirb.model.ItemEntryViewModel
-import com.example.preteirb.model.ItemUiState
-import com.example.preteirb.model.ItemsOwnedUiState
-import com.example.preteirb.model.ItemsOwnedUsageEntryViewModel
-import com.example.preteirb.model.UsageDetails
-import com.example.preteirb.model.UsagePeriod
-import com.example.preteirb.model.UsageUiState
+import com.example.preteirb.model.*
 import com.example.preteirb.ui.navigation.NavigationDestination
+import com.example.preteirb.ui.screens.list.NewObjectDialog
 import kotlinx.coroutines.launch
 
 object ItemOwnedUsageEntryDestination : NavigationDestination {
@@ -104,8 +88,8 @@ fun NewUsageForm(
     var isShowObjectDialog by rememberSaveable {
         mutableStateOf(false)
     }
-    
-    
+
+
     Column(
         modifier = modifier
     ) {
@@ -119,7 +103,7 @@ fun NewUsageForm(
             onUsageValueChange = onUsageValueChange,
             onSaveUsageClick = onSaveUsageClick,
         )
-        
+
         if (isShowObjectDialog) {
             NewObjectDialog(
                 itemUiState = itemUiState,
@@ -133,8 +117,8 @@ fun NewUsageForm(
                 },
             )
         }
-        
-        
+
+
     }
 }
 
@@ -154,7 +138,7 @@ fun AddUsagesV2(
                     if (it.first != null && it.second != null) {
                         val periodUpdated = usageUiState.usageDetails.period
                         periodUpdated[index] = UsagePeriod(it.first!!, it.second!!)
-                        
+
                         onUsageValueChange(
                             usageUiState.usageDetails.copy(
                                 period = periodUpdated
@@ -183,7 +167,7 @@ fun AddUsagesV2(
                     if (it.first != null && it.second != null) {
                         val periodAdded = usageUiState.usageDetails.period
                         periodAdded.add(UsagePeriod(it.first!!, it.second!!))
-                        
+
                         onUsageValueChange(
                             usageUiState.usageDetails.copy(
                                 period = periodAdded
@@ -194,7 +178,7 @@ fun AddUsagesV2(
             )
         }
     }
-    
+
     Row(
         horizontalArrangement = Arrangement.SpaceEvenly,
         modifier = Modifier
