@@ -18,18 +18,18 @@ class ItemEntryViewModel @Inject constructor(
 ) : ViewModel() {
     var itemUiState by mutableStateOf(ItemUiState())
         private set
-    
+
     fun updateUiState(itemDetails: ItemDetails) {
         itemUiState =
             ItemUiState(itemDetails = itemDetails, isEntryValid = validateInput(itemDetails))
     }
-    
+
     private fun validateInput(uiState: ItemDetails = itemUiState.itemDetails): Boolean {
         return with(uiState) {
-            name.isNotBlank() && description.isNotBlank()
+            name.isNotBlank()
         }
     }
-    
+
     suspend fun saveItem() {
         val userOwnerId = settingsRepository.getUserId().first()
         if (validateInput()) {

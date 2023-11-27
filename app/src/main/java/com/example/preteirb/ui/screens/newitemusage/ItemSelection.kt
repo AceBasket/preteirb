@@ -1,12 +1,12 @@
 package com.example.preteirb.ui.screens.newitemusage
 
-import android.util.Log
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.KeyboardArrowDown
 import androidx.compose.material.icons.filled.KeyboardArrowUp
 import androidx.compose.material3.DropdownMenu
@@ -51,7 +51,7 @@ fun ObjectSelection(
         Icons.Filled.KeyboardArrowUp
     else
         Icons.Filled.KeyboardArrowDown
-    
+
     Column(
         modifier = modifier.fillMaxWidth()
     ) {
@@ -80,7 +80,7 @@ fun ObjectSelection(
                 )
             }
         )
-        
+
         // Create a drop-down menu with list of objects,
         // when clicked, set the Text Field text as the object selected
         DropdownMenu(
@@ -98,15 +98,21 @@ fun ObjectSelection(
                     },
                 )
             }
-            
+
             // last item is a button to add an object
             DropdownMenuItem(
+                leadingIcon = {
+                    Icon(
+                        Icons.Default.Add,
+                        contentDescription = null,
+                    )
+                },
                 text = { Text(stringResource(id = R.string.add_object)) },
                 onClick = onAddItem
             )
         }
     }
-    
+
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -134,19 +140,17 @@ fun ExposedDropdownObjectSelection(
                 )
             },
             colors = ExposedDropdownMenuDefaults.textFieldColors(),
-            modifier = Modifier.menuAnchor().fillMaxWidth()
+            modifier = Modifier
+                .menuAnchor()
+                .fillMaxWidth()
         )
-        
+
         ExposedDropdownMenu(
             expanded = isExpanded,
             onDismissRequest = {
                 isExpanded = false
             }
         ) {
-            Log.d(
-                "ExposedDropdownObjectSelection",
-                "ExposedDropdownMenu: ${objectList.size} items : $objectList"
-            )
             objectList.forEach { item ->
                 DropdownMenuItem(
                     text = { Text(text = item.name) },
@@ -158,8 +162,14 @@ fun ExposedDropdownObjectSelection(
                     contentPadding = ExposedDropdownMenuDefaults.ItemContentPadding,
                 )
             }
-            
+
             DropdownMenuItem(
+                leadingIcon = {
+                    Icon(
+                        Icons.Default.Add,
+                        contentDescription = null,
+                    )
+                },
                 text = { Text(text = stringResource(id = R.string.add_object)) },
                 onClick = onAddItem,
                 contentPadding = ExposedDropdownMenuDefaults.ItemContentPadding,
