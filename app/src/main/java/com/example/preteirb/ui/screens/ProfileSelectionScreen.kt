@@ -8,6 +8,8 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.Card
 import androidx.compose.material3.Icon
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Surface
@@ -26,6 +28,7 @@ import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
 import androidx.compose.ui.window.DialogProperties
 import androidx.lifecycle.viewmodel.compose.viewModel
@@ -53,9 +56,9 @@ fun ProfileSelectionScreen(
 ) {
     val uiState by viewModel.uiState.collectAsState()
     val coroutine = rememberCoroutineScope()
-    
-    
-    
+
+
+
     ProfileSelection(
         uiState = uiState,
         onAddAccount = { username ->
@@ -87,14 +90,14 @@ fun ProfileSelection(
     modifier: Modifier = Modifier,
 ) {
     var isShowAddAccountDialog by rememberSaveable { mutableStateOf(false) }
-    
+
     ProfileSelectionCarousel(
         list = uiState.users,
         onClickOnProfile = onClickOnProfile,
         onClickOnAddProfile = { isShowAddAccountDialog = true },
         modifier = modifier
     )
-    
+
     if (isShowAddAccountDialog) {
         AddAccountDialog(
             onDismissRequest = { isShowAddAccountDialog = false },
@@ -115,7 +118,7 @@ fun ProfileList(
     Column(
         modifier = modifier
     ) {
-        
+
         profileList.forEach { profile ->
             Row(
                 modifier = Modifier
@@ -139,7 +142,7 @@ fun AddAccountDialog(
     onAddAccount: (String) -> Unit = {},
 ) {
     var username by rememberSaveable { mutableStateOf("") }
-    
+
     Dialog(
         onDismissRequest = { onDismissRequest() },
         properties = DialogProperties(
@@ -147,29 +150,37 @@ fun AddAccountDialog(
             dismissOnClickOutside = true
         )
     ) {
-        Column(
-            modifier = modifier,
-            horizontalAlignment = Alignment.CenterHorizontally
+        Card(
+            modifier = Modifier
+                .fillMaxWidth()
+//                .height(375.dp)
+                .padding(16.dp),
+            shape = RoundedCornerShape(16.dp),
         ) {
-            OutlinedTextField(
-                value = username,
-                onValueChange = { username = it },
-                label = { Text(stringResource(id = R.string.username)) },
-            )
-            Row(
-                horizontalArrangement = Arrangement.End,
-                modifier = Modifier
-                    .fillMaxWidth()
+            Column(
+                modifier = modifier,
+                horizontalAlignment = Alignment.CenterHorizontally
             ) {
-                TextButton(
-                    onClick = { onDismissRequest() }
+                OutlinedTextField(
+                    value = username,
+                    onValueChange = { username = it },
+                    label = { Text(stringResource(id = R.string.username)) },
+                )
+                Row(
+                    horizontalArrangement = Arrangement.End,
+                    modifier = Modifier
+                        .fillMaxWidth()
                 ) {
-                    Text(stringResource(id = R.string.cancel))
-                }
-                TextButton(
-                    onClick = { onAddAccount(username) }
-                ) {
-                    Text(stringResource(id = R.string.add))
+                    TextButton(
+                        onClick = { onDismissRequest() }
+                    ) {
+                        Text(stringResource(id = R.string.cancel))
+                    }
+                    TextButton(
+                        onClick = { onAddAccount(username) }
+                    ) {
+                        Text(stringResource(id = R.string.add))
+                    }
                 }
             }
         }
@@ -184,7 +195,7 @@ fun ProfileSelectionPreview() {
             modifier = Modifier
                 .fillMaxSize()
         ) {
-            
+
             val fakeProfileList = listOf(
                 User(
                     userId = 1,
