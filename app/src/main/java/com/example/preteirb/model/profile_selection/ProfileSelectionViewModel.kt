@@ -27,21 +27,21 @@ class ProfileSelectionViewModel @Inject constructor(
             started = SharingStarted.WhileSubscribed(TIMEOUT_MILLIS),
             initialValue = ProfileSelectionUiState(),
         )
-    
+
     suspend fun logIn(user: User) {
         settingsRepository.storeUserId(user.userId)
         settingsRepository.storeIsLoggedIn(true)
     }
-    
+
     private suspend fun registerUser(user: User): Long {
         return usersRepository.insertUser(user)
     }
-    
+
     suspend fun registerUserAndLogIn(user: User) {
         val userId = registerUser(user).toInt()
         logIn(user.copy(userId = userId))
     }
-    
+
     companion object {
         private const val TIMEOUT_MILLIS = 5_000L
     }

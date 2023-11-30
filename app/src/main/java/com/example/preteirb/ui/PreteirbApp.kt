@@ -7,7 +7,12 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Snackbar
 import androidx.compose.material3.SnackbarHost
-import androidx.compose.runtime.*
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.tooling.preview.Preview
@@ -20,7 +25,6 @@ import com.example.preteirb.R
 import com.example.preteirb.model.PreteirbAppViewModel
 import com.example.preteirb.ui.navigation.NavigationDestination
 import com.example.preteirb.ui.navigation.appNavGraph
-import com.example.preteirb.ui.screens.ProfileDestination
 import com.example.preteirb.ui.screens.booking.BookItemDestination
 import com.example.preteirb.ui.screens.items_owned.ItemAndUsagesDetailsDestination
 import com.example.preteirb.ui.screens.items_owned.ListItemsDestination
@@ -46,7 +50,6 @@ fun PreteirbApp(
     val currentScreen: NavigationDestination = backStackEntry?.destination?.route?.let { route ->
         when (route) {
             SearchDestination.route -> SearchDestination
-            ProfileDestination.route -> ProfileDestination
             ProfileSelectionDestination.route -> ProfileSelectionDestination
             ItemOwnedUsageEntryDestination.route -> ItemOwnedUsageEntryDestination
             BookItemDestination.route -> BookItemDestination
