@@ -5,8 +5,6 @@ import androidx.navigation.NavType
 import androidx.navigation.compose.composable
 import androidx.navigation.navArgument
 import com.example.preteirb.ui.AppState
-import com.example.preteirb.ui.screens.ProfileDestination
-import com.example.preteirb.ui.screens.ProfileScreen
 import com.example.preteirb.ui.screens.booking.BookItemDestination
 import com.example.preteirb.ui.screens.booking.BookItemScreen
 import com.example.preteirb.ui.screens.items_owned.ItemAndUsagesDetailsDestination
@@ -24,12 +22,6 @@ fun NavGraphBuilder.appNavGraph(appState: AppState) {
     composable(route = SearchDestination.route) {
         SearchScreen(
             navigateToBookItem = { appState.navigate("${BookItemDestination.route}/${it}") },
-        )
-    }
-
-    composable(route = ProfileDestination.route) {
-        ProfileScreen(
-            navigateToSelectProfile = { appState.navigate(ProfileSelectionDestination.route) },
         )
     }
 
