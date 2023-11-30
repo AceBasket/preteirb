@@ -7,6 +7,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
@@ -46,6 +47,7 @@ object ItemAndUsagesDetailsDestination : NavigationDestination {
 
 @Composable
 fun ItemAndUsagesDetailsScreen(
+    navigateToBookItem: (itemId: Int) -> Unit,
     modifier: Modifier = Modifier,
     viewModel: ItemAndUsagesDetailsViewModel = hiltViewModel(),
 ) {
@@ -57,6 +59,7 @@ fun ItemAndUsagesDetailsScreen(
                     emptyList()
                 )
             ).value,
+        onClickOnBookItem = navigateToBookItem,
         modifier = modifier
     )
 }
@@ -64,6 +67,7 @@ fun ItemAndUsagesDetailsScreen(
 @Composable
 fun ItemAndUsagesDetails(
     itemAndUsages: ItemAndUsages,
+    onClickOnBookItem: (itemId: Int) -> Unit,
     modifier: Modifier = Modifier,
 ) {
     Column(modifier = modifier) {
@@ -78,6 +82,13 @@ fun ItemAndUsagesDetails(
         ItemBookedPeriods(
             usages = itemAndUsages.usages,
         )
+        HorizontalDivider()
+        OutlinedButton(
+            onClick = { onClickOnBookItem(itemAndUsages.item.itemId) },
+            modifier = Modifier.align(Alignment.End)
+        ) {
+            Text(text = "Book your object")
+        }
     }
 }
 
@@ -112,7 +123,7 @@ fun ItemBookedPeriods(
                 )
             )
         )
-        var monthDisplayed = epicCalendarPagerState.currentMonth.month.getDisplayName(
+        val monthDisplayed = epicCalendarPagerState.currentMonth.month.getDisplayName(
             TextStyle.FULL, Locale.getDefault()
         ) + " " + epicCalendarPagerState.currentMonth.year.toString()
         Text(
@@ -122,7 +133,7 @@ fun ItemBookedPeriods(
         )
         EpicCalendarPager(
             state = epicCalendarPagerState,
-            pageModifier = { page ->
+            pageModifier = { _ ->
                 Modifier.drawEpicRanges(
                     ranges = rangeUsages,
                     color = rangeColor
@@ -154,6 +165,6 @@ fun ItemDetailsScreenDetails() {
                 )
             )
         )
-        ItemAndUsagesDetails(fakeData)
+        ItemAndUsagesDetails(itemAndUsages = fakeData, onClickOnBookItem = {})
     }
 }

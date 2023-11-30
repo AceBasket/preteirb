@@ -5,7 +5,6 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.rounded.AccountCircle
-import androidx.compose.material.icons.rounded.AddCircle
 import androidx.compose.material.icons.rounded.List
 import androidx.compose.material.icons.rounded.Search
 import androidx.compose.material3.CenterAlignedTopAppBar
@@ -36,7 +35,6 @@ import androidx.navigation.compose.rememberNavController
 import com.example.compose.AppTheme
 import com.example.preteirb.R
 import com.example.preteirb.ui.screens.list.ListItemsDestination
-import com.example.preteirb.ui.screens.newitemusage.ItemOwnedUsageEntryDestination
 import com.example.preteirb.ui.screens.search.SearchDestination
 
 data class BottomNavItem(
@@ -51,11 +49,11 @@ val bottomNavItems = listOf(
         route = SearchDestination.route,
         icon = Icons.Rounded.Search,
     ),
-    BottomNavItem(
-        nameRes = ItemOwnedUsageEntryDestination.titleRes,
-        route = ItemOwnedUsageEntryDestination.route,
-        icon = Icons.Rounded.AddCircle,
-    ),
+//    BottomNavItem(
+//        nameRes = ItemOwnedUsageEntryDestination.titleRes,
+//        route = ItemOwnedUsageEntryDestination.route,
+//        icon = Icons.Rounded.AddCircle,
+//    ),
     BottomNavItem(
         nameRes = ListItemsDestination.titleRes,
         route = ListItemsDestination.route,
@@ -78,7 +76,7 @@ fun BottomAppBar(
     ) {
         bottomNavItems.forEach { item ->
             val isSelected = item.route == backStackEntry?.destination?.route
-            
+
             NavigationBarItem(
                 selected = isSelected,
                 onClick = { navController.navigate(item.route) },
@@ -154,7 +152,7 @@ fun AppTopBar(
             }
         }
     )
-    
+
 }
 
 @Preview(showBackground = true)

@@ -62,13 +62,13 @@ fun PreteirbApp(
     } ?: SearchDestination
 
     var startDestination by remember { mutableStateOf(currentScreen.route) }
-
     LaunchedEffect(viewModel.isLoggedIn) {
-        startDestination = if (viewModel.isLoggedIn.first()) {
-            SearchDestination.route
-        } else {
-            ProfileSelectionDestination.route
-        }
+        startDestination =
+            if (viewModel.isLoggedIn.first() && viewModel.profileId.first() != 0) {
+                SearchDestination.route
+            } else {
+                ProfileSelectionDestination.route
+            }
     }
 
 

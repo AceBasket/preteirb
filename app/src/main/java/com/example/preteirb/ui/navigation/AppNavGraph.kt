@@ -36,9 +36,6 @@ fun NavGraphBuilder.appNavGraph(appState: AppState) {
     composable(route = ItemOwnedUsageEntryDestination.route) {
         NewUsageScreen(
             navigateToHomeScreen = {
-                // pop back stack till and including the given route
-                //navController.popBackStack(ItemOwnedUsageEntryDestination.route, true)
-                //navController.navigate(SearchDestination.route)
                 appState.clearAndNavigate(SearchDestination.route)
             },
         )
@@ -47,9 +44,6 @@ fun NavGraphBuilder.appNavGraph(appState: AppState) {
     composable(route = ProfileSelectionDestination.route) {
         ProfileSelectionScreen(
             navigateToSearch = {
-                // pop back stack till and including the given route
-                //navController.popBackStack(ProfileSelectionDestination.route, true)
-                //navController.navigate(SearchDestination.route)
                 appState.clearAndNavigate(SearchDestination.route)
             }, //TODO: footnote saying account was created
         )
@@ -63,9 +57,6 @@ fun NavGraphBuilder.appNavGraph(appState: AppState) {
     ) {
         BookItemScreen(
             navigateToHomeScreen = {
-                // pop back stack till and including the given route
-                //navController.popBackStack(BookItemDestination.route, true)
-                //navController.navigate(SearchDestination.route)
                 appState.clearAndNavigate(SearchDestination.route)
             },
         )
@@ -83,6 +74,8 @@ fun NavGraphBuilder.appNavGraph(appState: AppState) {
             type = NavType.IntType
         })
     ) {
-        ItemAndUsagesDetailsScreen()
+        ItemAndUsagesDetailsScreen(
+            navigateToBookItem = { appState.navigate("${BookItemDestination.route}/${it}") },
+        )
     }
 }
