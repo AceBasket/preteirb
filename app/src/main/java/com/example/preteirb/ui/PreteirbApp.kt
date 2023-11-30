@@ -28,7 +28,6 @@ import com.example.preteirb.ui.navigation.appNavGraph
 import com.example.preteirb.ui.screens.booking.BookItemDestination
 import com.example.preteirb.ui.screens.items_owned.ItemAndUsagesDetailsDestination
 import com.example.preteirb.ui.screens.items_owned.ListItemsDestination
-import com.example.preteirb.ui.screens.new_usage.ItemOwnedUsageEntryDestination
 import com.example.preteirb.ui.screens.profile_selection.ProfileSelectionDestination
 import com.example.preteirb.ui.screens.search.SearchDestination
 import kotlinx.coroutines.flow.first
@@ -51,7 +50,6 @@ fun PreteirbApp(
         when (route) {
             SearchDestination.route -> SearchDestination
             ProfileSelectionDestination.route -> ProfileSelectionDestination
-            ItemOwnedUsageEntryDestination.route -> ItemOwnedUsageEntryDestination
             BookItemDestination.route -> BookItemDestination
             ListItemsDestination.route -> ListItemsDestination
             ItemAndUsagesDetailsDestination.route -> ItemAndUsagesDetailsDestination
@@ -77,7 +75,6 @@ fun PreteirbApp(
                 currentScreenTitle = currentScreen.titleRes,
                 canNavigateBack = navController.previousBackStackEntry != null && !listOf(
                     SearchDestination.route,
-                    ItemOwnedUsageEntryDestination.route,
                     ListItemsDestination.route,
                     ProfileSelectionDestination.route,
                 ).contains(currentScreen.route),

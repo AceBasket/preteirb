@@ -22,12 +22,6 @@ import com.example.preteirb.R
 import com.example.preteirb.model.new_usage.UsageDetails
 import com.example.preteirb.model.new_usage.UsagePeriod
 import com.example.preteirb.model.new_usage.UsageUiState
-import com.example.preteirb.ui.navigation.NavigationDestination
-
-object ItemOwnedUsageEntryDestination : NavigationDestination {
-    override val route = "item_owned_usage_entry"
-    override val titleRes = R.string.items_owned_new_usages
-}
 
 @Composable
 fun AddUsagesV2(
