@@ -35,11 +35,10 @@ import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.compose.AppTheme
 import com.example.preteirb.R
-import com.example.preteirb.model.AppViewModelProvider
 import com.example.preteirb.model.ItemDetails
 import com.example.preteirb.model.SearchResultUiState
 import com.example.preteirb.model.SearchViewModel
@@ -55,8 +54,7 @@ object SearchDestination : NavigationDestination {
 fun SearchScreen(
     navigateToBookItem: (Int) -> Unit,
     modifier: Modifier = Modifier,
-    //viewModel: SearchViewModel = hiltViewModel(),
-    viewModel: SearchViewModel = viewModel(factory = AppViewModelProvider.Factory),
+    viewModel: SearchViewModel = hiltViewModel(),
 ) {
 
     val uiState = viewModel.uiState.collectAsState()

@@ -34,10 +34,9 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.hilt.navigation.compose.hiltViewModel
 import com.example.compose.AppTheme
 import com.example.preteirb.R
-import com.example.preteirb.model.AppViewModelProvider
 import com.example.preteirb.model.UserDetails
 import com.example.preteirb.model.UserProfileUiState
 import com.example.preteirb.model.UserProfileViewModel
@@ -52,10 +51,9 @@ object ProfileDestination : NavigationDestination {
 fun ProfileScreen(
     navigateToSelectProfile: () -> Unit,
     modifier: Modifier = Modifier,
-    //viewModel: UserProfileViewModel = hiltViewModel(),
-    viewModel: UserProfileViewModel = viewModel(factory = AppViewModelProvider.Factory),
+    viewModel: UserProfileViewModel = hiltViewModel(),
 ) {
-    
+
     val uiState = viewModel.userProfileUiState.collectAsState()
     Column(
         modifier = modifier
@@ -132,7 +130,7 @@ fun IconAndLabelCard(
             text = label
         )
     }
-    
+
 }
 
 @Preview(showBackground = true)

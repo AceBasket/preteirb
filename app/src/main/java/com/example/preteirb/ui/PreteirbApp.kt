@@ -22,7 +22,6 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.currentBackStackEntryAsState
 import com.example.compose.AppTheme
 import com.example.preteirb.R
-import com.example.preteirb.model.AppViewModelProvider
 import com.example.preteirb.model.PreteirbAppViewModel
 import com.example.preteirb.ui.navigation.NavigationDestination
 import com.example.preteirb.ui.navigation.appNavGraph
@@ -38,16 +37,16 @@ import kotlinx.coroutines.flow.first
 @Composable
 fun PreteirbApp(
     modifier: Modifier = Modifier,
-    viewModel: PreteirbAppViewModel = viewModel(factory = AppViewModelProvider.Factory)
+    viewModel: PreteirbAppViewModel = viewModel()
 ) {
     val appState = rememberAppState()
-    
+
     //Create NavController
     val navController = appState.navController
-    
+
     // Get current back stack entry
     val backStackEntry by navController.currentBackStackEntryAsState()
-    
+
     // Get the current destination
     val currentScreen: NavigationDestination = backStackEntry?.destination?.route?.let { route ->
         when (route) {
@@ -61,9 +60,9 @@ fun PreteirbApp(
             else -> null
         }
     } ?: SearchDestination
-    
+
     var startDestination by remember { mutableStateOf(currentScreen.route) }
-    
+
     LaunchedEffect(viewModel.isLoggedIn) {
         startDestination = if (viewModel.isLoggedIn.first()) {
             SearchDestination.route
@@ -71,8 +70,8 @@ fun PreteirbApp(
             ProfileSelectionDestination.route
         }
     }
-    
-    
+
+
     Scaffold(
         modifier = modifier,
         topBar = {
@@ -120,7 +119,7 @@ fun PreteirbApp(
         ) {
             appNavGraph(appState)
         }
-        
+
     }
 }
 

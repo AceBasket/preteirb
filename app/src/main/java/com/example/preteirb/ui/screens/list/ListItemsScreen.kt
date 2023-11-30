@@ -18,11 +18,10 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.hilt.navigation.compose.hiltViewModel
 import com.example.compose.AppTheme
 import com.example.preteirb.R
 import com.example.preteirb.data.item.Item
-import com.example.preteirb.model.AppViewModelProvider
 import com.example.preteirb.model.ItemDetails
 import com.example.preteirb.model.ItemEntryViewModel
 import com.example.preteirb.model.ItemUiState
@@ -42,12 +41,12 @@ object ListItemsDestination : NavigationDestination {
 fun ListItemsScreen(
     navigateToItemDetails: (Int) -> Unit,
     modifier: Modifier = Modifier,
-    listItemsViewModel: ListItemsViewModel = viewModel(factory = AppViewModelProvider.Factory),
-    newItemViewModel: ItemEntryViewModel = viewModel(factory = AppViewModelProvider.Factory),
+    listItemsViewModel: ListItemsViewModel = hiltViewModel(),
+    newItemViewModel: ItemEntryViewModel = hiltViewModel(),
 ) {
     val coroutineScope = rememberCoroutineScope()
     val objectList by listItemsViewModel.listItemsUiState.collectAsState()
-    
+
     ListItemsScreenContent(
         objectList = objectList,
         onItemClick = { navigateToItemDetails(it) },

@@ -20,10 +20,9 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.hilt.navigation.compose.hiltViewModel
 import com.example.compose.AppTheme
 import com.example.preteirb.R
-import com.example.preteirb.model.AppViewModelProvider
 import com.example.preteirb.model.ItemDetails
 import com.example.preteirb.model.ItemEntryViewModel
 import com.example.preteirb.model.ItemUiState
@@ -45,10 +44,8 @@ object ItemOwnedUsageEntryDestination : NavigationDestination {
 fun NewUsageScreen(
     navigateToHomeScreen: () -> Unit,
     modifier: Modifier = Modifier,
-    //itemViewModel: ItemEntryViewModel = hiltViewModel(),
-    itemViewModel: ItemEntryViewModel = viewModel(factory = AppViewModelProvider.Factory),
-    //itemsOwnedUsagesViewModel: ItemsOwnedUsageEntryViewModel = hiltViewModel(),x
-    itemsOwnedUsagesViewModel: ItemsOwnedUsageEntryViewModel = viewModel(factory = AppViewModelProvider.Factory),
+    itemViewModel: ItemEntryViewModel = hiltViewModel(),
+    itemsOwnedUsagesViewModel: ItemsOwnedUsageEntryViewModel = hiltViewModel(),
 ) {
     val coroutineScope = rememberCoroutineScope()
     val itemsOwnedUiState by itemsOwnedUsagesViewModel.itemsOwnedUiState.collectAsState()
@@ -70,7 +67,7 @@ fun NewUsageScreen(
         },
         onSaveUsageClick = {
             coroutineScope.launch {
-                itemsOwnedUsagesViewModel.saveUsage()
+                itemsOwnedUsagesViewModel.saveUsage(it)
             }
             navigateToHomeScreen()
         },
@@ -79,6 +76,7 @@ fun NewUsageScreen(
                 itemViewModel.saveItem()
             }
         },
+        validateLastUsagePeriod = itemsOwnedUsagesViewModel::validateLastPeriod,
         modifier = modifier
     )
 }
@@ -92,8 +90,9 @@ fun NewUsageForm(
     onItemSelectionValueChange: (String) -> Unit,
     onItemValueChange: (ItemDetails) -> Unit,
     onUsageValueChange: (UsageDetails) -> Unit,
-    onSaveUsageClick: () -> Unit,
+    onSaveUsageClick: (UsagePeriod?) -> Unit,
     onSaveItem: () -> Unit,
+    validateLastUsagePeriod: (UsagePeriod) -> Boolean,
     modifier: Modifier = Modifier,
 ) {
     var isShowObjectDialog by rememberSaveable {
@@ -113,6 +112,7 @@ fun NewUsageForm(
             usageUiState = usageUiState,
             onUsageValueChange = onUsageValueChange,
             onSaveUsageClick = onSaveUsageClick,
+            validateLastUsagePeriod = validateLastUsagePeriod,
         )
 
         if (isShowObjectDialog) {
@@ -137,9 +137,12 @@ fun NewUsageForm(
 fun AddUsagesV2(
     usageUiState: UsageUiState,
     onUsageValueChange: (UsageDetails) -> Unit,
-    onSaveUsageClick: () -> Unit,
+    onSaveUsageClick: (UsagePeriod?) -> Unit,
+    validateLastUsagePeriod: (UsagePeriod) -> Boolean,
     modifier: Modifier = Modifier
 ) {
+    var lastUsagePeriod: UsagePeriod? by rememberSaveable { mutableStateOf(null) } // will be updated with the values from the last usage period
+
     LazyColumn(modifier = modifier) {
         itemsIndexed(
             items = usageUiState.usageDetails.period,
@@ -167,13 +170,18 @@ fun AddUsagesV2(
                             period = periodRemoved
                         )
                     )
-                    //onDeleteUsagePeriod(index)
                 },
             )
         }
         item {
             EmptyNewUsagePeriod(
                 notSelectablePeriods = usageUiState.bookedPeriods + usageUiState.usageDetails.period,
+                onNewUsagePeriodSelected = {
+                    if (it.first != null && it.second != null) {
+                        lastUsagePeriod = UsagePeriod(it.first!!, it.second!!)
+                        validateLastUsagePeriod(lastUsagePeriod!!)
+                    }
+                },
                 onAddUsagePeriod = {
                     if (it.first != null && it.second != null) {
                         val periodAdded = usageUiState.usageDetails.period
@@ -184,6 +192,8 @@ fun AddUsagesV2(
                                 period = periodAdded
                             )
                         )
+
+                        lastUsagePeriod = null // reset last usage period
                     }
                 }
             )
@@ -197,7 +207,7 @@ fun AddUsagesV2(
             .padding(top = dimensionResource(id = R.dimen.padding_small))
     ) {
         Button(
-            onClick = onSaveUsageClick,
+            onClick = { onSaveUsageClick(lastUsagePeriod) },
             enabled = usageUiState.isEntryValid,
         ) {
             Text(text = stringResource(id = R.string.post))
@@ -219,6 +229,7 @@ fun NewUsageFormPreview() {
             onUsageValueChange = {},
             onSaveUsageClick = {},
             onSaveItem = {},
+            validateLastUsagePeriod = { true },
         )
     }
 }

@@ -46,6 +46,7 @@ import java.time.format.DateTimeFormatter
 @Composable
 fun EmptyNewUsagePeriod(
     notSelectablePeriods: List<UsagePeriod>,
+    onNewUsagePeriodSelected: (Pair<Long?, Long?>) -> Unit,
     onAddUsagePeriod: (Pair<Long?, Long?>) -> Unit,
     modifier: Modifier = Modifier,
 ) {
@@ -56,6 +57,7 @@ fun EmptyNewUsagePeriod(
             onNewUsagePeriodSelected = {
                 startPeriod = it.first
                 endPeriod = it.second
+                onNewUsagePeriodSelected(it)
             },
             notSelectablePeriods = notSelectablePeriods,
             isModifiable = true,
@@ -69,10 +71,10 @@ fun EmptyNewUsagePeriod(
                         contentDescription = stringResource(id = R.string.add_usage_period)
                     )
                 }
-                
+
             }
         )
-        
+
     }
 }
 
@@ -83,6 +85,7 @@ fun EmptyNewUsagePeriodPreview() {
         EmptyNewUsagePeriod(
             notSelectablePeriods = listOf(),
             onAddUsagePeriod = {},
+            onNewUsagePeriodSelected = {},
         )
     }
 }
@@ -114,16 +117,16 @@ fun UsagePeriodListItem(
                         modifier = Modifier.padding(start = dimensionResource(id = R.dimen.padding_small))
                     )
                 }
-                
+
                 DeleteUsagePeriodButton(
                     onClick = onDeleteUsagePeriod,
                     modifier = Modifier.padding(start = dimensionResource(id = R.dimen.padding_small))
                 )
-                
+
             }
         )
-        
-        
+
+
     }
 }
 
@@ -204,19 +207,19 @@ fun NewUsagePeriodV2(
     var startDateTime: Long? by rememberSaveable {
         mutableStateOf(initialValues.first)
     }
-    
+
     var endDateTime: Long? by rememberSaveable {
         mutableStateOf(initialValues.second)
     }
-    
+
     var isShowDatePicker by rememberSaveable {
         mutableStateOf(false)
     }
-    
+
     var isSelectEndDate by rememberSaveable {
         mutableStateOf(false)
     }
-    
+
     Row(
         modifier = modifier.padding(top = dimensionResource(id = R.dimen.padding_small))
     ) {
@@ -269,7 +272,7 @@ fun NewUsagePeriodV2(
         Spacer(modifier = Modifier.padding(dimensionResource(id = R.dimen.padding_extra_small)))
         trailingButtons()
     }
-    
+
     if (isShowDatePicker) {
         UsagePeriodPickerDialog(
             dateRangePickerState = rememberDateRangePickerState(
@@ -311,25 +314,25 @@ fun NewUsagePeriod(
     var startDateTime: Long? by rememberSaveable {
         mutableStateOf(null)
     }
-    
+
     var endDateTime: Long? by rememberSaveable {
         mutableStateOf(null)
     }
-    
+
     var isShowDatePicker by rememberSaveable {
         mutableStateOf(false)
     }
-    
+
     var isSelectEndDate by rememberSaveable {
         mutableStateOf(false)
     }
-    
+
     var isModifiable by rememberSaveable { mutableStateOf(false) }
-    
-    
+
+
     //var startDateTime: Long? by rememberSaveable { mutableStateOf(null) }
     //var endDateTime: Long? by rememberSaveable { mutableStateOf(null) }
-    
+
     Row(
         modifier = modifier.padding(top = dimensionResource(id = R.dimen.padding_small))
     ) {
@@ -380,7 +383,7 @@ fun NewUsagePeriod(
             }
         }
         Spacer(modifier = Modifier.padding(dimensionResource(id = R.dimen.padding_extra_small)))
-        
+
         if (isLastUsagePeriodEntry) {
             IconButton(
                 onClick = { onAddUsagePeriod() },
@@ -427,9 +430,9 @@ fun NewUsagePeriod(
                 )
             }
         }
-        
+
     }
-    
+
     if (isShowDatePicker) {
         UsagePeriodPickerDialog(
             dateRangePickerState = rememberDateRangePickerState(
@@ -491,7 +494,7 @@ fun UsagePeriodPickerDialog(
             modifier = Modifier.height(height = 500.dp) // if I don't set this, dialog's buttons are not appearing
         )
     }
-    
+
 }
 
 
@@ -519,7 +522,7 @@ fun UsagePeriodPickerDialogPreview() {
             dateRangePickerState = rememberDateRangePickerState(
                 initialSelectedStartDateMillis = null,
                 initialSelectedEndDateMillis = null,
-                
+
                 ),
             onDismissDialog = {},
             onConfirmSelection = {},

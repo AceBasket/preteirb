@@ -5,6 +5,7 @@ import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.compose.runtime.snapshots.SnapshotStateList
+import androidx.compose.runtime.toMutableStateList
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.preteirb.data.SettingsRepository
@@ -24,7 +25,7 @@ abstract class UsageEntryViewModel(
      */
     var uiState by mutableStateOf(UsageUiState())
         private set
-    
+
     // init with userId from settings
     init {
         viewModelScope.launch {
@@ -35,7 +36,7 @@ abstract class UsageEntryViewModel(
             )
         }
     }
-    
+
     /**
      * Updates the [uiState] with the value provided in the argument. This method also triggers
      * a validation for input values.
@@ -44,17 +45,31 @@ abstract class UsageEntryViewModel(
         uiState =
             UsageUiState(usageDetails = usageDetails, isEntryValid = validateInput(usageDetails))
     }
-    
+
     private fun validateInput(uiState: UsageDetails = this.uiState.usageDetails): Boolean {
         return with(uiState) {
-            userId > 0 && itemId > 0 && period.isNotEmpty() && period.all { it.start < it.end } && period.none {
-                isPeriodOverlapping(
-                    it
-                )
-            }
+            userId > 0 && itemId > 0 && validatePeriods(period)
         }
     }
-    
+
+    fun validatePeriods(periods: List<UsagePeriod>): Boolean {
+        return periods.isNotEmpty() && periods.all { it.start < it.end } && periods.none {
+            isPeriodOverlapping(
+                it
+            )
+        }
+    }
+
+    fun validateLastPeriod(period: UsagePeriod): Boolean {
+        return if (period.start < period.end && !isPeriodOverlapping(period)) {
+            uiState = uiState.copy(isEntryValid = true)
+            true
+        } else {
+            uiState = uiState.copy(isEntryValid = false)
+            false
+        }
+    }
+
     private fun isPeriodOverlapping(period: UsagePeriod): Boolean {
         return uiState.usageDetails.period.any {
             period.start < it.end && period.end > it.start && period != it
@@ -62,11 +77,16 @@ abstract class UsageEntryViewModel(
             period.start < it.end && period.end > it.start
         }
     }
-    
-    suspend fun saveUsage() {
-        if (validateInput()) {
-            usagesRepository.insertUsageList(uiState.usageDetails.toUsages())
+
+    suspend fun saveUsage(lastPeriod: UsagePeriod?) {
+        if (!uiState.isEntryValid) {
+            return
         }
+        val newPeriods = uiState.usageDetails.period.toMutableList()
+        newPeriods.add(lastPeriod ?: return)
+        usagesRepository.insertUsageList(
+            uiState.usageDetails.copy(period = newPeriods.toMutableStateList()).toUsages()
+        )
     }
 }
 
