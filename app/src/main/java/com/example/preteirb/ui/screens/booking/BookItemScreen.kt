@@ -42,11 +42,11 @@ fun BookItemScreen(
             onUsageValueChange = bookItemsViewModel::updateUiState,
             onSaveUsageClick = {
                 coroutineScope.launch {
-                    bookItemsViewModel.saveUsage()
+                    bookItemsViewModel.saveUsage(it)
                 }
                 navigateToHomeScreen()
-            }
-        
+            },
+            validateLastUsagePeriod = bookItemsViewModel::validateLastPeriod,
         )
     }
 }

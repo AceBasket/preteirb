@@ -1,8 +1,6 @@
 package com.example.preteirb.ui.screens.profileselection
 
-import androidx.annotation.DrawableRes
 import androidx.compose.foundation.ExperimentalFoundationApi
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
@@ -20,6 +18,7 @@ import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -35,7 +34,6 @@ import androidx.compose.ui.unit.dp
 import com.example.compose.AppTheme
 import com.example.preteirb.R
 import com.example.preteirb.data.user.User
-
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
@@ -53,7 +51,6 @@ fun ProfileSelectionCarousel(
     ) {
         HorizontalPager(
             state = pagerState,
-            //pageSpacing = 0.dp,
             contentPadding = PaddingValues(horizontal = 25.dp),
             modifier = Modifier.width(
                 dimensionResource(id = R.dimen.big_profile_image_size).times(
@@ -95,7 +92,7 @@ fun ProfileSelectionCarousel(
             }
         }
     }
-    
+
 }
 
 @Composable
@@ -105,8 +102,17 @@ fun ProfileSelectionItem(
 ) {
     ProfileCarouselItem(
         text = profile.username,
-        contentDescription = stringResource(id = R.string.profile_image, profile.username),
-        image = R.drawable.baseline_account_circle_24,
+        content = {
+            Icon(
+                painter = painterResource(id = R.drawable.baseline_account_circle_24),
+                contentDescription = stringResource(
+                    id = R.string.profile_image,
+                    profile.username
+                ),
+                tint = MaterialTheme.colorScheme.onSurface,
+                modifier = it
+            )
+        },
         modifier = modifier
     )
 }
@@ -117,10 +123,16 @@ fun AddProfileItem(
 ) {
     ProfileCarouselItem(
         text = stringResource(id = R.string.add_profile),
-        contentDescription = stringResource(
-            id = R.string.add_profile
-        ),
-        image = R.drawable.baseline_person_add_24,
+        content = {
+            Icon(
+                painter = painterResource(id = R.drawable.baseline_person_add_24),
+                contentDescription = stringResource(
+                    id = R.string.add_profile
+                ),
+                tint = MaterialTheme.colorScheme.onSurface,
+                modifier = it
+            )
+        },
         modifier = modifier
     )
 }
@@ -128,8 +140,7 @@ fun AddProfileItem(
 @Composable
 fun ProfileCarouselItem(
     text: String,
-    contentDescription: String,
-    @DrawableRes image: Int,
+    content: @Composable (Modifier) -> Unit,
     modifier: Modifier = Modifier
 ) {
     Column(
@@ -137,13 +148,7 @@ fun ProfileCarouselItem(
         horizontalAlignment = Alignment.CenterHorizontally,
         modifier = modifier
     ) {
-        Image(
-            painter = painterResource(id = image),
-            contentDescription = contentDescription,
-            modifier = Modifier
-                .size(dimensionResource(id = R.dimen.big_profile_image_size))
-                //.clip(CircleShape)
-        )
+        content(Modifier.size(dimensionResource(id = R.dimen.big_profile_image_size)))
         Text(
             text = text,
             style = MaterialTheme.typography.bodyLarge

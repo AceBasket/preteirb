@@ -22,7 +22,6 @@ import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
 import com.example.compose.AppTheme
 import com.example.preteirb.R
-import com.example.preteirb.model.AppViewModelProvider
 import com.example.preteirb.model.PreteirbAppViewModel
 import com.example.preteirb.ui.navigation.NavigationDestination
 import com.example.preteirb.ui.screens.ProfileDestination
@@ -44,14 +43,14 @@ import kotlinx.coroutines.flow.first
 @Composable
 fun PreteirbApp(
     modifier: Modifier = Modifier,
-    viewModel: PreteirbAppViewModel = viewModel(factory = AppViewModelProvider.Factory)
+    viewModel: PreteirbAppViewModel = viewModel()
 ) {
     //Create NavController
     val navController = rememberNavController()
-    
+
     // Get current back stack entry
     val backStackEntry by navController.currentBackStackEntryAsState()
-    
+
     // Get the current destination
     val currentScreen: NavigationDestination = backStackEntry?.destination?.route?.let { route ->
         when (route) {
@@ -65,9 +64,9 @@ fun PreteirbApp(
             else -> null
         }
     } ?: SearchDestination
-    
+
     var startDestination by remember { mutableStateOf(currentScreen.route) }
-    
+
     LaunchedEffect(viewModel.isLoggedIn) {
         startDestination = if (viewModel.isLoggedIn.first()) {
             SearchDestination.route
@@ -75,7 +74,7 @@ fun PreteirbApp(
             ProfileSelectionDestination.route
         }
     }
-    
+
     Scaffold(
         modifier = modifier,
         topBar = {
@@ -117,14 +116,14 @@ fun PreteirbApp(
                     modifier = screenModifier
                 )
             }
-            
+
             composable(route = ProfileDestination.route) {
                 ProfileScreen(
                     navigateToSelectProfile = { navController.navigate(ProfileSelectionDestination.route) },
                     modifier = screenModifier
                 )
             }
-            
+
             composable(route = ItemOwnedUsageEntryDestination.route) {
                 NewUsageScreen(
                     navigateToHomeScreen = {
@@ -135,7 +134,7 @@ fun PreteirbApp(
                     modifier = screenModifier
                 )
             }
-            
+
             composable(route = ProfileSelectionDestination.route) {
                 ProfileSelectionScreen(
                     navigateToSearch = {
@@ -146,7 +145,7 @@ fun PreteirbApp(
                     modifier = screenModifier
                 )
             }
-            
+
             composable(
                 route = BookItemDestination.routeWithArgs,
                 arguments = listOf(navArgument(BookItemDestination.itemIdArg) {
@@ -162,14 +161,14 @@ fun PreteirbApp(
                     modifier = screenModifier
                 )
             }
-            
+
             composable(route = ListItemsDestination.route) {
                 ListItemsScreen(
                     navigateToItemDetails = { navController.navigate("${ItemAndUsagesDetailsDestination.route}/${it}") },
                     modifier = screenModifier
                 )
             }
-            
+
             composable(
                 route = ItemAndUsagesDetailsDestination.routeWithArgs,
                 arguments = listOf(navArgument(ItemAndUsagesDetailsDestination.itemIdArg) {
@@ -179,7 +178,7 @@ fun PreteirbApp(
                 ItemAndUsagesDetailsScreen(modifier = screenModifier)
             }
         }
-        
+
     }
 }
 
