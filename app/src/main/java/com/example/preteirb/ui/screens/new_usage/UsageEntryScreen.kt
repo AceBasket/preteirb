@@ -1,22 +1,12 @@
-package com.example.preteirb.ui.screens.newitemusage
+package com.example.preteirb.ui.screens.new_usage
 
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.material3.Button
 import androidx.compose.material3.Text
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.*
 import androidx.compose.runtime.saveable.rememberSaveable
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.stringResource
@@ -24,16 +14,17 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.example.compose.AppTheme
 import com.example.preteirb.R
-import com.example.preteirb.model.ItemDetails
-import com.example.preteirb.model.ItemEntryViewModel
-import com.example.preteirb.model.ItemUiState
-import com.example.preteirb.model.ItemsOwnedUiState
-import com.example.preteirb.model.ItemsOwnedUsageEntryViewModel
-import com.example.preteirb.model.UsageDetails
-import com.example.preteirb.model.UsagePeriod
-import com.example.preteirb.model.UsageUiState
+import com.example.preteirb.model.*
+import com.example.preteirb.model.items_owned.ItemDetails
+import com.example.preteirb.model.items_owned.ItemEntryViewModel
+import com.example.preteirb.model.items_owned.ItemUiState
+import com.example.preteirb.model.items_owned.ItemsOwnedUsageEntryViewModel
+import com.example.preteirb.model.new_usage.ItemsOwnedUiState
+import com.example.preteirb.model.new_usage.UsageDetails
+import com.example.preteirb.model.new_usage.UsagePeriod
+import com.example.preteirb.model.new_usage.UsageUiState
 import com.example.preteirb.ui.navigation.NavigationDestination
-import com.example.preteirb.ui.screens.list.NewObjectDialog
+import com.example.preteirb.ui.screens.items_owned.NewObjectDialog
 import kotlinx.coroutines.launch
 
 object ItemOwnedUsageEntryDestination : NavigationDestination {

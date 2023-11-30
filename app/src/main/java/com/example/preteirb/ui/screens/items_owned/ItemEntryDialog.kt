@@ -1,20 +1,10 @@
-package com.example.preteirb.ui.screens.list
+package com.example.preteirb.ui.screens.items_owned
 
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Close
-import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
-import androidx.compose.material3.OutlinedTextField
-import androidx.compose.material3.Surface
-import androidx.compose.material3.Text
-import androidx.compose.material3.TextButton
+import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.dimensionResource
@@ -24,8 +14,8 @@ import androidx.compose.ui.window.Dialog
 import androidx.compose.ui.window.DialogProperties
 import com.example.compose.AppTheme
 import com.example.preteirb.R
-import com.example.preteirb.model.ItemDetails
-import com.example.preteirb.model.ItemUiState
+import com.example.preteirb.model.items_owned.ItemDetails
+import com.example.preteirb.model.items_owned.ItemUiState
 
 @Composable
 fun NewObjectDialog(

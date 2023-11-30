@@ -1,20 +1,9 @@
-package com.example.preteirb.ui.screens
+package com.example.preteirb.ui.screens.profile_selection
 
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.Card
-import androidx.compose.material3.Icon
-import androidx.compose.material3.OutlinedTextField
-import androidx.compose.material3.Surface
-import androidx.compose.material3.Text
-import androidx.compose.material3.TextButton
+import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
@@ -35,10 +24,9 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import com.example.compose.AppTheme
 import com.example.preteirb.R
 import com.example.preteirb.data.user.User
-import com.example.preteirb.model.ProfileSelectionUiState
-import com.example.preteirb.model.ProfileSelectionViewModel
+import com.example.preteirb.model.profile_selection.ProfileSelectionUiState
+import com.example.preteirb.model.profile_selection.ProfileSelectionViewModel
 import com.example.preteirb.ui.navigation.NavigationDestination
-import com.example.preteirb.ui.screens.profileselection.ProfileSelectionCarousel
 import kotlinx.coroutines.launch
 
 object ProfileSelectionDestination : NavigationDestination {

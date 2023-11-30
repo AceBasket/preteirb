@@ -1,14 +1,10 @@
-package com.example.preteirb.ui.screens.list
+package com.example.preteirb.ui.screens.items_owned
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.CardDefaults
-import androidx.compose.material3.HorizontalDivider
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.OutlinedButton
-import androidx.compose.material3.Text
+import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
@@ -23,8 +19,8 @@ import com.example.preteirb.R
 import com.example.preteirb.data.item.Item
 import com.example.preteirb.data.item.ItemAndUsages
 import com.example.preteirb.data.usage.Usage
-import com.example.preteirb.model.ItemAndUsagesDetailsViewModel
-import com.example.preteirb.model.toItemDetails
+import com.example.preteirb.model.items_owned.ItemAndUsagesDetailsViewModel
+import com.example.preteirb.model.items_owned.toItemDetails
 import com.example.preteirb.ui.navigation.NavigationDestination
 import com.example.preteirb.ui.screens.search.ObjectCard
 import epicarchitect.calendar.compose.basis.config.rememberBasisEpicCalendarConfig
@@ -36,7 +32,7 @@ import kotlinx.datetime.LocalDate
 import kotlinx.datetime.TimeZone
 import kotlinx.datetime.toLocalDateTime
 import java.time.format.TextStyle
-import java.util.Locale
+import java.util.*
 
 object ItemAndUsagesDetailsDestination : NavigationDestination {
     override val route = "item_details"

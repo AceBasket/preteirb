@@ -1,9 +1,11 @@
-package com.example.preteirb.model
+package com.example.preteirb.model.items_owned
 
 import androidx.lifecycle.viewModelScope
 import com.example.preteirb.data.SettingsRepository
 import com.example.preteirb.data.usage.UsagesRepository
 import com.example.preteirb.data.user.UsersRepository
+import com.example.preteirb.model.ItemsOwnedUiState
+import com.example.preteirb.model.UsageEntryViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.StateFlow
 import javax.inject.Inject

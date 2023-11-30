@@ -3,6 +3,7 @@ package com.example.preteirb.model
 import com.example.preteirb.data.SettingsRepository
 import com.example.preteirb.data.item.Item
 import com.example.preteirb.data.item.ItemsRepository
+import com.example.preteirb.model.items_owned.*
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.runBlocking
 import org.junit.Assert.assertEquals
@@ -15,17 +16,17 @@ import org.mockito.junit.MockitoJUnitRunner
 
 @RunWith(MockitoJUnitRunner::class)
 class ItemEntryViewModelTest {
-    
+
     // Mock the items repository using Mockito
     private lateinit var itemsRepository: ItemsRepository
     private lateinit var settingsRepository: SettingsRepository
-    
+
     // Create an instance of the view model under test
     private lateinit var viewModel: ItemEntryViewModel
-    
-    
+
+
     private val userOwnerId = 1
-    
+
     // Set up the view model before each test
     @Before
     fun setUp() {
@@ -34,7 +35,7 @@ class ItemEntryViewModelTest {
         Mockito.`when`(settingsRepository.getUserId()).thenReturn(flowOf(userOwnerId))
         viewModel = ItemEntryViewModel(itemsRepository, settingsRepository)
     }
-    
+
     // Test that the initial ui state is empty and invalid
     @Test
     fun testInitialUiState() {
@@ -42,7 +43,7 @@ class ItemEntryViewModelTest {
         assertEquals(ItemDetails(0, "", ""), uiState.itemDetails)
         assertEquals(false, uiState.isEntryValid)
     }
-    
+
     // Test that updating the ui state with valid input makes it valid
     @Test
     fun testUpdateUiStateWithValidInput() {
@@ -52,7 +53,7 @@ class ItemEntryViewModelTest {
         assertEquals(itemDetails, uiState.itemDetails)
         assertEquals(true, uiState.isEntryValid)
     }
-    
+
     // Test that updating the ui state with invalid input makes it invalid
     @Test
     fun testUpdateUiStateWithInvalidInput() {
@@ -62,7 +63,7 @@ class ItemEntryViewModelTest {
         assertEquals(itemDetails, uiState.itemDetails)
         assertEquals(false, uiState.isEntryValid)
     }
-    
+
     // Test that saving an item with valid input calls the repository insert method
     @Test
     fun testSaveItemWithValidInput(): Unit = runBlocking {
@@ -71,7 +72,7 @@ class ItemEntryViewModelTest {
         viewModel.saveItem()
         verify(itemsRepository).insertItem(itemDetails.toItem(userOwnerId))
     }
-    
+
     // Test that saving an item with invalid input does not call the repository insert method
     @Test
     fun testSaveItemWithInvalidInput(): Unit = runBlocking {
@@ -80,7 +81,7 @@ class ItemEntryViewModelTest {
         viewModel.saveItem()
         verify(itemsRepository, Mockito.never()).insertItem(itemDetails.toItem(userOwnerId))
     }
-    
+
     // Test that converting an item to a ui state works
     @Test
     fun testItemToItemUiState() {
@@ -89,7 +90,7 @@ class ItemEntryViewModelTest {
         assertEquals(item.toItemDetails(), itemUiState.itemDetails)
         assertEquals(false, itemUiState.isEntryValid)
     }
-    
+
     // Test that converting an item to item details works
     @Test
     fun testItemToItemDetails() {
@@ -99,7 +100,7 @@ class ItemEntryViewModelTest {
         assertEquals(item.name, itemDetails.name)
         assertEquals(item.description, itemDetails.description)
     }
-    
+
     // Test that converting item details to an item works
     @Test
     fun testItemDetailsToItem() {

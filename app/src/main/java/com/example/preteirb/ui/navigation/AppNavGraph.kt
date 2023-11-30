@@ -7,16 +7,16 @@ import androidx.navigation.navArgument
 import com.example.preteirb.ui.AppState
 import com.example.preteirb.ui.screens.ProfileDestination
 import com.example.preteirb.ui.screens.ProfileScreen
-import com.example.preteirb.ui.screens.ProfileSelectionDestination
-import com.example.preteirb.ui.screens.ProfileSelectionScreen
 import com.example.preteirb.ui.screens.booking.BookItemDestination
 import com.example.preteirb.ui.screens.booking.BookItemScreen
-import com.example.preteirb.ui.screens.list.ItemAndUsagesDetailsDestination
-import com.example.preteirb.ui.screens.list.ItemAndUsagesDetailsScreen
-import com.example.preteirb.ui.screens.list.ListItemsDestination
-import com.example.preteirb.ui.screens.list.ListItemsScreen
-import com.example.preteirb.ui.screens.newitemusage.ItemOwnedUsageEntryDestination
-import com.example.preteirb.ui.screens.newitemusage.NewUsageScreen
+import com.example.preteirb.ui.screens.items_owned.ItemAndUsagesDetailsDestination
+import com.example.preteirb.ui.screens.items_owned.ItemAndUsagesDetailsScreen
+import com.example.preteirb.ui.screens.items_owned.ListItemsDestination
+import com.example.preteirb.ui.screens.items_owned.ListItemsScreen
+import com.example.preteirb.ui.screens.new_usage.ItemOwnedUsageEntryDestination
+import com.example.preteirb.ui.screens.new_usage.NewUsageScreen
+import com.example.preteirb.ui.screens.profile_selection.ProfileSelectionDestination
+import com.example.preteirb.ui.screens.profile_selection.ProfileSelectionScreen
 import com.example.preteirb.ui.screens.search.SearchDestination
 import com.example.preteirb.ui.screens.search.SearchScreen
 
@@ -26,13 +26,13 @@ fun NavGraphBuilder.appNavGraph(appState: AppState) {
             navigateToBookItem = { appState.navigate("${BookItemDestination.route}/${it}") },
         )
     }
-    
+
     composable(route = ProfileDestination.route) {
         ProfileScreen(
             navigateToSelectProfile = { appState.navigate(ProfileSelectionDestination.route) },
         )
     }
-    
+
     composable(route = ItemOwnedUsageEntryDestination.route) {
         NewUsageScreen(
             navigateToHomeScreen = {
@@ -40,7 +40,7 @@ fun NavGraphBuilder.appNavGraph(appState: AppState) {
             },
         )
     }
-    
+
     composable(route = ProfileSelectionDestination.route) {
         ProfileSelectionScreen(
             navigateToSearch = {
@@ -48,7 +48,7 @@ fun NavGraphBuilder.appNavGraph(appState: AppState) {
             }, //TODO: footnote saying account was created
         )
     }
-    
+
     composable(
         route = BookItemDestination.routeWithArgs,
         arguments = listOf(navArgument(BookItemDestination.itemIdArg) {
@@ -61,13 +61,13 @@ fun NavGraphBuilder.appNavGraph(appState: AppState) {
             },
         )
     }
-    
+
     composable(route = ListItemsDestination.route) {
         ListItemsScreen(
             navigateToItemDetails = { appState.navigate("${ItemAndUsagesDetailsDestination.route}/${it}") },
         )
     }
-    
+
     composable(
         route = ItemAndUsagesDetailsDestination.routeWithArgs,
         arguments = listOf(navArgument(ItemAndUsagesDetailsDestination.itemIdArg) {

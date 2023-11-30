@@ -8,10 +8,10 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.example.preteirb.R
-import com.example.preteirb.model.BookItemsViewModel
-import com.example.preteirb.model.ItemDetails
+import com.example.preteirb.model.booking.BookItemsViewModel
+import com.example.preteirb.model.items_owned.ItemDetails
 import com.example.preteirb.ui.navigation.NavigationDestination
-import com.example.preteirb.ui.screens.newitemusage.AddUsagesV2
+import com.example.preteirb.ui.screens.new_usage.AddUsagesV2
 import com.example.preteirb.ui.screens.search.ObjectCard
 import kotlinx.coroutines.launch
 

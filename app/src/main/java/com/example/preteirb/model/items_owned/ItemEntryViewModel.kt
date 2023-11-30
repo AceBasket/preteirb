@@ -1,4 +1,4 @@
-package com.example.preteirb.model
+package com.example.preteirb.model.items_owned
 
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf

@@ -1,4 +1,4 @@
-package com.example.preteirb.model
+package com.example.preteirb.model.profile_selection
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope

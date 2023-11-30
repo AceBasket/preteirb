@@ -1,15 +1,11 @@
-package com.example.preteirb.model
+package com.example.preteirb.model.items_owned
 
 import com.example.preteirb.data.SettingsRepository
 import com.example.preteirb.data.user.UsersRepository
+import com.example.preteirb.model.new_usage.ItemsOwnedUiState
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.flow.SharingStarted
-import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.filterNotNull
-import kotlinx.coroutines.flow.flatMapLatest
-import kotlinx.coroutines.flow.map
-import kotlinx.coroutines.flow.stateIn
+import kotlinx.coroutines.flow.*
 
 @OptIn(ExperimentalCoroutinesApi::class)
 fun getItemsOwnedUiState(

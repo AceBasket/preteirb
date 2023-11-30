@@ -1,8 +1,10 @@
-package com.example.preteirb.model
+package com.example.preteirb.model.search
+
+import com.example.preteirb.model.items_owned.ItemDetails
 
 sealed interface SearchResultUiState {
     data object Loading : SearchResultUiState
-    
+
     /**
      * The state query is empty or too short. To distinguish the state between the
      * (initial state or when the search query is cleared) vs the state where no search

@@ -7,12 +7,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Snackbar
 import androidx.compose.material3.SnackbarHost
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
+import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.tooling.preview.Preview
@@ -26,11 +21,11 @@ import com.example.preteirb.model.PreteirbAppViewModel
 import com.example.preteirb.ui.navigation.NavigationDestination
 import com.example.preteirb.ui.navigation.appNavGraph
 import com.example.preteirb.ui.screens.ProfileDestination
-import com.example.preteirb.ui.screens.ProfileSelectionDestination
 import com.example.preteirb.ui.screens.booking.BookItemDestination
-import com.example.preteirb.ui.screens.list.ItemAndUsagesDetailsDestination
-import com.example.preteirb.ui.screens.list.ListItemsDestination
-import com.example.preteirb.ui.screens.newitemusage.ItemOwnedUsageEntryDestination
+import com.example.preteirb.ui.screens.items_owned.ItemAndUsagesDetailsDestination
+import com.example.preteirb.ui.screens.items_owned.ListItemsDestination
+import com.example.preteirb.ui.screens.new_usage.ItemOwnedUsageEntryDestination
+import com.example.preteirb.ui.screens.profile_selection.ProfileSelectionDestination
 import com.example.preteirb.ui.screens.search.SearchDestination
 import kotlinx.coroutines.flow.first
 
