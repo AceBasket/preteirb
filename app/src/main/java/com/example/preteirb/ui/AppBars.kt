@@ -1,5 +1,7 @@
 package com.example.preteirb.ui
-
+/*
+* Strong inspiration from https://github.com/android/nowinandroid
+*/
 import androidx.annotation.StringRes
 import androidx.compose.foundation.layout.Box
 import androidx.compose.material.icons.Icons
@@ -15,67 +17,55 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.navigation.NavBackStackEntry
-import androidx.navigation.NavController
-import androidx.navigation.compose.rememberNavController
+import androidx.navigation.NavDestination
+import androidx.navigation.NavDestination.Companion.hierarchy
 import com.example.compose.AppTheme
 import com.example.preteirb.R
 import com.example.preteirb.ui.screens.items_owned.ListItemsDestination
 import com.example.preteirb.ui.screens.search.SearchDestination
 
-data class BottomNavItem(
-    @StringRes val nameRes: Int,
+enum class TopLevelDestination(
     val route: String,
+    @StringRes val titleRes: Int,
     val icon: ImageVector,
-)
+) {
+    Search(SearchDestination.route, SearchDestination.titleRes, Icons.Rounded.Search),
+    ListItems(ListItemsDestination.route, ListItemsDestination.titleRes, Icons.Rounded.List),
+}
 
-val bottomNavItems = listOf(
-    BottomNavItem(
-        nameRes = SearchDestination.titleRes,
-        route = SearchDestination.route,
-        icon = Icons.Rounded.Search,
-    ),
-//    BottomNavItem(
-//        nameRes = ItemOwnedUsageEntryDestination.titleRes,
-//        route = ItemOwnedUsageEntryDestination.route,
-//        icon = Icons.Rounded.AddCircle,
-//    ),
-    BottomNavItem(
-        nameRes = ListItemsDestination.titleRes,
-        route = ListItemsDestination.route,
-        icon = Icons.Rounded.List,
-    ),
-)
-
+private fun NavDestination?.isTopLevelDestinationInHierarchy(destination: TopLevelDestination) =
+    this?.hierarchy?.any {
+        it.route?.contains(destination.name, true) ?: false
+    } ?: false
 
 @Composable
 fun BottomAppBar(
-    navController: NavController,
-    backStackEntry: NavBackStackEntry?,
+    destinations: List<TopLevelDestination>,
+    onNavigateToDestination: (TopLevelDestination) -> Unit,
+    currentDestination: NavDestination?,
     modifier: Modifier = Modifier,
-    isDisplayBottomAppBar: Boolean = true,
 ) {
-    if (!isDisplayBottomAppBar) return
     NavigationBar(
         containerColor = MaterialTheme.colorScheme.primaryContainer,
         modifier = modifier,
     ) {
-        bottomNavItems.forEach { item ->
-            val isSelected = item.route == backStackEntry?.destination?.route
-
+        destinations.forEach { destination ->
+            val isSelected = currentDestination.isTopLevelDestinationInHierarchy(
+                destination = TopLevelDestination.valueOf(destination.route)
+            )
             NavigationBarItem(
                 selected = isSelected,
-                onClick = { navController.navigate(item.route) },
+                onClick = { onNavigateToDestination(destination) },
                 label = {
                     Text(
-                        text = stringResource(id = item.nameRes),
+                        text = stringResource(id = destination.titleRes),
                         fontWeight = FontWeight.SemiBold,
                     )
                 },
                 icon = {
                     Icon(
-                        imageVector = item.icon,
-                        contentDescription = "${stringResource(item.nameRes)} Icon",
+                        imageVector = destination.icon,
+                        contentDescription = "${stringResource(destination.titleRes)} Icon",
                     )
                 }
             )
@@ -146,8 +136,9 @@ fun AppTopBar(
 fun BottomAppBarPreview() {
     AppTheme {
         BottomAppBar(
-            navController = rememberNavController(),
-            backStackEntry = null
+            destinations = TopLevelDestination.values().toList(),
+            onNavigateToDestination = {},
+            currentDestination = null,
         )
     }
 }
