@@ -1,21 +1,31 @@
 package com.example.preteirb.model.new_usage
 
-import androidx.compose.runtime.*
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateListOf
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.setValue
 import androidx.compose.runtime.snapshots.SnapshotStateList
+import androidx.compose.runtime.toMutableStateList
+import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.preteirb.data.SettingsRepository
 import com.example.preteirb.data.item.Item
 import com.example.preteirb.data.usage.Usage
 import com.example.preteirb.data.usage.UsagesRepository
+import com.example.preteirb.ui.screens.booking.BookItemDestination
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 
 
 abstract class UsageEntryViewModel(
+    savedStateHandle: SavedStateHandle,
     private val usagesRepository: UsagesRepository,
     private val settingsRepository: SettingsRepository
 ) : ViewModel() {
+
+    protected val itemId: Int = checkNotNull(savedStateHandle[BookItemDestination.itemIdArg])
+
     /**
      * Holds current usage ui state
      */
@@ -28,7 +38,10 @@ abstract class UsageEntryViewModel(
             uiState = UsageUiState(
                 usageDetails = UsageDetails(
                     userId = settingsRepository.getUserId().first(),
-                )
+                    itemId = itemId
+                ),
+                bookedPeriods = usagesRepository.getAllUsagesByItemIdStream(itemId).first()
+                    .map { it.toUsagePeriod() }
             )
         }
     }
@@ -118,3 +131,8 @@ fun UsageDetails.toUsages(): List<Usage> = period.map { usagePeriod ->
         endDateTime = usagePeriod.end,
     )
 }
+
+fun Usage.toUsagePeriod(): UsagePeriod = UsagePeriod(
+    start = startDateTime,
+    end = endDateTime,
+)

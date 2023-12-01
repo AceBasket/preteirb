@@ -12,19 +12,22 @@ import kotlinx.coroutines.flow.Flow
 interface UsageDao {
     @Insert(onConflict = OnConflictStrategy.IGNORE)
     suspend fun insert(usage: Usage);
-    
+
     @Insert(onConflict = OnConflictStrategy.IGNORE)
     suspend fun insert(usages: List<Usage>);
-    
+
     @Delete
     suspend fun delete(usage: Usage);
-    
+
     @Update
     suspend fun update(usage: Usage);
-    
+
     @Query("SELECT * from usages WHERE usageId = :usageId")
     fun getUsage(usageId: Int): Flow<Usage>;
-    
+
     @Query("SELECT * from usages")
     fun getAllUsages(): Flow<List<Usage>>;
+
+    @Query("SELECT * from usages WHERE itemId = :itemId")
+    fun getAllUsagesByItemId(itemId: Int): Flow<List<Usage>>;
 }
