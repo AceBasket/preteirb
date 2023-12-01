@@ -34,4 +34,6 @@
     <string name="profile_image">Profile image of %1s</string>
     <string name="booked_periods">Booked periods</string>
     <string name="your_objects">Your objects</string>
+    <string name="from">From</string>
+    <string name="to">To</string>
 </resources>

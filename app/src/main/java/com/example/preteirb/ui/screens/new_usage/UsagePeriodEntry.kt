@@ -1,5 +1,6 @@
 package com.example.preteirb.ui.screens.new_usage
 
+import androidx.annotation.StringRes
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
@@ -13,6 +14,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.stringResource
@@ -22,6 +24,7 @@ import com.example.compose.AppTheme
 import com.example.preteirb.R
 import com.example.preteirb.model.new_usage.UsagePeriod
 import java.time.Instant
+import java.time.ZoneId
 import java.time.format.DateTimeFormatter
 
 @Composable
@@ -34,7 +37,7 @@ fun EmptyNewUsagePeriod(
     Box(modifier = modifier.fillMaxWidth()) {
         var startPeriod: Long? by rememberSaveable { mutableStateOf(null) }
         var endPeriod: Long? by rememberSaveable { mutableStateOf(null) }
-        NewUsagePeriodV2(
+        NewUsagePeriod(
             onNewUsagePeriodSelected = {
                 startPeriod = it.first
                 endPeriod = it.second
@@ -81,7 +84,7 @@ fun UsagePeriodListItem(
 ) {
     Row(modifier = modifier) {
         var isModifiable by rememberSaveable { mutableStateOf(false) }
-        NewUsagePeriodV2(
+        NewUsagePeriod(
             onNewUsagePeriodSelected = onNewUsagePeriodSelected,
             notSelectablePeriods = notSelectablePeriods,
             isModifiable = isModifiable,
@@ -118,7 +121,7 @@ fun UsagePeriodListItemPreview() {
         UsagePeriodListItem(
             onNewUsagePeriodSelected = {},
             notSelectablePeriods = listOf(),
-            usagePeriod = UsagePeriod(0L, 0L),
+            usagePeriod = UsagePeriod(1701427036000, 0L),
             onDeleteUsagePeriod = {},
         )
     }
@@ -177,7 +180,7 @@ fun DeleteUsagePeriodButton(
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun NewUsagePeriodV2(
+fun NewUsagePeriod(
     onNewUsagePeriodSelected: (Pair<Long?, Long?>) -> Unit,
     notSelectablePeriods: List<UsagePeriod>,
     isModifiable: Boolean,
@@ -204,52 +207,22 @@ fun NewUsagePeriodV2(
     Row(
         modifier = modifier.padding(top = dimensionResource(id = R.dimen.padding_small))
     ) {
-        OutlinedButton(
+        UsageDateField(
             onClick = { isShowDatePicker = true },
-            shape = RoundedCornerShape(dimensionResource(id = R.dimen.corner_radius_small)),
-            modifier = Modifier.weight(0.5f),
-            enabled = isModifiable
-        ) {
-            Column {
-                Text(
-                    text = "Start date:",
-                    style = MaterialTheme.typography.bodySmall
-                )
-                Text(
-                    text = if (startDateTime == 0L || startDateTime == null) ""
-                    else DateTimeFormatter.ISO_INSTANT.format(
-                        Instant.ofEpochMilli(
-                            startDateTime ?: 0L
-                        )
-                    )
-                )
-            }
-        }
+            isModifiable = isModifiable,
+            dateTime = startDateTime,
+            label = R.string.from
+        )
         Spacer(modifier = Modifier.padding(dimensionResource(id = R.dimen.padding_extra_small)))
-        OutlinedButton(
+        UsageDateField(
             onClick = {
                 isShowDatePicker = true
                 isSelectEndDate = true
-            },
-            shape = RoundedCornerShape(dimensionResource(id = R.dimen.corner_radius_small)),
-            modifier = Modifier.weight(0.5f),
-            enabled = isModifiable
-        ) {
-            Column {
-                Text(
-                    text = "End date:",
-                    style = MaterialTheme.typography.bodySmall
-                )
-                Text(
-                    text = if (endDateTime == 0L || endDateTime == null) ""
-                    else DateTimeFormatter.ISO_INSTANT.format(
-                        Instant.ofEpochMilli(
-                            endDateTime ?: 0L
-                        )
-                    )
-                )
-            }
-        }
+                      },
+            isModifiable = isModifiable,
+            dateTime = endDateTime,
+            label = R.string.to
+        )
         Spacer(modifier = Modifier.padding(dimensionResource(id = R.dimen.padding_extra_small)))
         trailingButtons()
     }
@@ -281,163 +254,39 @@ fun NewUsagePeriodV2(
     }
 }
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun NewUsagePeriod(
-    onNewUsagePeriodSelected: (Pair<Long?, Long?>) -> Unit,
-    onAddUsagePeriod: () -> Unit,
-    onDeleteUsagePeriod: () -> Unit,
-    onUpdateUsagePeriod: (Pair<Long?, Long?>) -> Unit,
-    isLastUsagePeriodEntry: Boolean,
-    notSelectablePeriods: List<UsagePeriod>,
-    modifier: Modifier = Modifier,
+fun RowScope.UsageDateField(
+    onClick: () -> Unit,
+    isModifiable: Boolean,
+    dateTime: Long?,
+    @StringRes label: Int,
+    modifier: Modifier = Modifier
 ) {
-    var startDateTime: Long? by rememberSaveable {
-        mutableStateOf(null)
-    }
-
-    var endDateTime: Long? by rememberSaveable {
-        mutableStateOf(null)
-    }
-
-    var isShowDatePicker by rememberSaveable {
-        mutableStateOf(false)
-    }
-
-    var isSelectEndDate by rememberSaveable {
-        mutableStateOf(false)
-    }
-
-    var isModifiable by rememberSaveable { mutableStateOf(false) }
-
-
-    //var startDateTime: Long? by rememberSaveable { mutableStateOf(null) }
-    //var endDateTime: Long? by rememberSaveable { mutableStateOf(null) }
-
-    Row(
-        modifier = modifier.padding(top = dimensionResource(id = R.dimen.padding_small))
+    OutlinedButton(
+        onClick = onClick,
+        shape = RoundedCornerShape(dimensionResource(id = R.dimen.corner_radius_small)),
+        modifier = modifier.weight(0.5f),
+        contentPadding = PaddingValues(dimensionResource(id = R.dimen.padding_small)),
+        enabled = isModifiable
     ) {
-        OutlinedButton(
-            onClick = { isShowDatePicker = true },
-            shape = RoundedCornerShape(dimensionResource(id = R.dimen.corner_radius_small)),
-            modifier = Modifier.weight(0.5f),
-            enabled = isModifiable || isLastUsagePeriodEntry,
+        Column(
+            modifier = Modifier.fillMaxWidth()
         ) {
-            Column {
-                Text(
-                    text = "Start date:",
-                    style = MaterialTheme.typography.bodySmall
-                )
-                Text(
-                    text = if (startDateTime == 0L || startDateTime == null) ""
-                    else DateTimeFormatter.ISO_INSTANT.format(
+            Text(
+                text = stringResource(id = label),
+                style = MaterialTheme.typography.bodySmall,
+            )
+            Text(
+                text = if (dateTime == 0L || dateTime == null) ""
+                else DateTimeFormatter.ofPattern("d MMM uuuu").withZone(ZoneId.systemDefault())
+                    .format(
                         Instant.ofEpochMilli(
-                            startDateTime ?: 0L
+                            dateTime ?: 0L
                         )
-                    )
-                )
-            }
+                    ),
+                modifier = Modifier.align(Alignment.CenterHorizontally)
+            )
         }
-        Spacer(modifier = Modifier.padding(dimensionResource(id = R.dimen.padding_extra_small)))
-        OutlinedButton(
-            onClick = {
-                isShowDatePicker = true
-                isSelectEndDate = true
-            },
-            shape = RoundedCornerShape(dimensionResource(id = R.dimen.corner_radius_small)),
-            modifier = Modifier.weight(0.5f),
-            enabled = isModifiable || isLastUsagePeriodEntry,
-        ) {
-            Column {
-                Text(
-                    text = "End date:",
-                    style = MaterialTheme.typography.bodySmall
-                )
-                Text(
-                    text = if (endDateTime == 0L || endDateTime == null) ""
-                    else DateTimeFormatter.ISO_INSTANT.format(
-                        Instant.ofEpochMilli(
-                            endDateTime ?: 0L
-                        )
-                    )
-                )
-            }
-        }
-        Spacer(modifier = Modifier.padding(dimensionResource(id = R.dimen.padding_extra_small)))
-
-        if (isLastUsagePeriodEntry) {
-            IconButton(
-                onClick = { onAddUsagePeriod() },
-                colors = IconButtonDefaults.iconButtonColors(containerColor = MaterialTheme.colorScheme.primaryContainer)
-            ) {
-                Icon(
-                    imageVector = Icons.Default.Add,
-                    contentDescription = stringResource(id = R.string.add_usage_period)
-                )
-            }
-        } else {
-            if (isModifiable) {
-                IconButton(
-                    onClick = {
-                        onUpdateUsagePeriod(Pair(startDateTime, endDateTime))
-                        isModifiable = false
-                    },
-                    colors = IconButtonDefaults.iconButtonColors(containerColor = MaterialTheme.colorScheme.primaryContainer)
-                ) {
-                    Icon(
-                        imageVector = Icons.Default.Check,
-                        contentDescription = stringResource(id = R.string.confirm_edit_usage_period)
-                    )
-                }
-            } else {
-                IconButton(
-                    onClick = { isModifiable = true },
-                    colors = IconButtonDefaults.iconButtonColors(containerColor = MaterialTheme.colorScheme.primaryContainer)
-                ) {
-                    Icon(
-                        imageVector = Icons.Default.Edit,
-                        contentDescription = stringResource(id = R.string.edit_usage_period)
-                    )
-                }
-            }
-            IconButton(
-                onClick = { onDeleteUsagePeriod() },
-                colors = IconButtonDefaults.iconButtonColors(containerColor = MaterialTheme.colorScheme.primaryContainer),
-                enabled = false
-            ) {
-                Icon(
-                    imageVector = Icons.Default.Delete,
-                    contentDescription = stringResource(id = R.string.delete_usage_period)
-                )
-            }
-        }
-
-    }
-
-    if (isShowDatePicker) {
-        UsagePeriodPickerDialog(
-            dateRangePickerState = rememberDateRangePickerState(
-                initialSelectedStartDateMillis = startDateTime,
-                initialSelectedEndDateMillis = endDateTime,
-                selectableDates = object : SelectableDates {
-                    override fun isSelectableDate(utcTimeMillis: Long): Boolean {
-                        // is selectable if it's not in any of the notSelectablePeriods
-                        return utcTimeMillis > System.currentTimeMillis()
-                                && notSelectablePeriods.none { usagePeriod ->
-                            utcTimeMillis in usagePeriod.start..usagePeriod.end
-                        }
-                    }
-                }
-            ),
-            onDismissDialog = { isShowDatePicker = false },
-            onConfirmSelection = {
-                startDateTime = it.selectedStartDateMillis
-                endDateTime = it.selectedEndDateMillis
-                isShowDatePicker = false
-                onNewUsagePeriodSelected(Pair(startDateTime, endDateTime))
-            },
-            isSelectEndDate = isSelectEndDate,
-        )
     }
 }
 
@@ -476,22 +325,6 @@ fun UsagePeriodPickerDialog(
         )
     }
 
-}
-
-
-@Preview(showBackground = true)
-@Composable
-fun NewUsagePeriodPreview() {
-    AppTheme {
-        NewUsagePeriod(
-            onAddUsagePeriod = {},
-            onNewUsagePeriodSelected = {},
-            onDeleteUsagePeriod = {},
-            onUpdateUsagePeriod = {},
-            isLastUsagePeriodEntry = false,
-            notSelectablePeriods = listOf(),
-        )
-    }
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
