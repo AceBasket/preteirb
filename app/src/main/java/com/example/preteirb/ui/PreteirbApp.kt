@@ -1,5 +1,6 @@
 package com.example.preteirb.ui
 
+import android.util.Log
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -47,12 +48,13 @@ fun PreteirbApp(
 
     // Get the current destination
     val currentScreen: NavigationDestination = backStackEntry?.destination?.route?.let { route ->
+        Log.d("currentScreen", route)
         when (route) {
             SearchDestination.route -> SearchDestination
             ProfileSelectionDestination.route -> ProfileSelectionDestination
-            BookItemDestination.route -> BookItemDestination
+            BookItemDestination.routeWithArgs -> BookItemDestination
             ListItemsDestination.route -> ListItemsDestination
-            ItemAndUsagesDetailsDestination.route -> ItemAndUsagesDetailsDestination
+            ItemAndUsagesDetailsDestination.routeWithArgs -> ItemAndUsagesDetailsDestination
             else -> null
         }
     } ?: SearchDestination
