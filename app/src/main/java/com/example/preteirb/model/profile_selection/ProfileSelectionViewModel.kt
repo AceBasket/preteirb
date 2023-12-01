@@ -2,6 +2,8 @@ package com.example.preteirb.model.profile_selection
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.preteirb.common.snackbar.SnackbarManager
+import com.example.preteirb.common.snackbar.SnackbarMessage.Companion.toSnackbarMessage
 import com.example.preteirb.data.SettingsRepository
 import com.example.preteirb.data.user.User
 import com.example.preteirb.data.user.UsersRepository
@@ -34,12 +36,20 @@ class ProfileSelectionViewModel @Inject constructor(
     }
 
     private suspend fun registerUser(user: User): Long {
-        return usersRepository.insertUser(user)
+        try {
+            return usersRepository.insertUser(user)
+        } catch (e: Exception) {
+            throw e
+        }
     }
 
     suspend fun registerUserAndLogIn(user: User) {
-        val userId = registerUser(user).toInt()
-        logIn(user.copy(userId = userId))
+        try {
+            val userId = registerUser(user).toInt()
+            logIn(user.copy(userId = userId))
+        } catch (e: Exception) {
+            SnackbarManager.showMessage(e.toSnackbarMessage())
+        }
     }
 
     companion object {

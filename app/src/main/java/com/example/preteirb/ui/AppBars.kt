@@ -130,7 +130,7 @@ fun AppTopBar(
                         leadingIcon = {
                             Icon(
                                 painter = painterResource(id = R.drawable.baseline_logout_24),
-                                contentDescription = "Logout icon"
+                                contentDescription = stringResource(id = R.string.logout_icon)
                             )
                         }
                     )

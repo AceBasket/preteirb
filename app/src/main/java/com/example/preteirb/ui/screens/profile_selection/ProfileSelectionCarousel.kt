@@ -44,7 +44,7 @@ fun ProfileSelectionCarousel(
             state = pagerState,
             contentPadding = PaddingValues(horizontal = 25.dp),
             modifier = Modifier.width(
-                dimensionResource(id = R.dimen.big_profile_image_size).times(
+                dimensionResource(id = R.dimen.image_size_large).times(
                     1.5f
                 )
             )
@@ -52,11 +52,11 @@ fun ProfileSelectionCarousel(
             val itemModifier = Modifier
                 .fillMaxWidth()
                 .aspectRatio(0.7f)
-                .clip(RoundedCornerShape(16.dp))
+                .clip(RoundedCornerShape(dimensionResource(R.dimen.corner_radius_medium)))
                 .border(
                     width = 1.dp,
                     color = Color.Gray,
-                    shape = RoundedCornerShape(16.dp)
+                    shape = RoundedCornerShape(dimensionResource(R.dimen.corner_radius_medium))
                 )
             if (page == list.size) {
                 AddProfileItem(
@@ -75,10 +75,10 @@ fun ProfileSelectionCarousel(
                     if (pagerState.currentPage == iteration) Color.DarkGray else Color.LightGray
                 Box(
                     modifier = Modifier
-                        .padding(2.dp)
+                        .padding(dimensionResource(id = R.dimen.padding_extra_extra_small))
                         .clip(CircleShape)
                         .background(color)
-                        .size(8.dp)
+                        .size(dimensionResource(id = R.dimen.image_size_extra_extra_small))
                 )
             }
         }
@@ -139,7 +139,7 @@ fun ProfileCarouselItem(
         horizontalAlignment = Alignment.CenterHorizontally,
         modifier = modifier
     ) {
-        content(Modifier.size(dimensionResource(id = R.dimen.big_profile_image_size)))
+        content(Modifier.size(dimensionResource(id = R.dimen.image_size_large)))
         Text(
             text = text,
             style = MaterialTheme.typography.bodyLarge
@@ -155,27 +155,22 @@ fun ProfileSelectionCarouselPreview() {
             User(
                 userId = 0,
                 username = "Sarah",
-                location = "location",
             ),
             User(
                 userId = 1,
                 username = "Camille",
-                location = "location",
             ),
             User(
                 userId = 2,
                 username = "Tiphaine",
-                location = "location",
             ),
             User(
                 userId = 3,
                 username = "Brigitte",
-                location = "location",
             ),
             User(
                 userId = 4,
                 username = "Jerome",
-                location = "location",
             )
         )
         ProfileSelectionCarousel(
@@ -194,7 +189,6 @@ fun ProfileSelectionItemPreview() {
             profile = User(
                 userId = 0,
                 username = "username",
-                location = "location",
             )
         )
     }

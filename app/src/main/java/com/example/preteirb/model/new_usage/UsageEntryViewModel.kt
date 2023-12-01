@@ -9,6 +9,8 @@ import androidx.compose.runtime.toMutableStateList
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.preteirb.R
+import com.example.preteirb.common.snackbar.SnackbarManager
 import com.example.preteirb.data.SettingsRepository
 import com.example.preteirb.data.item.Item
 import com.example.preteirb.data.usage.Usage
@@ -93,9 +95,15 @@ abstract class UsageEntryViewModel(
         }
         val newPeriods = uiState.usageDetails.period.toMutableList()
         newPeriods.add(lastPeriod ?: return)
-        usagesRepository.insertUsageList(
-            uiState.usageDetails.copy(period = newPeriods.toMutableStateList()).toUsages()
-        )
+        try {
+            usagesRepository.insertUsageList(
+                uiState.usageDetails.copy(period = newPeriods.toMutableStateList()).toUsages()
+            )
+            SnackbarManager.showMessage(R.string.save_usages_success)
+        } catch (e: Exception) {
+            SnackbarManager.showMessage(R.string.save_usages_error)
+            return
+        }
     }
 }
 

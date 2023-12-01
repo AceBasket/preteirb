@@ -4,6 +4,8 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
+import com.example.preteirb.R
+import com.example.preteirb.common.snackbar.SnackbarManager
 import com.example.preteirb.data.SettingsRepository
 import com.example.preteirb.data.item.Item
 import com.example.preteirb.data.item.ItemsRepository
@@ -33,7 +35,14 @@ class ItemEntryViewModel @Inject constructor(
     suspend fun saveItem() {
         val userOwnerId = settingsRepository.getUserId().first()
         if (validateInput()) {
-            itemsRepository.insertItem(itemUiState.itemDetails.toItem(userOwnerId))
+            try {
+                itemsRepository.insertItem(itemUiState.itemDetails.toItem(userOwnerId))
+                SnackbarManager.showMessage(R.string.save_item_success)
+            } catch (e: Exception) {
+                SnackbarManager.showMessage(R.string.save_item_error)
+            }
+        } else {
+            SnackbarManager.showMessage(R.string.save_item_error)
         }
     }
 }

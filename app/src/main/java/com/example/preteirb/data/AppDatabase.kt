@@ -13,7 +13,7 @@ import com.example.preteirb.data.user.UserDao
 
 @Database(
     entities = [User::class, Item::class, Usage::class],
-    version = 4,
+    version = 5,
     exportSchema = false
 )
 abstract class AppDatabase : RoomDatabase() {

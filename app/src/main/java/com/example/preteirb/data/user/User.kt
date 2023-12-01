@@ -10,5 +10,4 @@ data class User(
     @PrimaryKey(autoGenerate = true)
     val userId: Int = 1,
     val username: String,
-    val location: String,
 )

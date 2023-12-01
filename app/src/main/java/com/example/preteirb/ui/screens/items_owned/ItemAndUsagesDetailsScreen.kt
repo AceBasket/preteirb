@@ -4,13 +4,18 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.*
+import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.HorizontalDivider
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.OutlinedButton
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.dimensionResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -32,7 +37,7 @@ import kotlinx.datetime.LocalDate
 import kotlinx.datetime.TimeZone
 import kotlinx.datetime.toLocalDateTime
 import java.time.format.TextStyle
-import java.util.*
+import java.util.Locale
 
 object ItemAndUsagesDetailsDestination : NavigationDestination {
     override val route = "item_details"
@@ -83,7 +88,7 @@ fun ItemAndUsagesDetails(
             onClick = { onClickOnBookItem(itemAndUsages.item.itemId) },
             modifier = Modifier.align(Alignment.End)
         ) {
-            Text(text = "Book your object")
+            Text(text = stringResource(id = R.string.book_item))
         }
     }
 }
@@ -106,12 +111,12 @@ fun ItemBookedPeriods(
         val epicCalendarPagerState = rememberEpicCalendarPagerState(
             config = rememberEpicCalendarPagerConfig(
                 basisConfig = rememberBasisEpicCalendarConfig(
-                    rowsSpacerHeight = 4.dp,
+                    rowsSpacerHeight = dimensionResource(id = R.dimen.padding_extra_small),
                     dayOfWeekViewHeight = 40.dp,
                     dayOfMonthViewHeight = 40.dp,
                     columnWidth = 40.dp,
-                    dayOfWeekViewShape = RoundedCornerShape(16.dp),
-                    dayOfMonthViewShape = RoundedCornerShape(16.dp),
+                    dayOfWeekViewShape = RoundedCornerShape(dimensionResource(id = R.dimen.corner_radius_medium)),
+                    dayOfMonthViewShape = RoundedCornerShape(dimensionResource(id = R.dimen.corner_radius_medium)),
                     contentPadding = PaddingValues(0.dp),
                     contentColor = Color.Unspecified,
                     displayDaysOfAdjacentMonths = true,

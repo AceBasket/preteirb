@@ -1,4 +1,4 @@
-package com.example.preteirb.utils
+package com.example.preteirb.model.search
 
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.catch

@@ -2,38 +2,52 @@
     <!-- Common -->
     <string name="generic_error">Something wrong happened. Please try again.</string>
 
-    <string name="app_name">PRET\'EIRB</string>
-    <string name="home">Home</string>
+    <!-- Booking -->
+    <string name="book_item">Book item</string> <!-- + Items owned -->
+
+    <!-- Items booked -->
+
+    <!-- Items owned -->
+    <string name="booked_periods">Booked periods</string>
+    <string name="close_dialog">Close dialog</string>
     <string name="add_object">Add object</string>
-    <string name="account">Account</string>
-    <string name="find_object">Find an object</string>
-    <string name="add_account">Add account</string>
-    <string name="cancel">Cancel</string>
-    <string name="add">Add</string>
-    <string name="username">Username</string>
+    <string name="save">Save</string>
     <string name="title">Title</string>
     <string name="description">Description</string>
-    <string name="add_profile">Add a profile</string>
-    <string name="select_profile">Select a profile</string>
-    <string name="post">Add a new object</string>
-    <string name="settings">Settings</string>
-    <string name="switch_account">Switch account</string>
-    <string name="logout">Logout</string>
-    <string name="search">Search</string>
-    <string name="close_dialog">Close dialog</string>
-    <string name="save">Save</string>
-    <string name="search_result_not_found">Sorry, there is no content found for your search \"%1$s\"</string>
+    <string name="your_objects">Your objects</string>
+    <string name="save_item_success">Item saved successfully</string>
+    <string name="save_item_error">Item couldn\'t be saved, please check the input fields</string>
+
+    <!-- New usage -->
     <string name="add_usage_period">Add a new usage period</string>
     <string name="edit_usage_period">Edit this usage period</string>
-    <string name="confirm_edit_usage_period">Confirm edition of this usage period</string>
     <string name="delete_usage_period">Delete this usage period</string>
+    <string name="confirm_edit_usage_period">Confirm edition of this usage period</string>
+    <string name="cancel">Cancel</string> <!-- + Profile selection -->
     <string name="confirm">Confirm</string>
-    <string name="items_owned_new_usages">Add usages to your items</string>
-    <string name="profile">Profile</string>
-    <string name="book_item">Book item</string>
-    <string name="profile_image">Profile image of %1s</string>
-    <string name="booked_periods">Booked periods</string>
-    <string name="your_objects">Your objects</string>
+    <string name="post">Save usage periods</string>
     <string name="from">From</string>
     <string name="to">To</string>
+    <string name="save_usages_success">Usage periods saved successfully</string>
+    <string name="save_usages_error">Usage periods couldn\'t be saved, please check the input fields</string>
+
+    <!-- Profile selection -->
+    <string name="select_profile">Select a profile</string>
+    <string name="username">Username</string>
+    <string name="add">Add</string>
+    <string name="profile_image">Profile image of %1s</string>
+    <string name="save_user_success">User saved successfully</string>
+    <string name="save_user_error">User couldn\'t be saved, please check the input fields</string>
+
+    <!-- Search -->
+    <string name="find_object">Find an object</string>
+    <string name="add_profile">Add a profile</string>
+    <string name="search">Search</string>
+    <string name="search_result_not_found">Sorry, there is no content found for your search \"%1$s\"</string>
+
+    <!-- App bars -->
+    <string name="logout">Logout</string>
+    <string name="logout_icon">Logout icon</string>
+
+    <string name="app_name">PRET\'EIRB</string>
 </resources>

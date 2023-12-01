@@ -16,6 +16,10 @@ See the License for the specific language governing permissions and
 limitations under the License.
  */
 
+/*
+This code comes from https://github.com/FirebaseExtended/make-it-so-android
+*/
+
 import androidx.annotation.StringRes
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -25,15 +29,15 @@ object SnackbarManager {
     private val messages: MutableStateFlow<SnackbarMessage?> = MutableStateFlow(null)
     val snackbarMessages: StateFlow<SnackbarMessage?>
         get() = messages.asStateFlow()
-    
+
     fun showMessage(@StringRes message: Int) {
         messages.value = SnackbarMessage.ResourceSnackbar(message)
     }
-    
+
     fun showMessage(message: SnackbarMessage) {
         messages.value = message
     }
-    
+
     fun clearSnackbarState() {
         messages.value = null
     }

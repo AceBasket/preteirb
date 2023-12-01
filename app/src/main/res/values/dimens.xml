@@ -14,13 +14,19 @@
   ~ limitations under the License.
   -->
 <resources>
+    <dimen name="padding_extra_extra_small">2dp</dimen>
     <dimen name="padding_extra_small">4dp</dimen>
     <dimen name="padding_small">8dp</dimen>
     <dimen name="padding_medium">16dp</dimen>
     <dimen name="padding_large">32dp</dimen>
     <dimen name="padding_extra_large">64dp</dimen>
+
     <dimen name="corner_radius_small">4dp</dimen>
-    <dimen name="big_profile_image_size">128dp</dimen>
+    <dimen name="corner_radius_medium">16dp</dimen>
+
+    <dimen name="image_size_large">128dp</dimen>
     <dimen name="image_size_medium">64dp</dimen>
     <dimen name="image_size_small">32dp</dimen>
+    <dimen name="image_size_extra_small">16dp</dimen>
+    <dimen name="image_size_extra_extra_small">8dp</dimen>
 </resources>

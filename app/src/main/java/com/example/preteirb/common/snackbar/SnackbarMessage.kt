@@ -16,6 +16,10 @@ See the License for the specific language governing permissions and
 limitations under the License.
  */
 
+/*
+This code comes from https://github.com/FirebaseExtended/make-it-so-android
+*/
+
 import android.content.res.Resources
 import androidx.annotation.StringRes
 import com.example.preteirb.R
@@ -23,7 +27,7 @@ import com.example.preteirb.R
 sealed class SnackbarMessage {
     class StringSnackbar(val message: String) : SnackbarMessage()
     class ResourceSnackbar(@StringRes val message: Int) : SnackbarMessage()
-    
+
     companion object {
         fun SnackbarMessage.toMessage(resources: Resources): String {
             return when (this) {
@@ -31,7 +35,7 @@ sealed class SnackbarMessage {
                 is ResourceSnackbar -> resources.getString(this.message)
             }
         }
-        
+
         fun Throwable.toSnackbarMessage(): SnackbarMessage {
             val message = this.message.orEmpty()
             return if (message.isNotBlank()) StringSnackbar(message)
