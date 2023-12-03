@@ -15,9 +15,8 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.navigation.NavBackStackEntry
-import androidx.navigation.NavController
-import androidx.navigation.compose.rememberNavController
+import androidx.navigation.NavDestination
+import androidx.navigation.NavDestination.Companion.hierarchy
 import com.example.compose.AppTheme
 import com.example.preteirb.R
 import com.example.preteirb.ui.screens.items_owned.ListItemsDestination
@@ -47,11 +46,28 @@ val bottomNavItems = listOf(
     ),
 )
 
+enum class TopLevelDestination(
+    @StringRes val titleRes: Int,
+    val route: String,
+    val icon: ImageVector,
+) {
+    SEARCH(
+        titleRes = SearchDestination.titleRes,
+        route = SearchDestination.route,
+        icon = Icons.Rounded.Search,
+    ),
+    LIST_ITEMS(
+        titleRes = ListItemsDestination.titleRes,
+        route = ListItemsDestination.route,
+        icon = Icons.Rounded.List,
+    )
+}
 
 @Composable
 fun BottomAppBar(
-    navController: NavController,
-    backStackEntry: NavBackStackEntry?,
+    destinations: List<TopLevelDestination>,
+    currentDestination: NavDestination?,
+    onNavigateToDestination: (TopLevelDestination) -> Unit,
     modifier: Modifier = Modifier,
     isDisplayBottomAppBar: Boolean = true,
 ) {
@@ -60,28 +76,32 @@ fun BottomAppBar(
         containerColor = MaterialTheme.colorScheme.primaryContainer,
         modifier = modifier,
     ) {
-        bottomNavItems.forEach { item ->
-            val isSelected = item.route == backStackEntry?.destination?.route
+        destinations.forEach { destination ->
 
             NavigationBarItem(
-                selected = isSelected,
-                onClick = { navController.navigate(item.route) },
+                selected = currentDestination.isTopLevelDestinationInHierarchy(destination),
+                onClick = { onNavigateToDestination(destination) },
                 label = {
                     Text(
-                        text = stringResource(id = item.nameRes),
+                        text = stringResource(id = destination.titleRes),
                         fontWeight = FontWeight.SemiBold,
                     )
                 },
                 icon = {
                     Icon(
-                        imageVector = item.icon,
-                        contentDescription = "${stringResource(item.nameRes)} Icon",
+                        imageVector = destination.icon,
+                        contentDescription = "${stringResource(destination.titleRes)} Icon",
                     )
                 }
             )
         }
     }
 }
+
+private fun NavDestination?.isTopLevelDestinationInHierarchy(destination: TopLevelDestination) =
+    this?.hierarchy?.any {
+        it.route?.contains(destination.name, true) ?: false
+    } ?: false
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -146,8 +166,9 @@ fun AppTopBar(
 fun BottomAppBarPreview() {
     AppTheme {
         BottomAppBar(
-            navController = rememberNavController(),
-            backStackEntry = null
+            destinations = TopLevelDestination.values().asList(),
+            currentDestination = NavDestination("search"),
+            onNavigateToDestination = {},
         )
     }
 }

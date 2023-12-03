@@ -90,9 +90,11 @@ fun PreteirbApp(
         },
         bottomBar = {
             BottomAppBar(
-                navController = navController,
-                backStackEntry = null,
-                isDisplayBottomAppBar = navController.currentDestination?.route != ProfileSelectionDestination.route,
+                destinations = appState.topLevelDestinations,
+                currentDestination = appState.currentDestination,
+                onNavigateToDestination = appState::navigateToTopLevelDestination,
+                modifier = Modifier
+                    .fillMaxWidth()
             )
         },
         snackbarHost = {
