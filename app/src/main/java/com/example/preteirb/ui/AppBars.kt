@@ -5,6 +5,7 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.rounded.AccountCircle
+import androidx.compose.material.icons.rounded.DateRange
 import androidx.compose.material.icons.rounded.List
 import androidx.compose.material.icons.rounded.Search
 import androidx.compose.material3.*
@@ -19,32 +20,9 @@ import androidx.navigation.NavDestination
 import androidx.navigation.NavDestination.Companion.hierarchy
 import com.example.compose.AppTheme
 import com.example.preteirb.R
+import com.example.preteirb.ui.screens.items_booked.ItemsBookedDestination
 import com.example.preteirb.ui.screens.items_owned.ListItemsDestination
 import com.example.preteirb.ui.screens.search.SearchDestination
-
-data class BottomNavItem(
-    @StringRes val nameRes: Int,
-    val route: String,
-    val icon: ImageVector,
-)
-
-val bottomNavItems = listOf(
-    BottomNavItem(
-        nameRes = SearchDestination.titleRes,
-        route = SearchDestination.route,
-        icon = Icons.Rounded.Search,
-    ),
-//    BottomNavItem(
-//        nameRes = ItemOwnedUsageEntryDestination.titleRes,
-//        route = ItemOwnedUsageEntryDestination.route,
-//        icon = Icons.Rounded.AddCircle,
-//    ),
-    BottomNavItem(
-        nameRes = ListItemsDestination.titleRes,
-        route = ListItemsDestination.route,
-        icon = Icons.Rounded.List,
-    ),
-)
 
 enum class TopLevelDestination(
     @StringRes val titleRes: Int,
@@ -56,11 +34,16 @@ enum class TopLevelDestination(
         route = SearchDestination.route,
         icon = Icons.Rounded.Search,
     ),
+    BOOKINGS(
+        titleRes = ItemsBookedDestination.titleRes,
+        route = ItemsBookedDestination.route,
+        icon = Icons.Rounded.DateRange,
+    ),
     LIST_ITEMS(
         titleRes = ListItemsDestination.titleRes,
         route = ListItemsDestination.route,
         icon = Icons.Rounded.List,
-    )
+    ),
 }
 
 @Composable
@@ -77,7 +60,6 @@ fun BottomAppBar(
         modifier = modifier,
     ) {
         destinations.forEach { destination ->
-
             NavigationBarItem(
                 selected = currentDestination.isTopLevelDestinationInHierarchy(destination),
                 onClick = { onNavigateToDestination(destination) },
@@ -100,7 +82,7 @@ fun BottomAppBar(
 
 private fun NavDestination?.isTopLevelDestinationInHierarchy(destination: TopLevelDestination) =
     this?.hierarchy?.any {
-        it.route?.contains(destination.name, true) ?: false
+        it.route?.equals(destination.route, true) ?: false
     } ?: false
 
 @OptIn(ExperimentalMaterial3Api::class)

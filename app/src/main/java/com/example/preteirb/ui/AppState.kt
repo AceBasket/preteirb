@@ -52,6 +52,7 @@ class AppState(
         @Composable get() = when (currentDestination?.route) {
             TopLevelDestination.SEARCH.route -> TopLevelDestination.SEARCH
             TopLevelDestination.LIST_ITEMS.route -> TopLevelDestination.LIST_ITEMS
+            TopLevelDestination.BOOKINGS.route -> TopLevelDestination.BOOKINGS
             else -> null
         }
 
@@ -110,6 +111,13 @@ class AppState(
             }
 
             TopLevelDestination.LIST_ITEMS -> {
+                navController.navigate(
+                    route = topLevelDestination.route,
+                    navOptions = topLevelNavOptions
+                )
+            }
+
+            TopLevelDestination.BOOKINGS -> {
                 navController.navigate(
                     route = topLevelDestination.route,
                     navOptions = topLevelNavOptions

@@ -28,6 +28,6 @@ interface UsageDao {
     @Query("SELECT * from usages")
     fun getAllUsages(): Flow<List<Usage>>;
 
-    @Query("SELECT * from usages WHERE itemId = :itemId")
+    @Query("SELECT * from usages WHERE itemUsedId = :itemId")
     fun getAllUsagesByItemId(itemId: Int): Flow<List<Usage>>;
 }

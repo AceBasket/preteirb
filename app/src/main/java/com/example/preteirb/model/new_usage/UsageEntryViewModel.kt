@@ -1,5 +1,6 @@
 package com.example.preteirb.model.new_usage
 
+import android.util.Log
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
@@ -101,6 +102,7 @@ abstract class UsageEntryViewModel(
             )
             SnackbarManager.showMessage(R.string.save_usages_success)
         } catch (e: Exception) {
+            Log.d("UsageEntryViewModel", "saveUsage: ${e.message}")
             SnackbarManager.showMessage(R.string.save_usages_error)
             return
         }
@@ -132,8 +134,8 @@ data class UsagePeriod(
 fun UsageDetails.toUsages(): List<Usage> = period.map { usagePeriod ->
     Usage(
         usageId = usageId,
-        userId = userId,
-        itemId = itemId,
+        userUsingItemId = userId,
+        itemUsedId = itemId,
         //TODO: might need to change this (0 would be a really bad value)
         startDateTime = usagePeriod.start,
         endDateTime = usagePeriod.end,

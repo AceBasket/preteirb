@@ -49,5 +49,8 @@
     <string name="logout">Logout</string>
     <string name="logout_icon">Logout icon</string>
 
+    <!-- Bookings -->
+    <string name="bookings">Bookings</string>
+
     <string name="app_name">PRET\'EIRB</string>
 </resources>

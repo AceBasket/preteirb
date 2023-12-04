@@ -2,9 +2,7 @@ package com.example.preteirb.ui.screens.items_owned
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
-import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedButton
@@ -16,6 +14,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -25,9 +24,7 @@ import com.example.preteirb.data.item.Item
 import com.example.preteirb.data.item.ItemAndUsages
 import com.example.preteirb.data.usage.Usage
 import com.example.preteirb.model.items_owned.ItemAndUsagesDetailsViewModel
-import com.example.preteirb.model.items_owned.toItemDetails
 import com.example.preteirb.ui.navigation.NavigationDestination
-import com.example.preteirb.ui.screens.search.ObjectCard
 import epicarchitect.calendar.compose.basis.config.rememberBasisEpicCalendarConfig
 import epicarchitect.calendar.compose.pager.EpicCalendarPager
 import epicarchitect.calendar.compose.pager.config.rememberEpicCalendarPagerConfig
@@ -72,12 +69,11 @@ fun ItemAndUsagesDetails(
     modifier: Modifier = Modifier,
 ) {
     Column(modifier = modifier) {
-        ObjectCard(
-            item = itemAndUsages.item.toItemDetails(),
-            shape = CardDefaults.elevatedShape,
-            colors = CardDefaults.elevatedCardColors(),
-            elevation = CardDefaults.elevatedCardElevation(),
-            modifier = Modifier.padding(horizontal = dimensionResource(id = R.dimen.padding_extra_large))
+        Text(
+            text = itemAndUsages.item.name,
+            style = MaterialTheme.typography.headlineLarge,
+            fontStyle = FontStyle.Italic,
+            modifier = Modifier.align(Alignment.CenterHorizontally)
         )
         HorizontalDivider()
         ItemBookedPeriods(
@@ -129,7 +125,7 @@ fun ItemBookedPeriods(
         ) + " " + epicCalendarPagerState.currentMonth.year.toString()
         Text(
             text = monthDisplayed,
-            style = MaterialTheme.typography.headlineMedium,
+            style = MaterialTheme.typography.headlineSmall,
             modifier = Modifier.align(Alignment.CenterHorizontally)
         )
         EpicCalendarPager(
@@ -149,7 +145,7 @@ fun ItemBookedPeriods(
 @Composable
 fun ItemDetailsScreenDetails() {
     AppTheme {
-        val fakeData: ItemAndUsages = ItemAndUsages(
+        val fakeData = ItemAndUsages(
             item = Item(
                 itemId = 1,
                 name = "Item name",
@@ -159,8 +155,8 @@ fun ItemDetailsScreenDetails() {
             usages = listOf(
                 Usage(
                     usageId = 1,
-                    userId = 1,
-                    itemId = 1,
+                    userUsingItemId = 1,
+                    itemUsedId = 1,
                     startDateTime = 1699900000000,
                     endDateTime = 1700680000000
                 )

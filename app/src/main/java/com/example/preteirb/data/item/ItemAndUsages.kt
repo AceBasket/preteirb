@@ -9,7 +9,7 @@ data class ItemAndUsages(
     val item: Item,
     @Relation(
         parentColumn = "itemId",
-        entityColumn = "itemId"
+        entityColumn = "itemUsedId"
     )
     val usages: List<Usage>
 )

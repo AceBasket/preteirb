@@ -1,13 +1,13 @@
-package com.example.preteirb.model.items_owned
+package com.example.preteirb.model.items_booked
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.preteirb.data.SettingsRepository
+import com.example.preteirb.data.usage.UsageWithItemAndUser
 import com.example.preteirb.data.user.UsersRepository
-import com.example.preteirb.model.new_usage.ItemsOwnedUiState
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.SharingStarted
-import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.filterNotNull
 import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.map
@@ -15,27 +15,33 @@ import kotlinx.coroutines.flow.stateIn
 import javax.inject.Inject
 
 @HiltViewModel
-class ListItemsViewModel @Inject constructor(
-    private val usersRepository: UsersRepository,
-    private val settingsRepository: SettingsRepository
+class ItemsBookedViewModel @Inject constructor(
+    val usersRepository: UsersRepository,
+    val settingsRepository: SettingsRepository
 ) : ViewModel() {
-    val listItemsUiState: StateFlow<ItemsOwnedUiState> = settingsRepository
+    @OptIn(ExperimentalCoroutinesApi::class)
+    val itemsBookedAndNotOwnedByUser = settingsRepository
         .getUserId()
         .flatMapLatest { userId ->
             usersRepository
-                .getAllItemsOwnedByUserStream(userId)
+                .getAllItemsBookedAndNotOwnedByUserStream(userId)
                 .filterNotNull()
-                .map { itemsOwned ->
-                    ItemsOwnedUiState(itemsOwned = itemsOwned.items)
+                .map { data ->
+                    ItemsBookedUiState(bookings = data)
                 }
         }
         .stateIn(
             scope = viewModelScope,
             started = SharingStarted.WhileSubscribed(TIMEOUT_MILLIS),
-            initialValue = ItemsOwnedUiState()
+            initialValue = ItemsBookedUiState()
         )
 
     companion object {
         private const val TIMEOUT_MILLIS = 5_000L
     }
+
 }
+
+data class ItemsBookedUiState(
+    val bookings: List<UsageWithItemAndUser> = emptyList()
+)

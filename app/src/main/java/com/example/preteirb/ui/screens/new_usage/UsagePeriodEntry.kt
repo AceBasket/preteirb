@@ -22,10 +22,8 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.example.compose.AppTheme
 import com.example.preteirb.R
+import com.example.preteirb.data.usage.getShortenedDateFormat
 import com.example.preteirb.model.new_usage.UsagePeriod
-import java.time.Instant
-import java.time.ZoneId
-import java.time.format.DateTimeFormatter
 
 @Composable
 fun EmptyNewUsagePeriod(
@@ -218,7 +216,7 @@ fun NewUsagePeriod(
             onClick = {
                 isShowDatePicker = true
                 isSelectEndDate = true
-                      },
+            },
             isModifiable = isModifiable,
             dateTime = endDateTime,
             label = R.string.to
@@ -278,12 +276,7 @@ fun RowScope.UsageDateField(
             )
             Text(
                 text = if (dateTime == 0L || dateTime == null) ""
-                else DateTimeFormatter.ofPattern("d MMM uuuu").withZone(ZoneId.systemDefault())
-                    .format(
-                        Instant.ofEpochMilli(
-                            dateTime ?: 0L
-                        )
-                    ),
+                else getShortenedDateFormat(dateTime),
                 modifier = Modifier.align(Alignment.CenterHorizontally)
             )
         }

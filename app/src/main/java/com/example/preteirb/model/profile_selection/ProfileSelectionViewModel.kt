@@ -1,5 +1,6 @@
 package com.example.preteirb.model.profile_selection
 
+import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.preteirb.common.snackbar.SnackbarManager
@@ -48,6 +49,7 @@ class ProfileSelectionViewModel @Inject constructor(
             val userId = registerUser(user).toInt()
             logIn(user.copy(userId = userId))
         } catch (e: Exception) {
+            Log.d("ProfileSelectionViewModel", "registerUserAndLogIn: ${e.message}")
             SnackbarManager.showMessage(e.toSnackbarMessage())
         }
     }

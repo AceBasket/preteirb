@@ -1,6 +1,5 @@
 package com.example.preteirb.ui
 
-import android.util.Log
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -20,13 +19,13 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.compose.NavHost
-import androidx.navigation.compose.currentBackStackEntryAsState
 import com.example.compose.AppTheme
 import com.example.preteirb.R
 import com.example.preteirb.model.PreteirbAppViewModel
 import com.example.preteirb.ui.navigation.NavigationDestination
 import com.example.preteirb.ui.navigation.appNavGraph
 import com.example.preteirb.ui.screens.booking.BookItemDestination
+import com.example.preteirb.ui.screens.items_booked.ItemsBookedDestination
 import com.example.preteirb.ui.screens.items_owned.ItemAndUsagesDetailsDestination
 import com.example.preteirb.ui.screens.items_owned.ListItemsDestination
 import com.example.preteirb.ui.screens.profile_selection.ProfileSelectionDestination
@@ -43,18 +42,15 @@ fun PreteirbApp(
     //Create NavController
     val navController = appState.navController
 
-    // Get current back stack entry
-    val backStackEntry by navController.currentBackStackEntryAsState()
-
     // Get the current destination
-    val currentScreen: NavigationDestination = backStackEntry?.destination?.route?.let { route ->
-        Log.d("currentScreen", route)
+    val currentScreen: NavigationDestination = appState.currentDestination?.route.let { route ->
         when (route) {
             SearchDestination.route -> SearchDestination
             ProfileSelectionDestination.route -> ProfileSelectionDestination
             BookItemDestination.routeWithArgs -> BookItemDestination
             ListItemsDestination.route -> ListItemsDestination
             ItemAndUsagesDetailsDestination.routeWithArgs -> ItemAndUsagesDetailsDestination
+            ItemsBookedDestination.route -> ItemsBookedDestination
             else -> null
         }
     } ?: SearchDestination
@@ -75,11 +71,9 @@ fun PreteirbApp(
         topBar = {
             AppTopBar(
                 currentScreenTitle = currentScreen.titleRes,
-                canNavigateBack = navController.previousBackStackEntry != null && !listOf(
-                    SearchDestination.route,
-                    ListItemsDestination.route,
-                    ProfileSelectionDestination.route,
-                ).contains(currentScreen.route),
+                canNavigateBack = navController.previousBackStackEntry != null
+                        && !appState.topLevelDestinations.map { it.route }
+                    .contains(appState.currentDestination?.route),
                 navigateUp = { navController.navigateUp() },
                 navigateToProfileSelection = {
                     navController.navigate(ProfileSelectionDestination.route)
@@ -93,6 +87,7 @@ fun PreteirbApp(
                 destinations = appState.topLevelDestinations,
                 currentDestination = appState.currentDestination,
                 onNavigateToDestination = appState::navigateToTopLevelDestination,
+                isDisplayBottomAppBar = appState.currentDestination?.route != ProfileSelectionDestination.route,
                 modifier = Modifier
                     .fillMaxWidth()
             )

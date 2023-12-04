@@ -7,6 +7,8 @@ import androidx.navigation.navArgument
 import com.example.preteirb.ui.AppState
 import com.example.preteirb.ui.screens.booking.BookItemDestination
 import com.example.preteirb.ui.screens.booking.BookItemScreen
+import com.example.preteirb.ui.screens.items_booked.ItemsBookedDestination
+import com.example.preteirb.ui.screens.items_booked.ItemsBookedScreen
 import com.example.preteirb.ui.screens.items_owned.ItemAndUsagesDetailsDestination
 import com.example.preteirb.ui.screens.items_owned.ItemAndUsagesDetailsScreen
 import com.example.preteirb.ui.screens.items_owned.ListItemsDestination
@@ -27,7 +29,7 @@ fun NavGraphBuilder.appNavGraph(appState: AppState) {
         ProfileSelectionScreen(
             navigateToSearch = {
                 appState.clearAndNavigate(SearchDestination.route)
-            }, //TODO: footnote saying account was created
+            },
         )
     }
 
@@ -59,5 +61,9 @@ fun NavGraphBuilder.appNavGraph(appState: AppState) {
         ItemAndUsagesDetailsScreen(
             navigateToBookItem = { appState.navigate("${BookItemDestination.route}/${it}") },
         )
+    }
+
+    composable(route = ItemsBookedDestination.route) {
+        ItemsBookedScreen()
     }
 }

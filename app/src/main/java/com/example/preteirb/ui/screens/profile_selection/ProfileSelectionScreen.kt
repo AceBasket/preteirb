@@ -57,6 +57,7 @@ fun ProfileSelectionScreen(
             coroutine.launch {
                 viewModel.registerUserAndLogIn(
                     User(
+                        userId = 0,
                         username = username,
                     )
                 )
