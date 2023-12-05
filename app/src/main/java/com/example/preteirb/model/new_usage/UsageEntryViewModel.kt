@@ -35,7 +35,6 @@ abstract class UsageEntryViewModel(
     var uiState by mutableStateOf(UsageUiState())
         private set
 
-    // init with userId from settings
     init {
         viewModelScope.launch {
             uiState = UsageUiState(
@@ -55,7 +54,11 @@ abstract class UsageEntryViewModel(
      */
     fun updateUiState(usageDetails: UsageDetails) {
         uiState =
-            UsageUiState(usageDetails = usageDetails, isEntryValid = validateInput(usageDetails))
+            UsageUiState(
+                usageDetails = usageDetails,
+                isEntryValid = validateInput(usageDetails),
+                bookedPeriods = uiState.bookedPeriods
+            )
     }
 
     private fun validateInput(uiState: UsageDetails = this.uiState.usageDetails): Boolean {
