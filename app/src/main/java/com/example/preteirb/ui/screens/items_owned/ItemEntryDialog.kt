@@ -1,14 +1,30 @@
 package com.example.preteirb.ui.screens.items_owned
 
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Close
-import androidx.compose.material3.*
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
+import androidx.compose.material3.OutlinedTextField
+import androidx.compose.material3.Surface
+import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.input.KeyboardCapitalization
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.window.Dialog
 import androidx.compose.ui.window.DialogProperties
@@ -55,11 +71,20 @@ fun NewObjectDialog(
                         Text(text = stringResource(id = R.string.save))
                     }
                 }
+                var isTitleError by rememberSaveable { mutableStateOf(false) }
                 OutlinedTextField(
                     value = itemUiState.itemDetails.name,
-                    onValueChange = { onValueChange(itemUiState.itemDetails.copy(name = it)) },
-                    label = { Text(stringResource(id = R.string.title)) },
-                    modifier = Modifier.fillMaxWidth()
+                    onValueChange = {
+                        onValueChange(itemUiState.itemDetails.copy(name = it))
+                        isTitleError = it.isEmpty()
+                    },
+                    label = { Text(stringResource(id = R.string.title) + '*') },
+                    modifier = Modifier.fillMaxWidth(),
+                    isError = isTitleError,
+                    singleLine = true,
+                    keyboardOptions = KeyboardOptions(
+                        capitalization = KeyboardCapitalization.Sentences,
+                    ),
                 )
                 OutlinedTextField(
                     value = itemUiState.itemDetails.description,

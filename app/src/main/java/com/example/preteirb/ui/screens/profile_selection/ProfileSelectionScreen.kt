@@ -7,6 +7,8 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.text.KeyboardActions
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.Card
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Surface
@@ -23,6 +25,8 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.input.ImeAction
+import androidx.compose.ui.text.input.KeyboardCapitalization
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.window.Dialog
 import androidx.compose.ui.window.DialogProperties
@@ -126,10 +130,23 @@ fun AddAccountDialog(
                 modifier = modifier,
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
+                var isUsernameError by rememberSaveable { mutableStateOf(false) }
                 OutlinedTextField(
                     value = username,
-                    onValueChange = { username = it },
-                    label = { Text(stringResource(id = R.string.username)) },
+                    onValueChange = { newUsername ->
+                        username = newUsername.trimStart { it == ' ' }
+                        isUsernameError = username.isEmpty()
+                    },
+                    label = { Text(stringResource(id = R.string.username) + '*') },
+                    singleLine = true,
+                    isError = isUsernameError,
+                    keyboardOptions = KeyboardOptions(
+                        capitalization = KeyboardCapitalization.Sentences,
+                        imeAction = ImeAction.Done
+                    ),
+                    keyboardActions = KeyboardActions {
+                        onAddAccount(username)
+                    }
                 )
                 Row(
                     horizontalArrangement = Arrangement.End,
