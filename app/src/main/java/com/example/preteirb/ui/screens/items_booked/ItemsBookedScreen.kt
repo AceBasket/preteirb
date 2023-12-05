@@ -55,15 +55,18 @@ fun ItemsBooked(
     uiState: ItemsBookedUiState,
     modifier: Modifier = Modifier
 ) {
-    LazyColumn(modifier = modifier.fillMaxWidth()) {
+    LazyColumn(
+        horizontalAlignment = Alignment.CenterHorizontally,
+        modifier = modifier.fillMaxWidth()
+    ) {
         items(uiState.bookings) { data ->
             ItemBookedCard(
                 item = data.item,
                 usage = data.usage,
                 modifier = modifier
                     .padding(
-                        start = dimensionResource(id = R.dimen.padding_large),
-                        end = dimensionResource(id = R.dimen.padding_large),
+//                        start = dimensionResource(id = R.dimen.padding_large),
+//                        end = dimensionResource(id = R.dimen.padding_large),
                         bottom = dimensionResource(id = R.dimen.padding_small)
                     )
             )
@@ -98,7 +101,7 @@ fun ItemBookedCard(
             ) {
                 Text(
                     text = item.item.name,
-                    style = MaterialTheme.typography.bodyMedium
+                    style = MaterialTheme.typography.titleMedium,
                 )
                 Text(
                     text = "Belongs to ${item.owner.username}",

@@ -105,7 +105,7 @@ fun PreteirbApp(
         val screenModifier = Modifier
             .fillMaxSize()
             .padding(innerPadding)
-            .padding(horizontal = dimensionResource(id = R.dimen.padding_medium))
+            .padding(dimensionResource(id = R.dimen.padding_medium))
         NavHost(
             navController = navController,
             startDestination = startDestination,
