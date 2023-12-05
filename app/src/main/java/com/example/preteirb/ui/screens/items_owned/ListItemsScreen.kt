@@ -3,9 +3,18 @@ package com.example.preteirb.ui.screens.items_owned
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
-import androidx.compose.material3.*
-import androidx.compose.runtime.*
+import androidx.compose.material3.ExtendedFloatingActionButton
+import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Text
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
@@ -13,7 +22,11 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import com.example.compose.AppTheme
 import com.example.preteirb.R
 import com.example.preteirb.data.item.Item
-import com.example.preteirb.model.items_owned.*
+import com.example.preteirb.model.items_owned.ItemDetails
+import com.example.preteirb.model.items_owned.ItemEntryViewModel
+import com.example.preteirb.model.items_owned.ItemUiState
+import com.example.preteirb.model.items_owned.ListItemsViewModel
+import com.example.preteirb.model.items_owned.toItemDetails
 import com.example.preteirb.model.new_usage.ItemsOwnedUiState
 import com.example.preteirb.ui.navigation.NavigationDestination
 import com.example.preteirb.ui.screens.search.ObjectList
@@ -42,8 +55,10 @@ fun ListItemsScreen(
         onSaveNewItem = {
             coroutineScope.launch {
                 newItemViewModel.saveItem()
+                newItemViewModel.whipeItemUiState()
             }
         },
+        whipeNewItemUiState = newItemViewModel::whipeItemUiState,
         modifier = modifier
     )
 }
@@ -55,6 +70,7 @@ fun ListItemsScreenContent(
     newItemUiState: ItemUiState,
     onNewItemValueChange: (ItemDetails) -> Unit,
     onSaveNewItem: () -> Unit,
+    whipeNewItemUiState: () -> Unit,
     modifier: Modifier = Modifier
 ) {
     var isShowObjectDialog by rememberSaveable {
@@ -98,6 +114,7 @@ fun ListItemsScreenContent(
             },
             onDismissDialog = {
                 isShowObjectDialog = false
+                whipeNewItemUiState()
             },
         )
     }
@@ -133,6 +150,7 @@ fun ListItemsScreenContentPreview() {
             newItemUiState = ItemUiState(),
             onNewItemValueChange = {},
             onSaveNewItem = {},
+            whipeNewItemUiState = {},
         )
     }
 }

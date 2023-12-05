@@ -45,6 +45,10 @@ class ItemEntryViewModel @Inject constructor(
             SnackbarManager.showMessage(R.string.save_item_error)
         }
     }
+
+    fun whipeItemUiState() {
+        itemUiState = ItemUiState()
+    }
 }
 
 data class ItemUiState(
