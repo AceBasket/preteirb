@@ -17,6 +17,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
@@ -43,11 +44,13 @@ fun ProfileSelectionCarousel(
         HorizontalPager(
             state = pagerState,
             contentPadding = PaddingValues(horizontal = 25.dp),
-            modifier = Modifier.width(
-                dimensionResource(id = R.dimen.image_size_large).times(
-                    1.5f
+            modifier = Modifier
+                .width(
+                    dimensionResource(id = R.dimen.image_size_large).times(
+                        1.5f
+                    )
                 )
-            )
+                .testTag("profileSelectionCarousel")
         ) { page ->
             val itemModifier = Modifier
                 .fillMaxWidth()
@@ -60,12 +63,16 @@ fun ProfileSelectionCarousel(
                 )
             if (page == list.size) {
                 AddProfileItem(
-                    modifier = Modifier.clickable { onClickOnAddProfile() }
+                    modifier = Modifier
+                        .clickable { onClickOnAddProfile() }
+                        .testTag("addProfileCarouselItem")
                 )
             } else {
                 ProfileSelectionItem(
                     profile = list[page],
-                    modifier = Modifier.clickable { onClickOnProfile(list[page]) }
+                    modifier = Modifier
+                        .clickable { onClickOnProfile(list[page]) }
+                        .testTag("profileCarouselItem")
                 )
             }
         }

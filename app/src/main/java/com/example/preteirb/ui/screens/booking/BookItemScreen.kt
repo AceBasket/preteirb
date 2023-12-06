@@ -11,7 +11,7 @@ import com.example.preteirb.R
 import com.example.preteirb.model.booking.BookItemsViewModel
 import com.example.preteirb.model.items_owned.ItemDetails
 import com.example.preteirb.ui.navigation.NavigationDestination
-import com.example.preteirb.ui.screens.new_usage.AddUsagesV2
+import com.example.preteirb.ui.screens.new_usage.AddUsages
 import com.example.preteirb.ui.screens.search.ObjectCard
 import kotlinx.coroutines.launch
 
@@ -37,7 +37,7 @@ fun BookItemScreen(
             colors = CardDefaults.elevatedCardColors(),
             elevation = CardDefaults.elevatedCardElevation(),
         )
-        AddUsagesV2(
+        AddUsages(
             usageUiState = bookItemsViewModel.uiState,
             onUsageValueChange = bookItemsViewModel::updateUiState,
             onSaveUsageClick = {

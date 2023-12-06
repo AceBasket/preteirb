@@ -18,6 +18,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Shape
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
@@ -43,12 +44,29 @@ fun SearchScreen(
     modifier: Modifier = Modifier,
     viewModel: SearchViewModel = hiltViewModel(),
 ) {
-
     val uiState = viewModel.uiState.collectAsState()
-
     // this is the text users enter
     val queryString by viewModel.searchQuery.collectAsStateWithLifecycle()
 
+    SearchScreenContent(
+        uiState = uiState.value,
+        queryString = queryString,
+        onSearchQueryChange = viewModel::onSearchQueryChanged,
+        navigateToBookItem = navigateToBookItem,
+        modifier = modifier.testTag("searchScreen")
+    )
+
+}
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+fun SearchScreenContent(
+    uiState: SearchResultUiState,
+    queryString: String,
+    onSearchQueryChange: (String) -> Unit,
+    navigateToBookItem: (Int) -> Unit,
+    modifier: Modifier = Modifier
+) {
     // if the search bar is active or not
     var isActive by remember {
         mutableStateOf(false)
@@ -58,7 +76,7 @@ fun SearchScreen(
     ) {
         SearchBar(
             query = queryString,
-            onQueryChange = viewModel::onSearchQueryChanged,
+            onQueryChange = onSearchQueryChange,
             onSearch = { isActive = false },
             active = isActive,
             onActiveChange = {},
@@ -66,19 +84,20 @@ fun SearchScreen(
             leadingIcon = { Icon(imageVector = Icons.Default.Search, contentDescription = null) },
             modifier = Modifier
                 .padding(dimensionResource(id = R.dimen.padding_medium))
+                .testTag("searchTextField")
         ) {}
 
-        when (uiState.value) {
+        when (uiState) {
             SearchResultUiState.Loading,
             SearchResultUiState.LoadFailed,
             SearchResultUiState.EmptyQuery,
             -> Unit
 
             is SearchResultUiState.Success -> {
-                if ((uiState.value as SearchResultUiState.Success).isEmpty()) {
+                if (uiState.isEmpty()) {
                     Text(text = stringResource(id = R.string.search_result_not_found, queryString))
                 } else {
-                    val items = (uiState.value as SearchResultUiState.Success).itemList
+                    val items = uiState.itemList
                     ObjectList(objects = items, onItemClick = navigateToBookItem)
                 }
             }
@@ -97,12 +116,7 @@ fun ObjectList(
     LazyColumn(
         modifier = modifier,
     ) {
-        items(
-            items = objects,
-            key = {
-                it.id
-            }
-        ) {
+        items(items = objects) {
             ObjectCard(
                 item = it,
                 modifier = Modifier
@@ -111,6 +125,7 @@ fun ObjectList(
                         bottom = dimensionResource(id = R.dimen.padding_small),
                     )
                     .clickable { onItemClick(it.id) }
+                    .testTag("objectCard")
             )
         }
     }

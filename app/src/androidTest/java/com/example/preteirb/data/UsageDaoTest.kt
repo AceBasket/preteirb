@@ -1,4 +1,4 @@
-package com.example.preteirb.data.usage
+package com.example.preteirb.data
 
 import android.content.Context
 import androidx.room.Room
@@ -7,6 +7,8 @@ import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.example.preteirb.data.AppDatabase
 import com.example.preteirb.data.item.Item
 import com.example.preteirb.data.item.ItemDao
+import com.example.preteirb.data.usage.Usage
+import com.example.preteirb.data.usage.UsageDao
 import com.example.preteirb.data.user.User
 import com.example.preteirb.data.user.UserDao
 import kotlinx.coroutines.flow.first
@@ -44,16 +46,16 @@ class UsageDaoTest {
         appDatabase.close();
     }
 
-    private var user1 = User(1, "User 1", "location 1");
-    private var user2 = User(2, "User 2", "location 2");
+    private var user1 = User(1, "User 1");
+    private var user2 = User(2, "User 2");
 
     private var item1 = Item(1, "Item 1", "Item 1 description", 1);
     private var item2 = Item(2, "Item 2", "Item 2 description", 1);
 
 
-    private var usage1 = Usage(1, 1, "", "");
-    private var usage2 = Usage(2, 1, "", "");
-    private var usage3 = Usage(1, 2, "", "");
+    private var usage1 = Usage(1, 1, 1, 0, 0);
+    private var usage2 = Usage(2, 2, 1, 0, 0);
+    private var usage3 = Usage(3, 1, 2, 0, 0);
 
     private suspend fun addOneUsageToDb() {
         userDao.insert(user1)
@@ -103,7 +105,7 @@ class UsageDaoTest {
     @Throws(Exception::class)
     fun daoGetUsage_returnsUsageFromDB() = runBlocking {
         addAllUsagesToDb()
-        val usage = usageDao.getUsage(1, 2).first()
+        val usage = usageDao.getUsage(usage3.usageId).first()
         assertEquals(usage, usage3)
     }
 
@@ -111,10 +113,10 @@ class UsageDaoTest {
     @Throws(Exception::class)
     fun daoUpdate_updatesUsageInDB() = runBlocking {
         addAllUsagesToDb()
-        val usage = usageDao.getUsage(1, 2).first()
+        val usage = usageDao.getUsage(usage3.usageId).first()
         assertEquals(usage, usage3)
         usageDao.update(usage.copy(itemUsedId = 2, userUsingItemId = 1))
-        val updatedUsage = usageDao.getUsage(2, 1).first()
+        val updatedUsage = usageDao.getUsage(usage.usageId).first()
         assertEquals(updatedUsage, usage3.copy(itemUsedId = 2, userUsingItemId = 1))
     }
 
@@ -122,7 +124,7 @@ class UsageDaoTest {
     @Throws(Exception::class)
     fun daoDelete_deletesUsageFromDB() = runBlocking {
         addAllUsagesToDb()
-        val usage = usageDao.getUsage(1, 2).first()
+        val usage = usageDao.getUsage(usage3.usageId).first()
         assertEquals(usage, usage3)
         usageDao.delete(usage)
         val allUsages = usageDao.getAllUsages().first()

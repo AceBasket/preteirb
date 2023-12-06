@@ -14,6 +14,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
@@ -24,7 +25,7 @@ import com.example.preteirb.model.new_usage.UsagePeriod
 import com.example.preteirb.model.new_usage.UsageUiState
 
 @Composable
-fun AddUsagesV2(
+fun AddUsages(
     usageUiState: UsageUiState,
     onUsageValueChange: (UsageDetails) -> Unit,
     onSaveUsageClick: (UsagePeriod?) -> Unit,
@@ -61,6 +62,7 @@ fun AddUsagesV2(
                         )
                     )
                 },
+                modifier = Modifier.testTag("usagePeriodListItem"),
             )
         }
         item {
@@ -85,7 +87,8 @@ fun AddUsagesV2(
 
                         lastUsagePeriod = null // reset last usage period
                     }
-                }
+                },
+                modifier = Modifier.testTag("emptyNewUsagePeriod"),
             )
         }
     }
@@ -99,6 +102,7 @@ fun AddUsagesV2(
         Button(
             onClick = { onSaveUsageClick(lastUsagePeriod) },
             enabled = usageUiState.isEntryValid,
+            modifier = Modifier.testTag("saveUsagePeriodsButton")
         ) {
             Text(text = stringResource(id = R.string.post))
         }
@@ -110,7 +114,7 @@ fun AddUsagesV2(
 @Composable
 fun NewUsageFormPreview() {
     AppTheme {
-        AddUsagesV2(
+        AddUsages(
             usageUiState = UsageUiState(),
             onUsageValueChange = {},
             onSaveUsageClick = {},

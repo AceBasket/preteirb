@@ -4,9 +4,9 @@ import androidx.annotation.StringRes
 import androidx.compose.foundation.layout.Box
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
+import androidx.compose.material.icons.automirrored.rounded.List
 import androidx.compose.material.icons.rounded.AccountCircle
 import androidx.compose.material.icons.rounded.DateRange
-import androidx.compose.material.icons.rounded.List
 import androidx.compose.material.icons.rounded.Search
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
@@ -42,7 +42,7 @@ enum class TopLevelDestination(
     LIST_ITEMS(
         titleRes = ListItemsDestination.titleRes,
         route = ListItemsDestination.route,
-        icon = Icons.Rounded.List,
+        icon = Icons.AutoMirrored.Rounded.List,
     ),
 }
 

@@ -16,6 +16,7 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
@@ -209,7 +210,8 @@ fun NewUsagePeriod(
             onClick = { isShowDatePicker = true },
             isModifiable = isModifiable,
             dateTime = startDateTime,
-            label = R.string.from
+            label = R.string.from,
+            modifier = Modifier.testTag("startUsageDateField")
         )
         Spacer(modifier = Modifier.padding(dimensionResource(id = R.dimen.padding_extra_small)))
         UsageDateField(
@@ -219,7 +221,8 @@ fun NewUsagePeriod(
             },
             isModifiable = isModifiable,
             dateTime = endDateTime,
-            label = R.string.to
+            label = R.string.to,
+            modifier = Modifier.testTag("endUsageDateField")
         )
         Spacer(modifier = Modifier.padding(dimensionResource(id = R.dimen.padding_extra_small)))
         trailingButtons()
@@ -248,6 +251,7 @@ fun NewUsagePeriod(
                 onNewUsagePeriodSelected(Pair(startDateTime, endDateTime))
             },
             isSelectEndDate = isSelectEndDate,
+            modifier = Modifier.testTag("usagePeriodPickerDialog")
         )
     }
 }
