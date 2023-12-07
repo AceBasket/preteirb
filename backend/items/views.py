@@ -1,6 +1,7 @@
 from django.shortcuts import render
 from rest_framework import viewsets
-from .serializers import ItemSerializer, ItemAndUsagesSerializer
+from .serializers.common import ItemSerializer
+from .serializers.specialized import ItemAndUsagesSerializer
 from .models import Item
 
 class ItemViewSet(viewsets.ModelViewSet):
@@ -13,5 +14,8 @@ class ItemViewSet(viewsets.ModelViewSet):
         return Response(serializer.data)
     
 class ItemAndUsagesViewSet(viewsets.ReadOnlyModelViewSet):
-    queryset = Item.objects.all()
     serializer_class = ItemAndUsagesSerializer
+    
+    def get_queryset(self):
+        item_id = self.kwargs['id']
+        return Item.objects.filter(id=item_id)
