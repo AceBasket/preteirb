@@ -1,4 +1,5 @@
 from django.shortcuts import render
+from django.db.models import Q
 from rest_framework import viewsets
 from .models import Profile
 from .serializers.common import ProfileSerializer
@@ -17,9 +18,11 @@ class ProfileAndItemsOwnedViewSet(viewsets.ReadOnlyModelViewSet):
         return Item.objects.filter(owner__id=profile_id)
     
 class UsageAndItemWithOwnerViewSet(viewsets.ReadOnlyModelViewSet):
+    # doesn't retrieve the items owned by the profile
     serializer_class = UsageAndItemWithOwnerSerializer
     
     def get_queryset(self):
         profile_id = self.kwargs['id']
-        return Usage.objects.filter(user__id=profile_id)
+        # usage__user__id=profile_id and usage__item__owner__id!=profile_id
+        return Usage.objects.filter(user__id=profile_id).filter(~Q(item__owner__id=profile_id))
     
