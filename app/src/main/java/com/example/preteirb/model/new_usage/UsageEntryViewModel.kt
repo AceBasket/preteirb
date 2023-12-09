@@ -140,12 +140,12 @@ fun UsageDetails.toUsages(): List<Usage> = period.map { usagePeriod ->
         userUsingItemId = userId,
         itemUsedId = itemId,
         //TODO: might need to change this (0 would be a really bad value)
-        startDateTime = usagePeriod.start,
-        endDateTime = usagePeriod.end,
+        startDate = usagePeriod.start,
+        endDate = usagePeriod.end,
     )
 }
 
 fun Usage.toUsagePeriod(): UsagePeriod = UsagePeriod(
-    start = startDateTime,
-    end = endDateTime,
+    start = startDate,
+    end = endDate,
 )

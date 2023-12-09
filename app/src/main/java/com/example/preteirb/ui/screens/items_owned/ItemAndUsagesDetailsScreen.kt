@@ -102,7 +102,7 @@ fun ItemBookedPeriods(
 ) {
     Column(modifier = modifier) {
         val rangeUsages =
-            usages.map { epochMilliToLocalDate(it.startDateTime)..epochMilliToLocalDate(it.endDateTime) }
+            usages.map { epochMilliToLocalDate(it.startDate)..epochMilliToLocalDate(it.endDate) }
         val rangeColor = MaterialTheme.colorScheme.primaryContainer
         val epicCalendarPagerState = rememberEpicCalendarPagerState(
             config = rememberEpicCalendarPagerConfig(
@@ -157,8 +157,8 @@ fun ItemDetailsScreenDetails() {
                     usageId = 1,
                     userUsingItemId = 1,
                     itemUsedId = 1,
-                    startDateTime = 1699900000000,
-                    endDateTime = 1700680000000
+                    startDate = 1699900000000,
+                    endDate = 1700680000000
                 )
             )
         )

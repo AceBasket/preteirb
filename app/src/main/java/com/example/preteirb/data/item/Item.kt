@@ -1,15 +1,21 @@
 package com.example.preteirb.data.item
 
-import androidx.room.Entity
-import androidx.room.PrimaryKey
+import kotlinx.serialization.Serializable
 
-@Entity(
-    tableName = "items"
-)
+//@Entity(
+//    tableName = "items"
+//)
+//data class Item(
+//    @PrimaryKey(autoGenerate = true)
+//    val itemId: Int = 1,
+//    var name: String,
+//    val description: String,
+//    val userOwnerId: Int,
+//)
+
+@Serializable
 data class Item(
-    @PrimaryKey(autoGenerate = true)
-    val itemId: Int = 1,
-    var name: String,
+    val id: Int,
+    val name: String,
     val description: String,
-    val userOwnerId: Int,
 )

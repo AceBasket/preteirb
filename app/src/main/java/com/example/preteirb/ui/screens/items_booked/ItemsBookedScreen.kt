@@ -113,13 +113,13 @@ fun ItemBookedCard(
                     horizontalArrangement = Arrangement.SpaceEvenly
                 ) {
                     Text(
-                        text = getShortenedDateFormat(usage.startDateTime),
+                        text = getShortenedDateFormat(usage.startDate),
                     )
                     Text(
                         text = " - ",
                     )
                     Text(
-                        text = getShortenedDateFormat(usage.endDateTime),
+                        text = getShortenedDateFormat(usage.endDate),
                     )
                 }
             }
