@@ -32,8 +32,8 @@ import java.time.format.DateTimeFormatter
 @Serializable
 data class Usage(
     val id: Int,
-    @SerialName(value = "item") val itemId: Int,
-    @SerialName(value = "user") val userId: Int,
+    @SerialName(value = "item") val itemUsedId: Int,
+    @SerialName(value = "user") val userUsingItemId: Int,
     @SerialName(value = "start") val startDate: Long,
     @SerialName(value = "end") val endDate: Long
 )

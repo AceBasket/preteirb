@@ -136,7 +136,7 @@ data class UsagePeriod(
 
 fun UsageDetails.toUsages(): List<Usage> = period.map { usagePeriod ->
     Usage(
-        usageId = usageId,
+        id = usageId,
         userUsingItemId = userId,
         itemUsedId = itemId,
         //TODO: might need to change this (0 would be a really bad value)

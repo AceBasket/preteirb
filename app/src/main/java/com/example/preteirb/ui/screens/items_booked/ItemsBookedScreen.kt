@@ -23,9 +23,7 @@ import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.example.preteirb.R
-import com.example.preteirb.data.item.Item
 import com.example.preteirb.data.item.ItemWithOwner
-import com.example.preteirb.data.usage.Usage
 import com.example.preteirb.data.usage.UsageWithItemAndUser
 import com.example.preteirb.data.usage.getShortenedDateFormat
 import com.example.preteirb.data.user.User
@@ -61,8 +59,7 @@ fun ItemsBooked(
     ) {
         items(uiState.bookings) { data ->
             ItemBookedCard(
-                item = data.item,
-                usage = data.usage,
+                usage = data,
                 modifier = modifier
                     .padding(
 //                        start = dimensionResource(id = R.dimen.padding_large),
@@ -77,8 +74,7 @@ fun ItemsBooked(
 
 @Composable
 fun ItemBookedCard(
-    item: ItemWithOwner,
-    usage: Usage,
+    usage: UsageWithItemAndUser,
     modifier: Modifier = Modifier
 ) {
     OutlinedCard(
@@ -100,11 +96,11 @@ fun ItemBookedCard(
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
                 Text(
-                    text = item.item.name,
+                    text = usage.item.name,
                     style = MaterialTheme.typography.titleMedium,
                 )
                 Text(
-                    text = "Belongs to ${item.owner.username}",
+                    text = "Belongs to ${usage.item.owner.username}",
                     style = MaterialTheme.typography.bodySmall,
                     fontStyle = FontStyle.Italic
                 )
@@ -135,32 +131,48 @@ fun ItemsBookedPreview() {
         uiState = ItemsBookedUiState(
             bookings = listOf(
                 UsageWithItemAndUser(
+                    id = 0,
+                    startDate = 1701613238000,
+                    endDate = 1702623238000,
                     item = ItemWithOwner(
-                        item = Item(0, "Tondeuse", "", 0),
-                        owner = User(0, "Sarah")
-                    ),
-                    usage = Usage(0, 0, 0, 1701613238000, 1702623238000)
-                ),
-                UsageWithItemAndUser(
-                    item = ItemWithOwner(
-                        item = Item(0, "Marteau", "", 0),
+                        id = 0,
+                        name = "Tondeuse",
+                        description = "",
                         owner = User(0, "Jean")
-                    ),
-                    usage = Usage(0, 0, 0, 1701613238000, 1702623238000)
+                    )
                 ),
                 UsageWithItemAndUser(
+                    id = 1,
+                    startDate = 1701613238000,
+                    endDate = 1702623238000,
                     item = ItemWithOwner(
-                        item = Item(0, "Sécateur", "", 0),
-                        owner = User(0, "Camille")
-                    ),
-                    usage = Usage(0, 0, 0, 1701613238000, 1702623238000)
+                        id = 1,
+                        name = "Perceuse",
+                        description = "",
+                        owner = User(1, "Céline")
+                    )
                 ),
                 UsageWithItemAndUser(
+                    id = 2,
+                    startDate = 1701613238000,
+                    endDate = 1702623238000,
                     item = ItemWithOwner(
-                        item = Item(0, "Pelle", "", 0),
-                        owner = User(0, "Toto")
-                    ),
-                    usage = Usage(0, 0, 0, 1701613238000, 1702623238000)
+                        id = 2,
+                        name = "Marteau",
+                        description = "",
+                        owner = User(2, "Pierre")
+                    )
+                ),
+                UsageWithItemAndUser(
+                    id = 3,
+                    startDate = 1701613238000,
+                    endDate = 1702623238000,
+                    item = ItemWithOwner(
+                        id = 3,
+                        name = "Tournevis",
+                        description = "",
+                        owner = User(3, "Paul")
+                    )
                 ),
             )
         ),
@@ -171,10 +183,16 @@ fun ItemsBookedPreview() {
 @Composable
 fun ItemsBookedCardPreview() {
     ItemBookedCard(
-        item = ItemWithOwner(
-            item = Item(0, "Tondeuse", "", 0),
-            owner = User(0, "Jean")
+        usage = UsageWithItemAndUser(
+            id = 0,
+            startDate = 1701613238000,
+            endDate = 1702623238000,
+            item = ItemWithOwner(
+                id = 0,
+                name = "Tondeuse",
+                description = "",
+                owner = User(0, "Jean")
+            )
         ),
-        usage = Usage(0, 0, 0, 1701613238000, 1702623238000)
     )
 }

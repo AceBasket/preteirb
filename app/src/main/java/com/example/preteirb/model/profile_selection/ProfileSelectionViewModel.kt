@@ -13,6 +13,7 @@ import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
+import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 /**
@@ -23,16 +24,33 @@ class ProfileSelectionViewModel @Inject constructor(
     private val usersRepository: UsersRepository,
     private val settingsRepository: SettingsRepository,
 ) : ViewModel() {
-    val uiState: StateFlow<ProfileSelectionUiState> = usersRepository.getAllUsersStream()
-        .map { users -> ProfileSelectionUiState(users) }
-        .stateIn(
-            scope = viewModelScope,
-            started = SharingStarted.WhileSubscribed(TIMEOUT_MILLIS),
-            initialValue = ProfileSelectionUiState(),
-        )
+    private lateinit var _uiState: StateFlow<ProfileSelectionUiState>
+
+    val uiState: StateFlow<ProfileSelectionUiState>
+        get() = _uiState
+
+    init {
+        viewModelScope.launch {
+            _uiState = usersRepository.getAllUsersStream()
+                .map { users -> ProfileSelectionUiState(users) }
+                .stateIn(
+                    scope = viewModelScope,
+                    started = SharingStarted.WhileSubscribed(TIMEOUT_MILLIS),
+                    initialValue = ProfileSelectionUiState(),
+                )
+        }
+    }
+
+//    val uiState: StateFlow<ProfileSelectionUiState> = usersRepository.getAllUsersStream()
+//        .map { users -> ProfileSelectionUiState(users) }
+//        .stateIn(
+//            scope = viewModelScope,
+//            started = SharingStarted.WhileSubscribed(TIMEOUT_MILLIS),
+//            initialValue = ProfileSelectionUiState(),
+//        )
 
     suspend fun logIn(user: User) {
-        settingsRepository.storeUserId(user.userId)
+        settingsRepository.storeUserId(user.id)
         settingsRepository.storeIsLoggedIn(true)
     }
 
@@ -47,7 +65,7 @@ class ProfileSelectionViewModel @Inject constructor(
     suspend fun registerUserAndLogIn(user: User) {
         try {
             val userId = registerUser(user).toInt()
-            logIn(user.copy(userId = userId))
+            logIn(user.copy(id = userId))
         } catch (e: Exception) {
             Log.d("ProfileSelectionViewModel", "registerUserAndLogIn: ${e.message}")
             SnackbarManager.showMessage(e.toSnackbarMessage())

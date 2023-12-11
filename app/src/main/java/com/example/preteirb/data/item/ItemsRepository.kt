@@ -9,33 +9,33 @@ interface ItemsRepository {
     /**
      * Retrieves all the items from the given data source.
      */
-    fun getAllItemsStream(): Flow<List<Item>>
-    
+    suspend fun getAllItemsStream(): Flow<List<Item>>
+
     /**
      * Retrieves an item from the given data source that matches with the [id].
      */
-    fun getItemStream(id: Int): Flow<Item?>
-    
+    suspend fun getItemStream(id: Int): Flow<Item?>
+
     /**
      * Retrieves an item and all the usages associated with it.
      */
-    fun getItemAndUsagesStream(id: Int): Flow<ItemAndUsages?>
-    
+    suspend fun getItemAndUsagesStream(id: Int): Flow<ItemAndUsages?>
+
     /**
      * Retrieves all the items from the given data source that matches with the [query].
      */
-    fun getItemsFromQueryStream(query: String): Flow<List<Item>>
-    
+    suspend fun getItemsFromQueryStream(query: String): Flow<List<Item>>
+
     /**
      * Insert item in the data source
      */
     suspend fun insertItem(item: Item): Long
-    
+
     /**
      * Delete item from the data source
      */
     suspend fun deleteItem(item: Item)
-    
+
     /**
      * Update item from the data source
      */

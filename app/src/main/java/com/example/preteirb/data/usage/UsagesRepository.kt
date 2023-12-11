@@ -1,5 +1,6 @@
 package com.example.preteirb.data.usage
 
+import com.example.preteirb.data.item.ItemAndUsages
 import kotlinx.coroutines.flow.Flow
 
 /**
@@ -14,7 +15,7 @@ interface UsagesRepository {
     /**
      * Retrieves all the usages from the given data source that matches with the [itemId].
      */
-    fun getAllUsagesByItemIdStream(itemId: Int): Flow<List<Usage>>
+    fun getAllUsagesByItemIdStream(itemId: Int): Flow<ItemAndUsages>
 
     /**
      * Retrieves an usage from the given data source that matches with the [id].
@@ -24,7 +25,7 @@ interface UsagesRepository {
     /**
      * Insert usage in the data source
      */
-    suspend fun insertUsage(usage: Usage)
+    suspend fun insertUsage(usage: Usage): Long
 
     /**
      * Insert multiple usages at once in the data source

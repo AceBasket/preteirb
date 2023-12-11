@@ -20,7 +20,6 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.example.compose.AppTheme
 import com.example.preteirb.R
-import com.example.preteirb.data.item.Item
 import com.example.preteirb.data.item.ItemAndUsages
 import com.example.preteirb.data.usage.Usage
 import com.example.preteirb.model.items_owned.ItemAndUsagesDetailsViewModel
@@ -53,7 +52,10 @@ fun ItemAndUsagesDetailsScreen(
         itemAndUsages = viewModel.itemAndUsages
             .collectAsState(
                 initial = ItemAndUsages(
-                    Item(0, "", "", 0),
+                    0,
+                    "",
+                    "",
+                    0,
                     emptyList()
                 )
             ).value,
@@ -70,7 +72,7 @@ fun ItemAndUsagesDetails(
 ) {
     Column(modifier = modifier) {
         Text(
-            text = itemAndUsages.item.name,
+            text = itemAndUsages.name,
             style = MaterialTheme.typography.headlineLarge,
             fontStyle = FontStyle.Italic,
             modifier = Modifier.align(Alignment.CenterHorizontally)
@@ -81,7 +83,7 @@ fun ItemAndUsagesDetails(
         )
         HorizontalDivider()
         OutlinedButton(
-            onClick = { onClickOnBookItem(itemAndUsages.item.itemId) },
+            onClick = { onClickOnBookItem(itemAndUsages.id) },
             modifier = Modifier.align(Alignment.End)
         ) {
             Text(text = stringResource(id = R.string.book_item))
@@ -146,15 +148,13 @@ fun ItemBookedPeriods(
 fun ItemDetailsScreenDetails() {
     AppTheme {
         val fakeData = ItemAndUsages(
-            item = Item(
-                itemId = 1,
-                name = "Item name",
-                description = "Item description",
-                userOwnerId = 1
-            ),
+            id = 1,
+            name = "Item name",
+            description = "Item description",
+            ownerId = 1,
             usages = listOf(
                 Usage(
-                    usageId = 1,
+                    id = 1,
                     userUsingItemId = 1,
                     itemUsedId = 1,
                     startDate = 1699900000000,
