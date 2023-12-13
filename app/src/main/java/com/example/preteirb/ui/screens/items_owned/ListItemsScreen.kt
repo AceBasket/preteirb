@@ -27,6 +27,7 @@ import com.example.preteirb.model.items_owned.ItemDetails
 import com.example.preteirb.model.items_owned.ItemEntryViewModel
 import com.example.preteirb.model.items_owned.ItemUiState
 import com.example.preteirb.model.items_owned.ListItemsViewModel
+import com.example.preteirb.model.items_owned.toItem
 import com.example.preteirb.model.items_owned.toItemDetails
 import com.example.preteirb.model.new_usage.ItemsOwnedUiState
 import com.example.preteirb.ui.navigation.NavigationDestination
@@ -55,7 +56,13 @@ fun ListItemsScreen(
         onNewItemValueChange = newItemViewModel::updateUiState,
         onSaveNewItem = {
             coroutineScope.launch {
-                newItemViewModel.saveItem()
+                if (newItemViewModel.saveItem()) {
+                    listItemsViewModel.addItem(
+                        newItemViewModel.itemUiState.itemDetails.toItem(
+                            listItemsViewModel.userId
+                        )
+                    )
+                }
                 newItemViewModel.whipeItemUiState()
             }
         },

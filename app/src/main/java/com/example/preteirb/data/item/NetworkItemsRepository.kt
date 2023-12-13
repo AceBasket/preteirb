@@ -1,7 +1,6 @@
 package com.example.preteirb.data.item
 
 import com.example.preteirb.api.ItemApiService
-import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import javax.inject.Inject
 
@@ -13,9 +12,9 @@ class NetworkItemsRepository @Inject constructor(val itemApiService: ItemApiServ
     override suspend fun getItemAndUsagesStream(id: Int) =
         flow { emit(itemApiService.getUsagesByItem(id)) }
 
-    override suspend fun getItemsFromQueryStream(query: String): Flow<List<Item>> {
-        TODO("Not yet implemented")
-    }
+    override suspend fun getItemsFromQueryStream(query: String) =
+        flow { emit(itemApiService.searchItems(query)) }
+
 
     override suspend fun insertItem(item: Item) = itemApiService.createItem(item).id.toLong()
 

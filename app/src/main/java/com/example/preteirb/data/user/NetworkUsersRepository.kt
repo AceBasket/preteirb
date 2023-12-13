@@ -1,6 +1,7 @@
 package com.example.preteirb.data.user
 
 import com.example.preteirb.api.ProfileApiService
+import com.example.preteirb.data.usage.toUsageWithItemAndUser
 import kotlinx.coroutines.flow.flow
 import javax.inject.Inject
 
@@ -14,7 +15,11 @@ class NetworkUsersRepository @Inject constructor(val profileApiService: ProfileA
         flow { emit(profileApiService.getItemsOwnedByUser(id)) }
 
     override suspend fun getAllItemsBookedAndNotOwnedByUserStream(id: Int) =
-        flow { emit(profileApiService.getUsagesAndItemWithOwnerByUser(id)) }
+        flow {
+            emit(
+                profileApiService.getUsagesAndItemWithOwnerByUser(id)
+                    .map { it.toUsageWithItemAndUser() })
+        }
 
     override suspend fun insertUser(user: User) = profileApiService.createProfile(user).id.toLong()
 

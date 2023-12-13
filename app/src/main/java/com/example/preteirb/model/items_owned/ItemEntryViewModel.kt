@@ -16,7 +16,7 @@ import javax.inject.Inject
 @HiltViewModel
 class ItemEntryViewModel @Inject constructor(
     private val itemsRepository: ItemsRepository,
-    private val settingsRepository: SettingsRepository
+    private val settingsRepository: SettingsRepository,
 ) : ViewModel() {
     var itemUiState by mutableStateOf(ItemUiState())
         private set
@@ -32,17 +32,20 @@ class ItemEntryViewModel @Inject constructor(
         }
     }
 
-    suspend fun saveItem() {
+    suspend fun saveItem(): Boolean {
         val userOwnerId = settingsRepository.getUserId().first()
-        if (validateInput()) {
+        return if (validateInput()) {
             try {
                 itemsRepository.insertItem(itemUiState.itemDetails.toItem(userOwnerId))
                 SnackbarManager.showMessage(R.string.save_item_success)
+                true
             } catch (e: Exception) {
                 SnackbarManager.showMessage(R.string.save_item_error)
+                false
             }
         } else {
             SnackbarManager.showMessage(R.string.save_item_error)
+            false
         }
     }
 

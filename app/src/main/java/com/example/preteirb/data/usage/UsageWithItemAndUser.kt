@@ -12,9 +12,38 @@ import kotlinx.serialization.Serializable
 //)
 
 @Serializable
+data class UsageWithItemAndUserStringDate(
+    val id: Int,
+    @SerialName(value = "start") val startDate: String,
+    @SerialName(value = "end") val endDate: String,
+    val item: ItemWithOwner,
+    val user: Int
+)
+
 data class UsageWithItemAndUser(
     val id: Int,
-    @SerialName(value = "start") val startDate: Long,
-    @SerialName(value = "end") val endDate: Long,
-    val item: ItemWithOwner
+    val startDate: Long,
+    val endDate: Long,
+    val item: ItemWithOwner,
+    val user: Int
 )
+
+fun UsageWithItemAndUserStringDate.toUsageWithItemAndUser(): UsageWithItemAndUser {
+    return UsageWithItemAndUser(
+        id = id,
+        startDate = getDateTime(startDate),
+        endDate = getDateTime(endDate),
+        item = item,
+        user = user
+    )
+}
+
+fun UsageWithItemAndUser.toUsageWithItemAndUserStringDate(): UsageWithItemAndUserStringDate {
+    return UsageWithItemAndUserStringDate(
+        id = id,
+        startDate = getDashedNumeralDateFormat(startDate),
+        endDate = getDashedNumeralDateFormat(endDate),
+        item = item,
+        user = user
+    )
+}

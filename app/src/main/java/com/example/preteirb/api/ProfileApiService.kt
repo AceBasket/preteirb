@@ -1,7 +1,7 @@
 package com.example.preteirb.api
 
 import com.example.preteirb.data.item.Item
-import com.example.preteirb.data.usage.UsageWithItemAndUser
+import com.example.preteirb.data.usage.UsageWithItemAndUserStringDate
 import com.example.preteirb.data.user.User
 import retrofit2.http.Body
 import retrofit2.http.DELETE
@@ -30,5 +30,5 @@ interface ProfileApiService {
     suspend fun getItemsOwnedByUser(@Path("id") id: Int): List<Item>
 
     @GET("profiles/{id}/usages")
-    suspend fun getUsagesAndItemWithOwnerByUser(@Path("id") id: Int): List<UsageWithItemAndUser>
+    suspend fun getUsagesAndItemWithOwnerByUser(@Path("id") id: Int): List<UsageWithItemAndUserStringDate>
 }

@@ -6,7 +6,14 @@ import androidx.lifecycle.viewModelScope
 import com.example.preteirb.data.item.ItemsRepository
 import com.example.preteirb.model.items_owned.ItemDetails
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.flow.*
+import kotlinx.coroutines.FlowPreview
+import kotlinx.coroutines.flow.SharingStarted
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.debounce
+import kotlinx.coroutines.flow.flatMapLatest
+import kotlinx.coroutines.flow.flowOf
+import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.stateIn
 import javax.inject.Inject
 
 /**
@@ -21,8 +28,9 @@ class SearchViewModel @Inject constructor(
 
     val searchQuery = savedStateHandle.getStateFlow(key = SEARCH_QUERY, initialValue = "")
 
+    @OptIn(FlowPreview::class)
     val uiState: StateFlow<SearchResultUiState> =
-        searchQuery.flatMapLatest { query ->
+        searchQuery.debounce(500).flatMapLatest { query ->
             if (query.length < SEARCH_QUERY_MIN_LENGTH) {
                 flowOf(SearchResultUiState.EmptyQuery)
             } else {
