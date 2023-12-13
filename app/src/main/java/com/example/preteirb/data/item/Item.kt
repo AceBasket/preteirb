@@ -1,5 +1,6 @@
 package com.example.preteirb.data.item
 
+import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
 //@Entity(
@@ -18,4 +19,5 @@ data class Item(
     val id: Int,
     val name: String,
     val description: String,
+    @SerialName(value = "owner") val ownerId: Int,
 )

@@ -34,7 +34,7 @@ class SearchViewModel @Inject constructor(
                                 // transform list of items to list of item details
                                 itemList = result.data.map { item ->
                                     ItemDetails(
-                                        id = item.itemId,
+                                        id = item.id,
                                         name = item.name,
                                         description = item.description,
                                     )

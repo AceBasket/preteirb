@@ -1,6 +1,5 @@
 package com.example.preteirb.model.new_usage
 
-import android.util.Log
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
@@ -16,6 +15,7 @@ import com.example.preteirb.data.SettingsRepository
 import com.example.preteirb.data.item.Item
 import com.example.preteirb.data.usage.Usage
 import com.example.preteirb.data.usage.UsagesRepository
+import com.example.preteirb.data.usage.toUsage
 import com.example.preteirb.ui.screens.booking.BookItemDestination
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
@@ -42,8 +42,8 @@ abstract class UsageEntryViewModel(
                     userId = settingsRepository.getUserId().first(),
                     itemId = itemId
                 ),
-                bookedPeriods = usagesRepository.getAllUsagesByItemIdStream(itemId).first()
-                    .map { it.toUsagePeriod() }
+                bookedPeriods = usagesRepository.getAllUsagesByItemIdStream(itemId)
+                    .first().usages.map { it.toUsage().toUsagePeriod() }
             )
         }
     }
@@ -99,16 +99,16 @@ abstract class UsageEntryViewModel(
         }
         val newPeriods = uiState.usageDetails.period.toMutableList()
         newPeriods.add(lastPeriod ?: return)
-        try {
-            usagesRepository.insertUsageList(
-                uiState.usageDetails.copy(period = newPeriods.toMutableStateList()).toUsages()
-            )
-            SnackbarManager.showMessage(R.string.save_usages_success)
-        } catch (e: Exception) {
-            Log.d("UsageEntryViewModel", "saveUsage: ${e.message}")
-            SnackbarManager.showMessage(R.string.save_usages_error)
-            return
-        }
+//        try {
+        usagesRepository.insertUsageList(
+            uiState.usageDetails.copy(period = newPeriods.toMutableStateList()).toUsages()
+        )
+        SnackbarManager.showMessage(R.string.save_usages_success)
+//        } catch (e: Exception) {
+//            Log.d("UsageEntryViewModel", "saveUsage: ${e.message}\n${e.stackTrace}")
+//            SnackbarManager.showMessage(R.string.save_usages_error)
+//            return
+//        }
     }
 }
 
@@ -140,12 +140,12 @@ fun UsageDetails.toUsages(): List<Usage> = period.map { usagePeriod ->
         userUsingItemId = userId,
         itemUsedId = itemId,
         //TODO: might need to change this (0 would be a really bad value)
-        startDate = usagePeriod.start,
-        endDate = usagePeriod.end,
+        startDateTime = usagePeriod.start,
+        endDateTime = usagePeriod.end,
     )
 }
 
 fun Usage.toUsagePeriod(): UsagePeriod = UsagePeriod(
-    start = startDate,
-    end = endDate,
+    start = startDateTime,
+    end = endDateTime,
 )

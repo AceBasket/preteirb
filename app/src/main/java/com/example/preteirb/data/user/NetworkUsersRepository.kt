@@ -16,7 +16,7 @@ class NetworkUsersRepository @Inject constructor(val profileApiService: ProfileA
     override suspend fun getAllItemsBookedAndNotOwnedByUserStream(id: Int) =
         flow { emit(profileApiService.getUsagesAndItemWithOwnerByUser(id)) }
 
-    override suspend fun insertUser(user: User) = profileApiService.createProfile(user)
+    override suspend fun insertUser(user: User) = profileApiService.createProfile(user).id.toLong()
 
     override suspend fun deleteUser(user: User) = profileApiService.deleteProfile(user.id)
 

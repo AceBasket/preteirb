@@ -41,14 +41,6 @@ class ProfileSelectionViewModel @Inject constructor(
         }
     }
 
-//    val uiState: StateFlow<ProfileSelectionUiState> = usersRepository.getAllUsersStream()
-//        .map { users -> ProfileSelectionUiState(users) }
-//        .stateIn(
-//            scope = viewModelScope,
-//            started = SharingStarted.WhileSubscribed(TIMEOUT_MILLIS),
-//            initialValue = ProfileSelectionUiState(),
-//        )
-
     suspend fun logIn(user: User) {
         settingsRepository.storeUserId(user.id)
         settingsRepository.storeIsLoggedIn(true)

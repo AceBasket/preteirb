@@ -22,6 +22,8 @@ import com.example.compose.AppTheme
 import com.example.preteirb.R
 import com.example.preteirb.data.item.ItemAndUsages
 import com.example.preteirb.data.usage.Usage
+import com.example.preteirb.data.usage.UsageWithStringDate
+import com.example.preteirb.data.usage.toUsage
 import com.example.preteirb.model.items_owned.ItemAndUsagesDetailsViewModel
 import com.example.preteirb.ui.navigation.NavigationDestination
 import epicarchitect.calendar.compose.basis.config.rememberBasisEpicCalendarConfig
@@ -79,7 +81,7 @@ fun ItemAndUsagesDetails(
         )
         HorizontalDivider()
         ItemBookedPeriods(
-            usages = itemAndUsages.usages,
+            usages = itemAndUsages.usages.map { it.toUsage() },
         )
         HorizontalDivider()
         OutlinedButton(
@@ -104,7 +106,7 @@ fun ItemBookedPeriods(
 ) {
     Column(modifier = modifier) {
         val rangeUsages =
-            usages.map { epochMilliToLocalDate(it.startDate)..epochMilliToLocalDate(it.endDate) }
+            usages.map { epochMilliToLocalDate(it.startDateTime)..epochMilliToLocalDate(it.endDateTime) }
         val rangeColor = MaterialTheme.colorScheme.primaryContainer
         val epicCalendarPagerState = rememberEpicCalendarPagerState(
             config = rememberEpicCalendarPagerConfig(
@@ -153,12 +155,12 @@ fun ItemDetailsScreenDetails() {
             description = "Item description",
             ownerId = 1,
             usages = listOf(
-                Usage(
+                UsageWithStringDate(
                     id = 1,
                     userUsingItemId = 1,
                     itemUsedId = 1,
-                    startDate = 1699900000000,
-                    endDate = 1700680000000
+                    startDate = "2023-12-4",
+                    endDate = "2023-12-8"
                 )
             )
         )

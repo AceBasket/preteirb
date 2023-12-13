@@ -6,6 +6,7 @@ import com.example.preteirb.data.SettingsRepository
 import com.example.preteirb.data.user.UsersRepository
 import com.example.preteirb.model.new_usage.ItemsOwnedUiState
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.filterNotNull
@@ -19,6 +20,7 @@ class ListItemsViewModel @Inject constructor(
     private val usersRepository: UsersRepository,
     private val settingsRepository: SettingsRepository
 ) : ViewModel() {
+    @OptIn(ExperimentalCoroutinesApi::class)
     val listItemsUiState: StateFlow<ItemsOwnedUiState> = settingsRepository
         .getUserId()
         .flatMapLatest { userId ->
@@ -26,7 +28,7 @@ class ListItemsViewModel @Inject constructor(
                 .getAllItemsOwnedByUserStream(userId)
                 .filterNotNull()
                 .map { itemsOwned ->
-                    ItemsOwnedUiState(itemsOwned = itemsOwned.items)
+                    ItemsOwnedUiState(itemsOwned = itemsOwned)
                 }
         }
         .stateIn(

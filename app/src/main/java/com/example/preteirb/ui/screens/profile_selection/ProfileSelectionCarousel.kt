@@ -160,23 +160,23 @@ fun ProfileSelectionCarouselPreview() {
     AppTheme {
         val userList = listOf(
             User(
-                userId = 0,
+                id = 0,
                 username = "Sarah",
             ),
             User(
-                userId = 1,
+                id = 1,
                 username = "Camille",
             ),
             User(
-                userId = 2,
+                id = 2,
                 username = "Tiphaine",
             ),
             User(
-                userId = 3,
+                id = 3,
                 username = "Brigitte",
             ),
             User(
-                userId = 4,
+                id = 4,
                 username = "Jerome",
             )
         )
@@ -194,7 +194,7 @@ fun ProfileSelectionItemPreview() {
     AppTheme {
         ProfileSelectionItem(
             profile = User(
-                userId = 0,
+                id = 0,
                 username = "username",
             )
         )

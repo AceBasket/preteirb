@@ -62,7 +62,7 @@ fun ProfileSelectionScreen(
             coroutine.launch {
                 viewModel.registerUserAndLogIn(
                     User(
-                        userId = 0,
+                        id = 0,
                         username = username,
                     )
                 )
@@ -182,15 +182,15 @@ fun ProfileSelectionPreview() {
 
             val fakeProfileList = listOf(
                 User(
-                    userId = 1,
+                    id = 1,
                     username = "username1",
                 ),
                 User(
-                    userId = 2,
+                    id = 2,
                     username = "username2",
                 ),
                 User(
-                    userId = 3,
+                    id = 3,
                     username = "username3",
                 ),
             )

@@ -1,6 +1,6 @@
 package com.example.preteirb.data.user
 
-import com.example.preteirb.data.item.ItemsOwned
+import com.example.preteirb.data.item.Item
 import com.example.preteirb.data.usage.UsageWithItemAndUser
 import kotlinx.coroutines.flow.Flow
 
@@ -21,7 +21,7 @@ interface UsersRepository {
     /**
      * Retrieves all the items owned by a user from the given data source that matches with the [id].
      */
-    suspend fun getAllItemsOwnedByUserStream(id: Int): Flow<ItemsOwned?>
+    suspend fun getAllItemsOwnedByUserStream(id: Int): Flow<List<Item>>
 
     /**
      * Retrieves all the usages of items not owned by the user from the given data source that matches with the [id].

@@ -129,22 +129,22 @@ fun ListItemsScreenContentPreview() {
     AppTheme {
         val fakeObjectList = listOf(
             Item(
-                itemId = 1,
+                id = 1,
                 name = "Item 1",
                 description = "Description 1",
-                userOwnerId = 1,
+                ownerId = 1,
             ),
             Item(
-                itemId = 2,
+                id = 2,
                 name = "Item 2",
                 description = "Description 2",
-                userOwnerId = 1,
+                ownerId = 1,
             ),
             Item(
-                itemId = 3,
+                id = 3,
                 name = "Item 3",
                 description = "Description 3",
-                userOwnerId = 1,
+                ownerId = 1,
             ),
         )
         ListItemsScreenContent(

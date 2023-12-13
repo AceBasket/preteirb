@@ -63,10 +63,10 @@ data class ItemDetails(
 )
 
 fun ItemDetails.toItem(userOwnerId: Int): Item = Item(
-    itemId = id,
+    id = id,
     name = name,
     description = description,
-    userOwnerId = userOwnerId
+    ownerId = userOwnerId
 )
 
 fun Item.toItemUiState(isEntryValid: Boolean = false): ItemUiState = ItemUiState(
@@ -75,7 +75,7 @@ fun Item.toItemUiState(isEntryValid: Boolean = false): ItemUiState = ItemUiState
 )
 
 fun Item.toItemDetails(): ItemDetails = ItemDetails(
-    id = itemId,
+    id = id,
     name = name,
     description = description
 )

@@ -17,7 +17,7 @@ class NetworkItemsRepository @Inject constructor(val itemApiService: ItemApiServ
         TODO("Not yet implemented")
     }
 
-    override suspend fun insertItem(item: Item) = itemApiService.createItem(item)
+    override suspend fun insertItem(item: Item) = itemApiService.createItem(item).id.toLong()
 
     override suspend fun deleteItem(item: Item) = itemApiService.deleteItem(item.id)
 

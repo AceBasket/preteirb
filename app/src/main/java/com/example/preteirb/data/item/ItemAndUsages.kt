@@ -1,6 +1,6 @@
 package com.example.preteirb.data.item
 
-import com.example.preteirb.data.usage.Usage
+import com.example.preteirb.data.usage.UsageWithStringDate
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
@@ -20,5 +20,5 @@ data class ItemAndUsages(
     val name: String,
     val description: String,
     @SerialName(value = "owner") val ownerId: Int,
-    val usages: List<Usage>
+    val usages: List<UsageWithStringDate>
 )
