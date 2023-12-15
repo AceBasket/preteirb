@@ -53,4 +53,6 @@
     <string name="bookings">Bookings</string>
 
     <string name="app_name">PRET\'EIRB</string>
+    <string name="edit">Edit</string>
+    <string name="edit_profile">Edit your profile</string>
 </resources>

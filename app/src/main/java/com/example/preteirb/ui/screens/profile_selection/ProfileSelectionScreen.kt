@@ -64,6 +64,7 @@ fun ProfileSelectionScreen(
                     User(
                         id = 0,
                         username = username,
+                        profilePicture = "",
                     )
                 )
             }
@@ -184,14 +185,17 @@ fun ProfileSelectionPreview() {
                 User(
                     id = 1,
                     username = "username1",
+                    profilePicture = "",
                 ),
                 User(
                     id = 2,
                     username = "username2",
+                    profilePicture = "",
                 ),
                 User(
                     id = 3,
                     username = "username3",
+                    profilePicture = "",
                 ),
             )
             ProfileSelection(

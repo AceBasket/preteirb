@@ -2,6 +2,7 @@ package com.example.preteirb.data.user
 
 import com.example.preteirb.data.item.Item
 import com.example.preteirb.data.usage.UsageWithItemAndUser
+import com.example.preteirb.model.ProfileDetails
 import kotlinx.coroutines.flow.Flow
 
 /**
@@ -31,7 +32,7 @@ interface UsersRepository {
     /**
      * Insert user in the data source
      */
-    suspend fun insertUser(user: User): Long
+    suspend fun insertUser(user: ProfileDetails): User
 
     /**
      * Delete user from the data source
@@ -41,7 +42,7 @@ interface UsersRepository {
     /**
      * Update user in the data source
      */
-    suspend fun updateUser(user: User)
+    suspend fun updateUser(user: ProfileDetails): User
 
 
 }

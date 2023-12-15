@@ -12,6 +12,7 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.dimensionResource
@@ -31,6 +32,7 @@ import com.example.preteirb.ui.screens.items_owned.ListItemsDestination
 import com.example.preteirb.ui.screens.profile_selection.ProfileSelectionDestination
 import com.example.preteirb.ui.screens.search.SearchDestination
 import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.launch
 
 @Composable
 fun PreteirbApp(
@@ -65,6 +67,7 @@ fun PreteirbApp(
             }
     }
 
+    val coroutineScope = rememberCoroutineScope()
 
     Scaffold(
         modifier = modifier,
@@ -78,6 +81,13 @@ fun PreteirbApp(
                 navigateToProfileSelection = {
                     navController.navigate(ProfileSelectionDestination.route)
                 },
+                profileUiState = viewModel.profileUiState,
+                onSaveChangesToProfile = {
+                    coroutineScope.launch {
+                        viewModel.saveProfileModifications()
+                    }
+                },
+                updateProfile = viewModel::updateUiState,
                 modifier = Modifier
                     .fillMaxWidth()
             )

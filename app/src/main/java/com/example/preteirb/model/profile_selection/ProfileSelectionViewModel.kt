@@ -8,6 +8,7 @@ import com.example.preteirb.common.snackbar.SnackbarMessage.Companion.toSnackbar
 import com.example.preteirb.data.SettingsRepository
 import com.example.preteirb.data.user.User
 import com.example.preteirb.data.user.UsersRepository
+import com.example.preteirb.model.toProfileDetails
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
@@ -48,7 +49,7 @@ class ProfileSelectionViewModel @Inject constructor(
 
     private suspend fun registerUser(user: User): Long {
         try {
-            return usersRepository.insertUser(user)
+            return usersRepository.insertUser(user.toProfileDetails()).id.toLong()
         } catch (e: Exception) {
             throw e
         }
