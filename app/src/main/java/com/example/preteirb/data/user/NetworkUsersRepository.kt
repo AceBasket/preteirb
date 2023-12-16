@@ -4,6 +4,7 @@ import android.content.Context
 import android.database.Cursor
 import android.net.Uri
 import android.provider.MediaStore
+import android.util.Log
 import com.example.preteirb.api.ProfileApiService
 import com.example.preteirb.data.usage.toUsageWithItemAndUser
 import com.example.preteirb.model.ProfileDetails
@@ -48,10 +49,11 @@ class NetworkUsersRepository @Inject constructor(
     private suspend fun updateOrCreateUser(user: ProfileDetails, isCreate: Boolean): User {
         if (user.profilePicture == Uri.EMPTY) {
             val updatedUser = User(id = user.id, username = user.username, profilePicture = null)
+            Log.d("saveProfile", "updatedUser: $updatedUser")
             return if (isCreate) {
                 profileApiService.createProfileWithoutPicture(updatedUser)
             } else {
-                profileApiService.updateProfileWithoutPicture(updatedUser)
+                profileApiService.updateProfileWithoutPicture(updatedUser.id, updatedUser)
             }
         }
         val profilePicturePart = uriToMultipartBody(user.profilePicture)

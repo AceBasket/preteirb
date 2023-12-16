@@ -42,7 +42,7 @@ interface ProfileApiService {
     ): User
 
     @PUT("profiles/{id}/")
-    suspend fun updateProfileWithoutPicture(@Body user: User): User
+    suspend fun updateProfileWithoutPicture(@Path("id") id: Int, @Body user: User): User
 
     @GET("profiles/{id}/items_owned/")
     suspend fun getItemsOwnedByUser(@Path("id") id: Int): List<Item>

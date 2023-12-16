@@ -2,27 +2,18 @@ package com.example.preteirb.ui
 
 import android.net.Uri
 import android.util.Log
-import androidx.activity.compose.rememberLauncherForActivityResult
-import androidx.activity.result.PickVisualMediaRequest
-import androidx.activity.result.contract.ActivityResultContracts
 import androidx.annotation.StringRes
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.automirrored.rounded.List
-import androidx.compose.material.icons.rounded.AccountCircle
 import androidx.compose.material.icons.rounded.DateRange
+import androidx.compose.material.icons.rounded.Delete
 import androidx.compose.material.icons.rounded.Search
-import androidx.compose.material3.Card
 import androidx.compose.material3.CenterAlignedTopAppBar
 import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.DropdownMenuItem
@@ -33,12 +24,9 @@ import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.NavigationBar
 import androidx.compose.material3.NavigationBarItem
-import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
-import androidx.compose.material3.TextButton
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.State
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -53,8 +41,6 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.unit.dp
-import androidx.compose.ui.window.Dialog
 import androidx.navigation.NavDestination
 import androidx.navigation.NavDestination.Companion.hierarchy
 import com.bumptech.glide.integration.compose.ExperimentalGlideComposeApi
@@ -62,6 +48,7 @@ import com.bumptech.glide.integration.compose.GlideImage
 import com.bumptech.glide.integration.compose.placeholder
 import com.example.compose.AppTheme
 import com.example.preteirb.R
+import com.example.preteirb.common.ProfileEditor
 import com.example.preteirb.model.ProfileDetails
 import com.example.preteirb.model.ProfileUiState
 import com.example.preteirb.ui.screens.items_booked.ItemsBookedDestination
@@ -135,12 +122,13 @@ fun AppTopBar(
     @StringRes currentScreenTitle: Int,
     canNavigateBack: Boolean,
     navigateUp: () -> Unit,
-    navigateToProfileSelection: () -> Unit,
-    profile: State<ProfileDetails>,
+    logOut: () -> Unit,
+    profile: ProfileDetails,
     profileUiState: ProfileUiState,
     updateProfile: (ProfileDetails) -> Unit,
     onSaveChangesToProfile: () -> Unit,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    isSelectProfile: Boolean = false,
 ) {
     var isExpanded by remember { mutableStateOf(false) }
     Log.d("UserDetails (AppTopBar)", "UserDetails: $profile")
@@ -162,175 +150,99 @@ fun AppTopBar(
             }
         },
         actions = {
-            var showEditProfileDialog by remember { mutableStateOf(false) }
-            if (showEditProfileDialog) {
-                ProfileEditor(
-                    uiState = profileUiState,
-                    onDismissRequest = { showEditProfileDialog = false },
-                    onConfirmation = {
-                        showEditProfileDialog = false
-                        onSaveChangesToProfile()
-                    },
-                    updateUiState = updateProfile,
-                )
-            }
-            Box {
-                IconButton(onClick = { isExpanded = true }) {
-                    Icon(
-                        imageVector = Icons.Rounded.AccountCircle,
-                        contentDescription = null,
+            if (!isSelectProfile) {
+                var showEditProfileDialog by remember { mutableStateOf(false) }
+                if (showEditProfileDialog) {
+                    ProfileEditor(
+                        uiState = profileUiState,
+                        onDismissRequest = { showEditProfileDialog = false },
+                        onConfirmation = {
+                            showEditProfileDialog = false
+                            onSaveChangesToProfile()
+                        },
+                        updateUiState = updateProfile,
                     )
                 }
-                DropdownMenu(expanded = isExpanded, onDismissRequest = { isExpanded = false }) {
-                    Log.d("UserDetails (Dropdown Menu)", "UserDetails: $profile")
-                    GlideImage(
-                        model = profile.value.profilePicture,
-                        contentDescription = profile.value.username,
-                        loading = placeholder(R.drawable.baseline_account_circle_24),
-                        failure = placeholder(R.drawable.baseline_account_circle_24),
-                        contentScale = ContentScale.Crop,
-                        modifier = Modifier
-                            .size(dimensionResource(id = R.dimen.image_size_medium))
-                            .align(Alignment.CenterHorizontally)
-                            .clickable {
-                                showEditProfileDialog = true
+                Box {
+                    IconButton(onClick = { isExpanded = true }) {
+                        Log.d("sync", "profile: $profile")
+                        GlideImage(
+                            model = if (profile.profilePicture != Uri.EMPTY) {
+                                profile.profilePicture
+                            } else {
+                                R.drawable.baseline_account_circle_24
+                            },
+                            contentDescription = profile.username,
+                            loading = placeholder(R.drawable.loading_img),
+                            failure = placeholder(R.drawable.baseline_account_circle_24),
+                            contentScale = ContentScale.Crop,
+                            modifier = Modifier
+                                .clip(CircleShape)
+                        )
+                    }
+                    DropdownMenu(expanded = isExpanded, onDismissRequest = { isExpanded = false }) {
+                        GlideImage(
+                            model = if (profile.profilePicture != Uri.EMPTY) {
+                                profile.profilePicture
+                            } else {
+                                R.drawable.baseline_account_circle_24
+                            },
+                            contentDescription = profile.username,
+                            loading = placeholder(R.drawable.loading_img),
+                            failure = placeholder(R.drawable.baseline_account_circle_24),
+                            contentScale = ContentScale.Crop,
+                            modifier = Modifier
+                                .size(dimensionResource(id = R.dimen.image_size_medium))
+                                .align(Alignment.CenterHorizontally)
+                                .clickable {
+                                    showEditProfileDialog = true
+                                }
+                                .clip(CircleShape),
+                        )
+                        Text(
+                            text = profile.username,
+                            style = MaterialTheme.typography.bodyLarge,
+                            modifier = Modifier.align(Alignment.CenterHorizontally)
+                        )
+                        Spacer(modifier = Modifier.size(dimensionResource(id = R.dimen.padding_medium)))
+                        HorizontalDivider()
+                        DropdownMenuItem(
+                            text = {
+                                Text(text = stringResource(id = R.string.delete_picture))
+                            },
+                            onClick = {
+                                updateProfile(profile.copy(profilePicture = Uri.EMPTY))
+                                onSaveChangesToProfile()
+                            },
+                            leadingIcon = {
+                                Icon(
+                                    imageVector = Icons.Rounded.Delete,
+                                    contentDescription = stringResource(id = R.string.delete_icon)
+                                )
                             }
-                            .clip(CircleShape),
-                    )
-                    Text(
-                        text = profile.value.username,
-                        style = MaterialTheme.typography.bodyLarge,
-                        modifier = Modifier.align(Alignment.CenterHorizontally)
-                    )
-                    Spacer(modifier = Modifier.size(dimensionResource(id = R.dimen.padding_medium)))
-                    HorizontalDivider()
-                    DropdownMenuItem(
-                        text = {
-                            Text(text = stringResource(id = R.string.logout))
-                        },
-                        onClick = {
-                            isExpanded = false
-                            navigateToProfileSelection()
-                        },
-                        leadingIcon = {
-                            Icon(
-                                painter = painterResource(id = R.drawable.baseline_logout_24),
-                                contentDescription = stringResource(id = R.string.logout_icon)
-                            )
-                        }
-                    )
+                        )
+                        DropdownMenuItem(
+                            text = {
+                                Text(text = stringResource(id = R.string.logout))
+                            },
+                            onClick = {
+                                isExpanded = false
+                                logOut()
+                            },
+                            leadingIcon = {
+                                Icon(
+                                    painter = painterResource(id = R.drawable.baseline_logout_24),
+                                    contentDescription = stringResource(id = R.string.logout_icon)
+                                )
+                            }
+                        )
+                    }
                 }
             }
-
         }
     )
 }
 
-@OptIn(ExperimentalGlideComposeApi::class)
-@Composable
-fun ProfileEditor(
-    uiState: ProfileUiState,
-    onDismissRequest: () -> Unit,
-    onConfirmation: () -> Unit,
-    updateUiState: (ProfileDetails) -> Unit,
-    modifier: Modifier = Modifier,
-) {
-    Log.d("ProfileEditer", "uiState: $uiState")
-    var username by remember { mutableStateOf(uiState.profileDetails.username) }
-    Dialog(
-        onDismissRequest = onDismissRequest,
-    ) {
-        Card(
-            modifier = modifier
-                .fillMaxWidth()
-                .padding(dimensionResource(id = R.dimen.padding_medium)),
-            shape = RoundedCornerShape(16.dp),
-        ) {
-            var selectedImageUri by remember {
-                mutableStateOf<Uri?>(null)
-            }
-            Log.d(
-                "ProfileEditer",
-                "current image uri: ${uiState.profileDetails.profilePicture}"
-            )
-
-            val singlePhotoPickerLauncher = rememberLauncherForActivityResult(
-                contract = ActivityResultContracts.PickVisualMedia(),
-                onResult = { uri ->
-                    selectedImageUri = uri
-                    Log.d("ProfileEditer", "selectedImageUri: $selectedImageUri")
-                    if (uri != null) {
-                        updateUiState(uiState.profileDetails.copy(profilePicture = uri))
-                    }
-                }
-            )
-            Text(
-                text = stringResource(id = R.string.edit_profile),
-                style = MaterialTheme.typography.headlineMedium,
-                modifier = Modifier.align(Alignment.CenterHorizontally),
-            )
-
-            GlideImage(
-                model = selectedImageUri ?: uiState.profileDetails.profilePicture,
-                contentDescription = uiState.profileDetails.username,
-                loading = placeholder(R.drawable.baseline_account_circle_24),
-                failure = placeholder(R.drawable.baseline_account_circle_24),
-                contentScale = ContentScale.Crop,
-                modifier = Modifier
-                    .size(dimensionResource(id = R.dimen.image_size_large))
-                    .align(Alignment.CenterHorizontally)
-                    .clickable {
-                        singlePhotoPickerLauncher.launch(
-                            PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly)
-                        )
-                    }
-                    .clip(CircleShape),
-            )
-            OutlinedTextField(
-                value = username,
-                onValueChange = {
-                    username = it
-                    updateUiState(uiState.profileDetails.copy(username = it))
-                },
-                label = { Text(text = stringResource(id = R.string.username)) },
-                modifier = Modifier
-                    .align(Alignment.CenterHorizontally)
-            )
-
-            Row(
-                horizontalArrangement = Arrangement.End,
-                modifier = Modifier
-                    .fillMaxWidth()
-            ) {
-                TextButton(onClick = onDismissRequest) {
-                    Text(
-                        text = stringResource(id = R.string.cancel),
-                    )
-                }
-                TextButton(onClick = onConfirmation) {
-                    Text(
-                        text = stringResource(id = R.string.edit),
-                    )
-                }
-            }
-        }
-    }
-}
-
-@Preview(showBackground = true)
-@Composable
-fun ProfileEditerPreview() {
-    AppTheme {
-        ProfileEditor(
-            uiState = ProfileUiState(
-                profileDetails = ProfileDetails(),
-            ),
-            onDismissRequest = {},
-            onConfirmation = {},
-            updateUiState = {},
-        )
-    }
-}
 
 @Preview(showBackground = true)
 @Composable
@@ -352,11 +264,11 @@ fun TopAppBarPreview() {
             currentScreenTitle = R.string.app_name,
             canNavigateBack = false,
             navigateUp = {},
-            navigateToProfileSelection = {},
+            logOut = {},
             profileUiState = ProfileUiState(),
             updateProfile = {},
             onSaveChangesToProfile = {},
-            profile = remember { mutableStateOf(ProfileDetails()) },
+            profile = ProfileDetails(),
         )
     }
 }

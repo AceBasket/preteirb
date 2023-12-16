@@ -1,6 +1,5 @@
 package com.example.preteirb.ui
 
-import android.util.Log
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -10,7 +9,6 @@ import androidx.compose.material3.Snackbar
 import androidx.compose.material3.SnackbarHost
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -42,10 +40,6 @@ fun PreteirbApp(
     viewModel: PreteirbAppViewModel = viewModel()
 ) {
     val appState = rememberAppState()
-    Log.d(
-        "UserDetails (Preteirb App)",
-        "viewModel.currentProfile: ${viewModel.currentProfile.value}"
-    )
 
     //Create NavController
     val navController = appState.navController
@@ -74,7 +68,7 @@ fun PreteirbApp(
     }
 
     val coroutineScope = rememberCoroutineScope()
-    val currentProfile = viewModel.currentProfile.collectAsState()
+
 
     Scaffold(
         modifier = modifier,
@@ -85,8 +79,11 @@ fun PreteirbApp(
                         && !appState.topLevelDestinations.map { it.route }
                     .contains(appState.currentDestination?.route),
                 navigateUp = { navController.navigateUp() },
-                navigateToProfileSelection = {
-                    navController.navigate(ProfileSelectionDestination.route)
+                logOut = {
+                    coroutineScope.launch {
+                        viewModel.logOut()
+                    }
+                    appState.clearAndNavigate(ProfileSelectionDestination.route)
                 },
                 profileUiState = viewModel.profileUiState,
                 onSaveChangesToProfile = {
@@ -95,7 +92,8 @@ fun PreteirbApp(
                     }
                 },
                 updateProfile = viewModel::updateUiState,
-                profile = currentProfile,
+                profile = viewModel.currentProfile,
+                isSelectProfile = appState.currentDestination?.route == ProfileSelectionDestination.route,
                 modifier = Modifier
                     .fillMaxWidth()
             )

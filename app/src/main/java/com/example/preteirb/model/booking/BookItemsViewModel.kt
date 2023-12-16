@@ -24,7 +24,7 @@ class BookItemsViewModel @Inject constructor(
     private val settingsRepository: SettingsRepository
 ) : UsageEntryViewModel(savedStateHandle, usagesRepository, settingsRepository) {
 
-    lateinit private var _itemToBookDetails: StateFlow<ItemDetails>
+    private lateinit var _itemToBookDetails: StateFlow<ItemDetails>
     val itemToBookDetails: StateFlow<ItemDetails>
         get() = _itemToBookDetails
 

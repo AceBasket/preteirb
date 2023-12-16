@@ -1,6 +1,6 @@
 package com.example.preteirb.di
 
-import com.commandiron.wheel_picker_compose.BuildConfig
+import com.example.preteirb.BuildConfig
 import com.example.preteirb.api.ItemApiService
 import com.example.preteirb.api.ProfileApiService
 import com.example.preteirb.api.UsageApiService

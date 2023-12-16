@@ -34,7 +34,11 @@ import androidx.compose.ui.window.DialogProperties
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.example.compose.AppTheme
 import com.example.preteirb.R
+import com.example.preteirb.common.ProfileCreator
 import com.example.preteirb.data.user.User
+import com.example.preteirb.model.PreteirbAppViewModel
+import com.example.preteirb.model.ProfileDetails
+import com.example.preteirb.model.ProfileUiState
 import com.example.preteirb.model.profile_selection.ProfileSelectionUiState
 import com.example.preteirb.model.profile_selection.ProfileSelectionViewModel
 import com.example.preteirb.ui.navigation.NavigationDestination
@@ -49,30 +53,26 @@ object ProfileSelectionDestination : NavigationDestination {
 fun ProfileSelectionScreen(
     navigateToSearch: () -> Unit,
     modifier: Modifier = Modifier,
-    viewModel: ProfileSelectionViewModel = hiltViewModel()
+    viewModel: ProfileSelectionViewModel = hiltViewModel(),
+    addProfileViewModel: PreteirbAppViewModel = hiltViewModel(),
 ) {
     val uiState by viewModel.uiState.collectAsState()
     val coroutine = rememberCoroutineScope()
 
-
-
     ProfileSelection(
         uiState = uiState,
-        onAddAccount = { username ->
+        profileUiState = viewModel.profileUiState,
+        updateProfileUiState = viewModel::updateUiState,
+        onAddAccount = {
             coroutine.launch {
-                viewModel.registerUserAndLogIn(
-                    User(
-                        id = 0,
-                        username = username,
-                        profilePicture = "",
-                    )
-                )
+                val user = viewModel.saveNewProfile()
+                addProfileViewModel.logIn(user)
             }
             navigateToSearch()
         },
         onClickOnProfile = {
             coroutine.launch {
-                viewModel.logIn(it)
+                addProfileViewModel.logIn(it)
             }
             navigateToSearch()
         },
@@ -83,7 +83,9 @@ fun ProfileSelectionScreen(
 @Composable
 fun ProfileSelection(
     uiState: ProfileSelectionUiState,
-    onAddAccount: (String) -> Unit,
+    profileUiState: ProfileUiState,
+    updateProfileUiState: (ProfileDetails) -> Unit,
+    onAddAccount: () -> Unit,
     onClickOnProfile: (User) -> Unit,
     modifier: Modifier = Modifier,
 ) {
@@ -97,12 +99,14 @@ fun ProfileSelection(
     )
 
     if (isShowAddAccountDialog) {
-        AddAccountDialog(
+        ProfileCreator(
+            uiState = profileUiState,
             onDismissRequest = { isShowAddAccountDialog = false },
-            onAddAccount = {
-                onAddAccount(it)
+            onConfirmation = {
                 isShowAddAccountDialog = false
+                onAddAccount()
             },
+            updateUiState = updateProfileUiState,
             modifier = Modifier.testTag("addProfileDialog")
         )
     }
@@ -203,7 +207,11 @@ fun ProfileSelectionPreview() {
                     users = fakeProfileList
                 ),
                 onAddAccount = { },
-                onClickOnProfile = { }
+                onClickOnProfile = { },
+                profileUiState = ProfileUiState(
+                    profileDetails = ProfileDetails(),
+                ),
+                updateProfileUiState = {},
             )
         }
     }

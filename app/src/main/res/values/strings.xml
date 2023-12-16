@@ -55,4 +55,8 @@
     <string name="app_name">PRET\'EIRB</string>
     <string name="edit">Edit</string>
     <string name="edit_profile">Edit your profile</string>
+    <string name="delete_picture">Delete picture</string>
+    <string name="delete_icon">Delete icon</string>
+    <string name="create">Create</string>
+    <string name="create_profile">Create a new profile</string>
 </resources>
