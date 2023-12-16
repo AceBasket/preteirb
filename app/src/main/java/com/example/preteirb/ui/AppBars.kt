@@ -38,6 +38,7 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.State
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -46,6 +47,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
@@ -134,13 +136,14 @@ fun AppTopBar(
     canNavigateBack: Boolean,
     navigateUp: () -> Unit,
     navigateToProfileSelection: () -> Unit,
+    profile: State<ProfileDetails>,
     profileUiState: ProfileUiState,
     updateProfile: (ProfileDetails) -> Unit,
     onSaveChangesToProfile: () -> Unit,
     modifier: Modifier = Modifier
 ) {
     var isExpanded by remember { mutableStateOf(false) }
-    val user = profileUiState.profileDetails
+    Log.d("UserDetails (AppTopBar)", "UserDetails: $profile")
     CenterAlignedTopAppBar(
         title = { Text(stringResource(currentScreenTitle)) },
         modifier = modifier,
@@ -161,7 +164,7 @@ fun AppTopBar(
         actions = {
             var showEditProfileDialog by remember { mutableStateOf(false) }
             if (showEditProfileDialog) {
-                ProfileEditer(
+                ProfileEditor(
                     uiState = profileUiState,
                     onDismissRequest = { showEditProfileDialog = false },
                     onConfirmation = {
@@ -179,18 +182,23 @@ fun AppTopBar(
                     )
                 }
                 DropdownMenu(expanded = isExpanded, onDismissRequest = { isExpanded = false }) {
+                    Log.d("UserDetails (Dropdown Menu)", "UserDetails: $profile")
                     GlideImage(
-                        model = user.profilePicture,
-                        contentDescription = user.username,
+                        model = profile.value.profilePicture,
+                        contentDescription = profile.value.username,
                         loading = placeholder(R.drawable.baseline_account_circle_24),
                         failure = placeholder(R.drawable.baseline_account_circle_24),
+                        contentScale = ContentScale.Crop,
                         modifier = Modifier
                             .size(dimensionResource(id = R.dimen.image_size_medium))
                             .align(Alignment.CenterHorizontally)
-                            .clickable { showEditProfileDialog = true },
+                            .clickable {
+                                showEditProfileDialog = true
+                            }
+                            .clip(CircleShape),
                     )
                     Text(
-                        text = user.username,
+                        text = profile.value.username,
                         style = MaterialTheme.typography.bodyLarge,
                         modifier = Modifier.align(Alignment.CenterHorizontally)
                     )
@@ -220,13 +228,14 @@ fun AppTopBar(
 
 @OptIn(ExperimentalGlideComposeApi::class)
 @Composable
-fun ProfileEditer(
+fun ProfileEditor(
     uiState: ProfileUiState,
     onDismissRequest: () -> Unit,
     onConfirmation: () -> Unit,
     updateUiState: (ProfileDetails) -> Unit,
     modifier: Modifier = Modifier,
 ) {
+    Log.d("ProfileEditer", "uiState: $uiState")
     var username by remember { mutableStateOf(uiState.profileDetails.username) }
     Dialog(
         onDismissRequest = onDismissRequest,
@@ -266,6 +275,7 @@ fun ProfileEditer(
                 contentDescription = uiState.profileDetails.username,
                 loading = placeholder(R.drawable.baseline_account_circle_24),
                 failure = placeholder(R.drawable.baseline_account_circle_24),
+                contentScale = ContentScale.Crop,
                 modifier = Modifier
                     .size(dimensionResource(id = R.dimen.image_size_large))
                     .align(Alignment.CenterHorizontally)
@@ -274,7 +284,7 @@ fun ProfileEditer(
                             PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly)
                         )
                     }
-                    .clip(CircleShape)
+                    .clip(CircleShape),
             )
             OutlinedTextField(
                 value = username,
@@ -311,7 +321,7 @@ fun ProfileEditer(
 @Composable
 fun ProfileEditerPreview() {
     AppTheme {
-        ProfileEditer(
+        ProfileEditor(
             uiState = ProfileUiState(
                 profileDetails = ProfileDetails(),
             ),
@@ -346,6 +356,7 @@ fun TopAppBarPreview() {
             profileUiState = ProfileUiState(),
             updateProfile = {},
             onSaveChangesToProfile = {},
+            profile = remember { mutableStateOf(ProfileDetails()) },
         )
     }
 }

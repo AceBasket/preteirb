@@ -82,7 +82,7 @@ class NetworkUsersRepository @Inject constructor(
         }
 
         // Create RequestBody from file
-        val file = File(filePath)
+        val file = File(filePath!!)
         val requestFile = file.asRequestBody("multipart/form-data".toMediaTypeOrNull())
 
         // Create MultipartBody.Part from RequestBody
