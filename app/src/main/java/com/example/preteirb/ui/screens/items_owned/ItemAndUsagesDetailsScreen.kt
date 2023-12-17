@@ -57,6 +57,7 @@ fun ItemAndUsagesDetailsScreen(
                     0,
                     "",
                     "",
+                    null,
                     0,
                     emptyList()
                 )
@@ -153,6 +154,7 @@ fun ItemDetailsScreenDetails() {
             id = 1,
             name = "Item name",
             description = "Item description",
+            image = null,
             ownerId = 1,
             usages = listOf(
                 UsageWithStringDate(

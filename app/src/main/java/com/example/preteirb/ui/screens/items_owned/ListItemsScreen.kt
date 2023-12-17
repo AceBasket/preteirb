@@ -22,12 +22,12 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.example.compose.AppTheme
 import com.example.preteirb.R
+import com.example.preteirb.common.ItemDialog
 import com.example.preteirb.data.item.Item
 import com.example.preteirb.model.items_owned.ItemDetails
 import com.example.preteirb.model.items_owned.ItemEntryViewModel
 import com.example.preteirb.model.items_owned.ItemUiState
 import com.example.preteirb.model.items_owned.ListItemsViewModel
-import com.example.preteirb.model.items_owned.toItem
 import com.example.preteirb.model.items_owned.toItemDetails
 import com.example.preteirb.model.new_usage.ItemsOwnedUiState
 import com.example.preteirb.ui.navigation.NavigationDestination
@@ -56,11 +56,10 @@ fun ListItemsScreen(
         onNewItemValueChange = newItemViewModel::updateUiState,
         onSaveNewItem = {
             coroutineScope.launch {
-                if (newItemViewModel.saveItem()) {
+                val newItem = newItemViewModel.saveItem()
+                if (newItem != null) {
                     listItemsViewModel.addItem(
-                        newItemViewModel.itemUiState.itemDetails.toItem(
-                            listItemsViewModel.userId
-                        )
+                        newItem
                     )
                 }
                 newItemViewModel.whipeItemUiState()
@@ -114,7 +113,7 @@ fun ListItemsScreenContent(
     }
 
     if (isShowObjectDialog) {
-        NewObjectDialog(
+        ItemDialog(
             itemUiState = newItemUiState,
             onValueChange = onNewItemValueChange,
             onSaveObject = {
@@ -125,6 +124,8 @@ fun ListItemsScreenContent(
                 isShowObjectDialog = false
                 whipeNewItemUiState()
             },
+            confirmButtonLabel = R.string.save,
+            dialogTitle = R.string.add_object,
             modifier = Modifier.testTag("addObjectDialog")
         )
     }
@@ -139,18 +140,21 @@ fun ListItemsScreenContentPreview() {
                 id = 1,
                 name = "Item 1",
                 description = "Description 1",
+                image = null,
                 ownerId = 1,
             ),
             Item(
                 id = 2,
                 name = "Item 2",
                 description = "Description 2",
+                image = null,
                 ownerId = 1,
             ),
             Item(
                 id = 3,
                 name = "Item 3",
                 description = "Description 3",
+                image = null,
                 ownerId = 1,
             ),
         )

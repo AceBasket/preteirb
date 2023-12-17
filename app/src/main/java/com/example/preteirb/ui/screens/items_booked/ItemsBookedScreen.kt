@@ -138,6 +138,7 @@ fun ItemsBookedPreview() {
                         id = 0,
                         name = "Tondeuse",
                         description = "",
+                        image = null,
                         owner = User(0, "Jean", ""),
                     ),
                     user = 0
@@ -150,6 +151,7 @@ fun ItemsBookedPreview() {
                         id = 1,
                         name = "Perceuse",
                         description = "",
+                        image = null,
                         owner = User(1, "Céline", "")
                     ),
                     user = 0
@@ -162,6 +164,7 @@ fun ItemsBookedPreview() {
                         id = 2,
                         name = "Marteau",
                         description = "",
+                        image = null,
                         owner = User(2, "Pierre", "")
                     ),
                     user = 0
@@ -174,6 +177,7 @@ fun ItemsBookedPreview() {
                         id = 3,
                         name = "Tournevis",
                         description = "",
+                        image = null,
                         owner = User(3, "Paul", "")
                     ),
                     user = 0
@@ -195,6 +199,7 @@ fun ItemsBookedCardPreview() {
                 id = 0,
                 name = "Tondeuse",
                 description = "",
+                image = null,
                 owner = User(0, "Jean", "")
             ),
             user = 0

@@ -104,12 +104,15 @@ fun ItemDialog(
                     onResult = { uri ->
                         selectedImageUri = uri
                         if (uri != null) {
-//                            updateUiState(uiState.profileDetails.copy(profilePicture = uri))
+                            onValueChange(itemUiState.itemDetails.copy(image = uri))
                         }
                     }
                 )
                 GlideImage(
-                    model = selectedImageUri ?: R.drawable.baseline_image_24,
+                    model = selectedImageUri ?: if (itemUiState.itemDetails.image != Uri.EMPTY)
+                        itemUiState.itemDetails.image
+                    else
+                        R.drawable.baseline_image_24,
                     contentDescription = stringResource(id = R.string.object_photo),
                     loading = placeholder(R.drawable.loading_img),
                     failure = placeholder(R.drawable.baseline_broken_image_24),

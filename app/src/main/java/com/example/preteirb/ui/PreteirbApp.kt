@@ -55,7 +55,7 @@ fun PreteirbApp(
             ItemsBookedDestination.route -> ItemsBookedDestination
             else -> null
         }
-    } ?: SearchDestination
+    } ?: ProfileSelectionDestination
 
     var startDestination by remember { mutableStateOf(currentScreen.route) }
     LaunchedEffect(viewModel.isLoggedIn) {

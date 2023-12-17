@@ -33,21 +33,21 @@ class ItemEntryViewModel @Inject constructor(
         }
     }
 
-    suspend fun saveItem(): Boolean {
+    suspend fun saveItem(): Item? {
         val userOwnerId = settingsRepository.getUserId().first()
         updateUiState(itemUiState.itemDetails.copy(ownerId = userOwnerId))
         return if (validateInput()) {
             try {
-                itemsRepository.insertItem(itemUiState.itemDetails)
+                val newItem = itemsRepository.insertItem(itemUiState.itemDetails)
                 SnackbarManager.showMessage(R.string.save_item_success)
-                true
+                newItem
             } catch (e: Exception) {
                 SnackbarManager.showMessage(R.string.save_item_error)
-                false
+                null
             }
         } else {
             SnackbarManager.showMessage(R.string.save_item_error)
-            false
+            null
         }
     }
 

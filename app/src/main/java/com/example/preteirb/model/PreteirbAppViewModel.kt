@@ -24,13 +24,14 @@ class PreteirbAppViewModel @Inject constructor(
     init {
         viewModelScope.launch {
             settingsRepository.getUserId().collect {
-                usersRepository.getUserStream(it)
-                    .filterNotNull()
-                    .collect { user ->
-                        currentProfile = user.toProfileDetails()
-                        profileUiState = ProfileUiState(profileDetails = currentProfile)
-                    }
-
+                if (it > 0) {
+                    usersRepository.getUserStream(it)
+                        .filterNotNull()
+                        .collect { user ->
+                            currentProfile = user.toProfileDetails()
+                            profileUiState = ProfileUiState(profileDetails = currentProfile)
+                        }
+                }
             }
         }
     }

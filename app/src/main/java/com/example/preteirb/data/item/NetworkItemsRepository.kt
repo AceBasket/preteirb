@@ -90,6 +90,6 @@ class NetworkItemsRepository @Inject constructor(
         val requestFile = file.asRequestBody("multipart/form-data".toMediaTypeOrNull())
 
         // Create MultipartBody.Part from RequestBody
-        return MultipartBody.Part.createFormData("profile_pic", file.name, requestFile)
+        return MultipartBody.Part.createFormData("image", file.name, requestFile)
     }
 }

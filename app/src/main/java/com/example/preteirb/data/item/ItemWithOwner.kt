@@ -15,5 +15,6 @@ data class ItemWithOwner(
     val id: Int,
     val name: String,
     val description: String,
+    val image: String?,
     val owner: User
 )
