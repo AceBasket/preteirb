@@ -34,6 +34,14 @@ class ListItemsViewModel @Inject constructor(
         _listItemsUiState.value = ItemsOwnedUiState(itemsOwned = currentItems)
     }
 
+    fun editItem(newItem: Item) {
+        val currentItems = _listItemsUiState.value.itemsOwned.toMutableList()
+        val itemIndex = currentItems.indexOfFirst { it.id == newItem.id }
+        if (itemIndex == -1) return
+        currentItems[itemIndex] = newItem
+        _listItemsUiState.value = ItemsOwnedUiState(itemsOwned = currentItems)
+    }
+
     init {
         viewModelScope.launch {
             _userId = settingsRepository.getUserId().first()

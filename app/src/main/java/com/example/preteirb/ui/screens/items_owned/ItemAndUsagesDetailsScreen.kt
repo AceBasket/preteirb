@@ -1,5 +1,6 @@
 package com.example.preteirb.ui.screens.items_owned
 
+import android.net.Uri
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
@@ -22,6 +23,7 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.dimensionResource
@@ -87,10 +89,11 @@ fun ItemAndUsagesDetailsScreen(
         itemUiState = viewModel.itemUiState,
         updateItemUiState = viewModel::updateUiState,
         saveItemModifications = {
-                                coroutineScope.launch {
-                                    viewModel.saveItem()
-                                }
-                                },
+            coroutineScope.launch {
+                val newItem = viewModel.saveItem()
+                // do something here
+            }
+        },
         modifier = modifier
     )
 }
@@ -105,7 +108,7 @@ fun ItemAndUsagesDetails(
     saveItemModifications: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
-        var isShowEditDialog by remember { mutableStateOf(false)}
+    var isShowEditDialog by remember { mutableStateOf(false) }
     Column(modifier = modifier) {
         DetailsHeadline(
             item = itemUiState.itemDetails,
@@ -126,7 +129,7 @@ fun ItemAndUsagesDetails(
     }
 
     if (isShowEditDialog) {
-        ItemEditor (
+        ItemEditor(
             itemUiState = itemUiState,
             updateUiState = updateItemUiState,
             onConfirmation = {
@@ -154,7 +157,11 @@ fun DetailsHeadline(
     Box(
         modifier = modifier
             .clickable { onClick() }
-            .border(1.dp, Color.Black, RoundedCornerShape(dimensionResource(id = R.dimen.corner_radius_medium)))
+            .border(
+                1.dp,
+                Color.Black,
+                RoundedCornerShape(dimensionResource(id = R.dimen.corner_radius_medium))
+            )
     ) {
         Column(
             horizontalAlignment = Alignment.CenterHorizontally,
@@ -166,13 +173,14 @@ fun DetailsHeadline(
                 fontStyle = FontStyle.Italic,
             )
             GlideImage(
-                model = item.image ?: R.drawable.baseline_image_24,
+                model = if (item.image != Uri.EMPTY) item.image else R.drawable.baseline_image_24,
                 contentDescription = item.name,
                 loading = placeholder(R.drawable.loading_img),
                 failure = placeholder(R.drawable.ic_broken_image),
                 contentScale = ContentScale.Crop,
                 modifier = Modifier
                     .size(dimensionResource(id = R.dimen.image_size_large))
+                    .clip(RoundedCornerShape(dimensionResource(id = R.dimen.corner_radius_small)))
             )
         }
         Icon(
