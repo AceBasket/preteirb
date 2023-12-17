@@ -1,5 +1,6 @@
 package com.example.preteirb.data.item
 
+import com.example.preteirb.model.items_owned.ItemDetails
 import kotlinx.coroutines.flow.Flow
 
 /**
@@ -29,7 +30,7 @@ interface ItemsRepository {
     /**
      * Insert item in the data source
      */
-    suspend fun insertItem(item: Item): Long
+    suspend fun insertItem(item: ItemDetails): Item
 
     /**
      * Delete item from the data source
@@ -39,5 +40,5 @@ interface ItemsRepository {
     /**
      * Update item from the data source
      */
-    suspend fun updateItem(item: Item)
+    suspend fun updateItem(item: ItemDetails): Item
 }

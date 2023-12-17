@@ -128,7 +128,7 @@ fun ProfileDialog(
             GlideImage(
                 model = selectedImageUri ?: uiState.profileDetails.profilePicture,
                 contentDescription = uiState.profileDetails.username,
-                loading = placeholder(R.drawable.baseline_account_circle_24),
+                loading = placeholder(R.drawable.loading_img),
                 failure = placeholder(R.drawable.baseline_account_circle_24),
                 contentScale = ContentScale.Crop,
                 modifier = Modifier

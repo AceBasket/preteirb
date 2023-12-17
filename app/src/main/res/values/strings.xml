@@ -59,4 +59,5 @@
     <string name="delete_icon">Delete icon</string>
     <string name="create">Create</string>
     <string name="create_profile">Create a new profile</string>
+    <string name="object_photo">Photo of object</string>
 </resources>
