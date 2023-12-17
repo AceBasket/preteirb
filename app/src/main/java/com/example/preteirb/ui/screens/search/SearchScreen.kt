@@ -1,17 +1,18 @@
 package com.example.preteirb.ui.screens.search
 
-import android.util.Log
+import android.net.Uri
 import androidx.compose.foundation.BorderStroke
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Search
 import androidx.compose.material3.Card
@@ -31,14 +32,18 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Shape
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.dimensionResource
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.bumptech.glide.integration.compose.ExperimentalGlideComposeApi
+import com.bumptech.glide.integration.compose.GlideImage
+import com.bumptech.glide.integration.compose.placeholder
 import com.example.compose.AppTheme
 import com.example.preteirb.R
 import com.example.preteirb.model.items_owned.ItemDetails
@@ -131,7 +136,6 @@ fun ObjectList(
         modifier = modifier,
     ) {
         items(items = objects) {
-            Log.d("ObjectList", "Composing for object id: ${it.id}")
             ObjectCard(
                 item = it,
                 modifier = Modifier
@@ -146,6 +150,7 @@ fun ObjectList(
     }
 }
 
+@OptIn(ExperimentalGlideComposeApi::class)
 @Composable
 fun ObjectCard(
     item: ItemDetails,
@@ -165,11 +170,18 @@ fun ObjectCard(
         Row(
             verticalAlignment = Alignment.CenterVertically
         ) {
-            Image(
-                painter = painterResource(id = R.drawable.ic_broken_image),
-                contentDescription = null,
-                modifier = Modifier.size(dimensionResource(id = R.dimen.image_size_medium))
+            GlideImage(
+                model = if (item.image == Uri.EMPTY) R.drawable.baseline_image_24 else item.image,
+                contentDescription = item.name,
+                loading = placeholder(R.drawable.loading_img),
+                failure = placeholder(R.drawable.ic_broken_image),
+                contentScale = ContentScale.Crop,
+                modifier = Modifier
+                    .size(dimensionResource(id = R.dimen.image_size_medium))
+                    .clip(RoundedCornerShape(dimensionResource(id = R.dimen.corner_radius_small)))
+
             )
+            Spacer(modifier = Modifier.size(dimensionResource(id = R.dimen.padding_small)))
             Column {
                 Text(
                     text = item.name,

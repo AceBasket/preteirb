@@ -50,6 +50,45 @@ import com.example.preteirb.R
 import com.example.preteirb.model.items_owned.ItemDetails
 import com.example.preteirb.model.items_owned.ItemUiState
 
+@Composable
+fun ItemCreator(
+    itemUiState: ItemUiState,
+    onDismissRequest: () -> Unit,
+    onConfirmation: () -> Unit,
+    updateUiState: (ItemDetails) -> Unit,
+    modifier: Modifier = Modifier
+) {
+    ItemDialog(
+        itemUiState = itemUiState,
+        onValueChange = updateUiState,
+        onSaveObject = onConfirmation,
+        onDismissDialog = onDismissRequest,
+        confirmButtonLabel = R.string.save,
+        dialogTitle = R.string.add_object,
+        modifier = modifier
+    )
+}
+
+@Composable
+fun ItemEditor(
+    itemUiState: ItemUiState,
+    onDismissRequest: () -> Unit,
+    onConfirmation: () -> Unit,
+    updateUiState: (ItemDetails) -> Unit,
+    modifier: Modifier = Modifier
+) {
+    ItemDialog(
+        itemUiState = itemUiState,
+        onValueChange = updateUiState,
+        onSaveObject = onConfirmation,
+        onDismissDialog = onDismissRequest,
+        confirmButtonLabel = R.string.edit,
+        dialogTitle = R.string.edit_object,
+        isDisplayDeleteImageButton = true,
+        modifier = modifier
+    )
+}
+
 @OptIn(ExperimentalGlideComposeApi::class)
 @Composable
 fun ItemDialog(
@@ -60,6 +99,7 @@ fun ItemDialog(
     @StringRes confirmButtonLabel: Int,
     @StringRes dialogTitle: Int,
     modifier: Modifier = Modifier,
+    isDisplayDeleteImageButton: Boolean = false,
 ) {
     // full screen dialog
     Dialog(
@@ -90,11 +130,13 @@ fun ItemDialog(
                         text = stringResource(id = dialogTitle),
                         style = MaterialTheme.typography.headlineSmall,
                     )
-                    TextButton(onClick = onSaveObject) {
+                    TextButton(
+                        onClick = onSaveObject,
+                        enabled = itemUiState.isEntryValid
+                    ) {
                         Text(text = stringResource(id = confirmButtonLabel))
                     }
                 }
-                var isTitleError by rememberSaveable { mutableStateOf(false) }
                 var selectedImageUri by remember {
                     mutableStateOf<Uri?>(null)
                 }
@@ -119,7 +161,6 @@ fun ItemDialog(
                     contentScale = ContentScale.Crop,
                     modifier = Modifier
                         .size(dimensionResource(id = R.dimen.image_size_large))
-//                        .fillMaxWidth()
                         .align(Alignment.CenterHorizontally)
                         .clickable {
                             singlePhotoPickerLauncher.launch(
@@ -128,13 +169,19 @@ fun ItemDialog(
                         }
                         .clip(RoundedCornerShape(dimensionResource(id = R.dimen.corner_radius_small)))
                 )
-                OutlinedButton(
-                    onClick = { /*TODO*/ },
-                    modifier = Modifier.align(Alignment.CenterHorizontally)
-                ) {
-                    Icon(Icons.Default.Delete, contentDescription = "Remove image")
-                    Text(text = "Remove image")
+                if (isDisplayDeleteImageButton) {
+                    OutlinedButton(
+                        onClick = { onValueChange(itemUiState.itemDetails.copy(image = Uri.EMPTY)) },
+                        modifier = Modifier.align(Alignment.CenterHorizontally)
+                    ) {
+                        Icon(
+                            Icons.Default.Delete,
+                            contentDescription = stringResource(id = R.string.remove_image)
+                        )
+                        Text(text = stringResource(id = R.string.remove_image))
+                    }
                 }
+                var isTitleError by rememberSaveable { mutableStateOf(false) }
                 OutlinedTextField(
                     value = itemUiState.itemDetails.name,
                     onValueChange = {

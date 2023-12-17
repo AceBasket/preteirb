@@ -22,7 +22,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.example.compose.AppTheme
 import com.example.preteirb.R
-import com.example.preteirb.common.ItemDialog
+import com.example.preteirb.common.ItemCreator
 import com.example.preteirb.data.item.Item
 import com.example.preteirb.model.items_owned.ItemDetails
 import com.example.preteirb.model.items_owned.ItemEntryViewModel
@@ -113,19 +113,17 @@ fun ListItemsScreenContent(
     }
 
     if (isShowObjectDialog) {
-        ItemDialog(
+        ItemCreator(
             itemUiState = newItemUiState,
-            onValueChange = onNewItemValueChange,
-            onSaveObject = {
+            updateUiState = onNewItemValueChange,
+            onConfirmation = {
                 onSaveNewItem()
                 isShowObjectDialog = false
             },
-            onDismissDialog = {
+            onDismissRequest = {
                 isShowObjectDialog = false
                 whipeNewItemUiState()
             },
-            confirmButtonLabel = R.string.save,
-            dialogTitle = R.string.add_object,
             modifier = Modifier.testTag("addObjectDialog")
         )
     }

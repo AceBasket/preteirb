@@ -21,16 +21,17 @@ interface ItemApiService {
     @GET("items/")
     suspend fun searchItems(@Query("search") search: String): List<Item>
 
-    @GET("items/{id}")
+    @GET("items/{id}/")
     suspend fun getItem(@Path("id") id: Int): Item
 
-    @DELETE("items/{id}")
+    @DELETE("items/{id}/")
     suspend fun deleteItem(@Path("id") id: Int)
 
-    @PUT("items/{id}")
-    suspend fun updateItemWithoutImage(@Path("id") id: Int, item: Item): Item
+    @PUT("items/{id}/")
+    suspend fun updateItemWithoutImage(@Path("id") id: Int, @Body item: Item): Item
 
-    @PUT("items/{id}")
+    @Multipart
+    @PUT("items/{id}/")
     suspend fun updateItem(
         @Path("id") id: Int,
         @Part image: MultipartBody.Part,
@@ -51,6 +52,6 @@ interface ItemApiService {
     @POST("items/")
     suspend fun createItemWithoutImage(@Body item: Item): Item
 
-    @GET("items/{id}/usages")
+    @GET("items/{id}/usages/")
     suspend fun getUsagesByItem(@Path("id") id: Int): ItemAndUsages
 }

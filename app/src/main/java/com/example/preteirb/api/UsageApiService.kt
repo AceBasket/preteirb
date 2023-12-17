@@ -12,13 +12,13 @@ interface UsageApiService {
     @GET("usages/")
     suspend fun getUsages(): List<UsageWithStringDate>
 
-    @GET("usages/{id}")
+    @GET("usages/{id}/")
     suspend fun getUsage(@Path("id") id: Int): UsageWithStringDate
 
-    @PATCH("usages/{id}")
+    @PATCH("usages/{id}/")
     suspend fun updateUsage(@Path("id") id: Int, usage: UsageWithStringDate)
 
-    @DELETE("usages/{id}")
+    @DELETE("usages/{id}/")
     suspend fun deleteUsage(@Path("id") id: Int)
 
     @POST("usages/")

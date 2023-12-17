@@ -5,6 +5,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.preteirb.data.item.ItemsRepository
 import com.example.preteirb.model.items_owned.ItemDetails
+import com.example.preteirb.model.items_owned.toItemDetails
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.flow.SharingStarted
@@ -41,11 +42,7 @@ class SearchViewModel @Inject constructor(
                             is Result.Success -> SearchResultUiState.Success(
                                 // transform list of items to list of item details
                                 itemList = result.data.map { item ->
-                                    ItemDetails(
-                                        id = item.id,
-                                        name = item.name,
-                                        description = item.description,
-                                    )
+                                    item.toItemDetails()
                                 }
                             )
 
