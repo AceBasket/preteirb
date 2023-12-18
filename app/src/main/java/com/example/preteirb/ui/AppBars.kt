@@ -128,7 +128,7 @@ fun AppTopBar(
     updateProfile: (ProfileDetails) -> Unit,
     onSaveChangesToProfile: () -> Unit,
     modifier: Modifier = Modifier,
-    isSelectProfile: Boolean = false,
+    isDisplayProfileIcon: Boolean = false,
 ) {
     var isExpanded by remember { mutableStateOf(false) }
     Log.d("UserDetails (AppTopBar)", "UserDetails: $profile")
@@ -150,7 +150,7 @@ fun AppTopBar(
             }
         },
         actions = {
-            if (!isSelectProfile) {
+            if (!isDisplayProfileIcon) {
                 var showEditProfileDialog by remember { mutableStateOf(false) }
                 if (showEditProfileDialog) {
                     ProfileEditor(

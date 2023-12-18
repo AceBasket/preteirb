@@ -23,12 +23,12 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import com.example.compose.AppTheme
 import com.example.preteirb.R
 import com.example.preteirb.common.ItemCreator
-import com.example.preteirb.data.item.Item
+import com.example.preteirb.data.cache.items_owned.ItemOwned
+import com.example.preteirb.data.cache.items_owned.toItemDetails
 import com.example.preteirb.model.items_owned.ItemDetails
 import com.example.preteirb.model.items_owned.ItemEntryViewModel
 import com.example.preteirb.model.items_owned.ItemUiState
 import com.example.preteirb.model.items_owned.ListItemsViewModel
-import com.example.preteirb.model.items_owned.toItemDetails
 import com.example.preteirb.model.new_usage.ItemsOwnedUiState
 import com.example.preteirb.ui.navigation.NavigationDestination
 import com.example.preteirb.ui.screens.search.ObjectList
@@ -56,12 +56,7 @@ fun ListItemsScreen(
         onNewItemValueChange = newItemViewModel::updateUiState,
         onSaveNewItem = {
             coroutineScope.launch {
-                val newItem = newItemViewModel.saveItem()
-                if (newItem != null) {
-                    listItemsViewModel.addItem(
-                        newItem
-                    )
-                }
+                newItemViewModel.saveItem()
                 newItemViewModel.whipeItemUiState()
             }
         },
@@ -134,25 +129,25 @@ fun ListItemsScreenContent(
 fun ListItemsScreenContentPreview() {
     AppTheme {
         val fakeObjectList = listOf(
-            Item(
+            ItemOwned(
                 id = 1,
                 name = "Item 1",
                 description = "Description 1",
-                image = null,
+                imageUrl = null,
                 ownerId = 1,
             ),
-            Item(
+            ItemOwned(
                 id = 2,
                 name = "Item 2",
                 description = "Description 2",
-                image = null,
+                imageUrl = null,
                 ownerId = 1,
             ),
-            Item(
+            ItemOwned(
                 id = 3,
                 name = "Item 3",
                 description = "Description 3",
-                image = null,
+                imageUrl = null,
                 ownerId = 1,
             ),
         )

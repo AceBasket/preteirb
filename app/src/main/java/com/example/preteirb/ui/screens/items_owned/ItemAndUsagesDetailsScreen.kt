@@ -90,8 +90,7 @@ fun ItemAndUsagesDetailsScreen(
         updateItemUiState = viewModel::updateUiState,
         saveItemModifications = {
             coroutineScope.launch {
-                val newItem = viewModel.saveItem()
-                // do something here
+                viewModel.saveItem()
             }
         },
         modifier = modifier

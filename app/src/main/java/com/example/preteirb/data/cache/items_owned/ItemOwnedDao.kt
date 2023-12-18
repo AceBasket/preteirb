@@ -5,6 +5,7 @@ import androidx.room.Delete
 import androidx.room.Insert
 import androidx.room.Query
 import androidx.room.Update
+import kotlinx.coroutines.flow.Flow
 
 @Dao
 interface ItemOwnedDao {
@@ -27,5 +28,5 @@ interface ItemOwnedDao {
     suspend fun deleteAll()
 
     @Query("SELECT * FROM items_owned")
-    suspend fun getAll(): List<ItemOwned>
+    fun getAll(): Flow<List<ItemOwned>>
 }

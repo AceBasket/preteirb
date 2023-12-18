@@ -13,6 +13,8 @@ import com.example.preteirb.ui.screens.items_owned.ItemAndUsagesDetailsDestinati
 import com.example.preteirb.ui.screens.items_owned.ItemAndUsagesDetailsScreen
 import com.example.preteirb.ui.screens.items_owned.ListItemsDestination
 import com.example.preteirb.ui.screens.items_owned.ListItemsScreen
+import com.example.preteirb.ui.screens.login.LoginDestination
+import com.example.preteirb.ui.screens.login.LoginScreen
 import com.example.preteirb.ui.screens.profile_selection.ProfileSelectionDestination
 import com.example.preteirb.ui.screens.profile_selection.ProfileSelectionScreen
 import com.example.preteirb.ui.screens.search.SearchDestination
@@ -65,5 +67,13 @@ fun NavGraphBuilder.appNavGraph(appState: AppState) {
 
     composable(route = ItemsBookedDestination.route) {
         ItemsBookedScreen()
+    }
+
+    composable(route = LoginDestination.route) {
+        LoginScreen(
+            navigateToSelectProfile = {
+                appState.clearAndNavigate(ProfileSelectionDestination.route)
+            },
+        )
     }
 }

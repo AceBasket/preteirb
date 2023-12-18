@@ -4,7 +4,7 @@ import android.net.Uri
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
 import com.example.preteirb.data.SettingsRepository
-import com.example.preteirb.data.item.Item
+import com.example.preteirb.data.cache.items_owned.ItemsOwnedRepository
 import com.example.preteirb.data.item.ItemAndUsages
 import com.example.preteirb.data.item.ItemsRepository
 import com.example.preteirb.ui.screens.items_owned.ItemAndUsagesDetailsDestination
@@ -19,7 +19,8 @@ class ItemAndUsagesDetailsViewModel @Inject constructor(
     savedStateHandle: SavedStateHandle,
     private val itemsRepository: ItemsRepository,
     private val settingsRepository: SettingsRepository,
-) : ItemEntryViewModel(itemsRepository, settingsRepository) {
+    private val itemsOwnedRepository: ItemsOwnedRepository,
+) : ItemEntryViewModel(itemsRepository, settingsRepository, itemsOwnedRepository) {
 
     private val itemId: Int =
         checkNotNull(savedStateHandle[ItemAndUsagesDetailsDestination.itemIdArg])
@@ -37,7 +38,7 @@ class ItemAndUsagesDetailsViewModel @Inject constructor(
         }
     }
 
-    override suspend fun saveItem(): Item? = saveItemInternal(false)
+    override suspend fun saveItem() = saveItemInternal(false)
 
 
     companion object {

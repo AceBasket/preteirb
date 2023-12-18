@@ -1,10 +1,13 @@
 package com.example.preteirb.di
 
 import com.example.preteirb.BuildConfig
+import com.example.preteirb.api.AuthApiService
+import com.example.preteirb.api.AuthInterceptor
 import com.example.preteirb.api.ItemApiService
 import com.example.preteirb.api.ProfileApiService
 import com.example.preteirb.api.UsageApiService
 import com.example.preteirb.common.Constants
+import com.example.preteirb.data.SettingsRepository
 import com.jakewharton.retrofit2.converter.kotlinx.serialization.asConverterFactory
 import dagger.Module
 import dagger.Provides
@@ -26,17 +29,24 @@ class ApiModule {
 
     @Singleton
     @Provides
-    fun provideOkHttpClient() = if (BuildConfig.DEBUG) {
+    fun provideOkHttpClient(authInterceptor: AuthInterceptor) = if (BuildConfig.DEBUG) {
         val loggingInterceptor = HttpLoggingInterceptor()
+        loggingInterceptor.setLevel(HttpLoggingInterceptor.Level.HEADERS)
         loggingInterceptor.setLevel(HttpLoggingInterceptor.Level.BODY)
         OkHttpClient.Builder()
             .addInterceptor(loggingInterceptor)
+            .addInterceptor(authInterceptor)
             .build()
     } else {
         OkHttpClient
             .Builder()
             .build()
     }
+
+    @Singleton
+    @Provides
+    fun provideAuthInterceptor(settingsRepository: SettingsRepository): AuthInterceptor =
+        AuthInterceptor(settingsRepository)
 
     @Singleton
     @Provides
@@ -60,5 +70,10 @@ class ApiModule {
     @Singleton
     fun provideUsageApiService(retrofit: Retrofit) =
         retrofit.create(UsageApiService::class.java)
+
+    @Provides
+    @Singleton
+    fun provideAuthApiService(retrofit: Retrofit) =
+        retrofit.create(AuthApiService::class.java)
 
 }

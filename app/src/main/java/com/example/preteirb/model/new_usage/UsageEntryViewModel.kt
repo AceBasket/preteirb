@@ -12,7 +12,7 @@ import androidx.lifecycle.viewModelScope
 import com.example.preteirb.R
 import com.example.preteirb.common.snackbar.SnackbarManager
 import com.example.preteirb.data.SettingsRepository
-import com.example.preteirb.data.item.Item
+import com.example.preteirb.data.cache.items_owned.ItemOwned
 import com.example.preteirb.data.usage.Usage
 import com.example.preteirb.data.usage.UsagesRepository
 import com.example.preteirb.data.usage.toUsage
@@ -119,7 +119,7 @@ data class UsageUiState(
 )
 
 data class ItemsOwnedUiState(
-    val itemsOwned: List<Item> = listOf()
+    val itemsOwned: List<ItemOwned> = listOf()
 )
 
 data class UsageDetails(

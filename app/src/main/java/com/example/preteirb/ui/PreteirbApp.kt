@@ -29,6 +29,7 @@ import com.example.preteirb.ui.screens.booking.BookItemDestination
 import com.example.preteirb.ui.screens.items_booked.ItemsBookedDestination
 import com.example.preteirb.ui.screens.items_owned.ItemAndUsagesDetailsDestination
 import com.example.preteirb.ui.screens.items_owned.ListItemsDestination
+import com.example.preteirb.ui.screens.login.LoginDestination
 import com.example.preteirb.ui.screens.profile_selection.ProfileSelectionDestination
 import com.example.preteirb.ui.screens.search.SearchDestination
 import kotlinx.coroutines.flow.first
@@ -53,9 +54,10 @@ fun PreteirbApp(
             ListItemsDestination.route -> ListItemsDestination
             ItemAndUsagesDetailsDestination.routeWithArgs -> ItemAndUsagesDetailsDestination
             ItemsBookedDestination.route -> ItemsBookedDestination
+            LoginDestination.route -> LoginDestination
             else -> null
         }
-    } ?: ProfileSelectionDestination
+    } ?: LoginDestination
 
     var startDestination by remember { mutableStateOf(currentScreen.route) }
     LaunchedEffect(viewModel.isLoggedIn) {
@@ -63,7 +65,7 @@ fun PreteirbApp(
             if (viewModel.isLoggedIn.first() && viewModel.profileId.first() != 0) {
                 SearchDestination.route
             } else {
-                ProfileSelectionDestination.route
+                LoginDestination.route
             }
     }
 
@@ -93,7 +95,7 @@ fun PreteirbApp(
                 },
                 updateProfile = viewModel::updateUiState,
                 profile = viewModel.currentProfile,
-                isSelectProfile = appState.currentDestination?.route == ProfileSelectionDestination.route,
+                isDisplayProfileIcon = appState.currentDestination?.route == ProfileSelectionDestination.route || appState.currentDestination?.route == LoginDestination.route,
                 modifier = Modifier
                     .fillMaxWidth()
             )

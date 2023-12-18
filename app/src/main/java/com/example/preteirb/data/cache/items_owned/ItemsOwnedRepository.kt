@@ -1,5 +1,6 @@
 package com.example.preteirb.data.cache.items_owned
 
+import kotlinx.coroutines.flow.Flow
 import javax.inject.Inject
 
 class ItemsOwnedRepository @Inject constructor(private val itemOwnedDao: ItemOwnedDao) {
@@ -15,7 +16,7 @@ class ItemsOwnedRepository @Inject constructor(private val itemOwnedDao: ItemOwn
         itemOwnedDao.update(itemOwned)
     }
 
-    suspend fun getAll(): List<ItemOwned> {
+    fun getAll(): Flow<List<ItemOwned>> {
         return itemOwnedDao.getAll()
     }
 

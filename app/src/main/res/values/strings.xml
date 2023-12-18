@@ -62,4 +62,5 @@
     <string name="object_photo">Photo of object</string>
     <string name="edit_object">Edit object</string>
     <string name="remove_image">Delete image</string>
+    <string name="login">Log In</string>
 </resources>

@@ -31,18 +31,13 @@ class ListItemsViewModel @Inject constructor(
 
     val listItemsUiState: StateFlow<ItemsOwnedUiState> get() = _listItemsUiState
 
-    fun addItem(item: Item) {
-        val currentItems = _listItemsUiState.value.itemsOwned.toMutableList()
-        currentItems.add(item)
-        _listItemsUiState.value = ItemsOwnedUiState(itemsOwned = currentItems)
-    }
-
-    fun editItem(newItem: Item) {
-        val currentItems = _listItemsUiState.value.itemsOwned.toMutableList()
-        val itemIndex = currentItems.indexOfFirst { it.id == newItem.id }
-        if (itemIndex == -1) return
-        currentItems[itemIndex] = newItem
-        _listItemsUiState.value = ItemsOwnedUiState(itemsOwned = currentItems)
+    suspend fun editItem(newItem: Item) {
+//        val currentItems = _listItemsUiState.value.itemsOwned.toMutableList()
+//        val itemIndex = currentItems.indexOfFirst { it.id == newItem.id }
+//        if (itemIndex == -1) return
+//        currentItems[itemIndex] = newItem
+//        _listItemsUiState.value = ItemsOwnedUiState(itemsOwned = currentItems)
+        itemsOwnedRepository.update(newItem.toItemOwned())
     }
 
     init {
@@ -51,9 +46,14 @@ class ListItemsViewModel @Inject constructor(
             usersRepository.getAllItemsOwnedByUserStream(_userId)
                 .filterNotNull()
                 .collect { itemsOwned ->
-                    _listItemsUiState.value = ItemsOwnedUiState(itemsOwned = itemsOwned)
                     // caching items
+                    itemsOwnedRepository.deleteAll()
                     itemsOwnedRepository.insertAll(itemsOwned.map { it.toItemOwned() })
+
+                    itemsOwnedRepository.getAll()
+                        .collect {
+                            _listItemsUiState.value = ItemsOwnedUiState(itemsOwned = it)
+                        }
                 }
         }
     }

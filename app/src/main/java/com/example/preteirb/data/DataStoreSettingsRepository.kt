@@ -5,6 +5,7 @@ import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.core.booleanPreferencesKey
 import androidx.datastore.preferences.core.edit
 import androidx.datastore.preferences.core.intPreferencesKey
+import androidx.datastore.preferences.core.stringPreferencesKey
 import com.example.preteirb.data.DataStoreSettingsRepository.PreferencesKeys.USER_ID
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
@@ -15,25 +16,42 @@ class DataStoreSettingsRepository @Inject constructor(private val dataStore: Dat
     private object PreferencesKeys {
         val USER_ID = intPreferencesKey("user_id")
         val IS_LOGGED_IN = booleanPreferencesKey("is_logged_in")
+        val TOKEN = stringPreferencesKey("token")
     }
-    
+
     override suspend fun storeUserId(userId: Int) {
         dataStore.edit { preferences ->
             preferences[USER_ID] = userId
         }
     }
-    
+
     override suspend fun storeIsLoggedIn(isLoggedIn: Boolean) {
         dataStore.edit { preferences ->
             preferences[PreferencesKeys.IS_LOGGED_IN] = isLoggedIn
         }
     }
-    
+
+    override suspend fun saveToken(token: String) {
+        dataStore.edit { preferences ->
+            preferences[PreferencesKeys.TOKEN] = token
+        }
+    }
+
+    override suspend fun deleteToken() {
+        dataStore.edit { preferences ->
+            preferences.remove(PreferencesKeys.TOKEN)
+        }
+    }
+
     override fun getUserId(): Flow<Int> = dataStore.data.map { preferences ->
         preferences[USER_ID] ?: 0
     }
-    
+
     override fun getIsLoggedIn(): Flow<Boolean> = dataStore.data.map { preferences ->
         preferences[PreferencesKeys.IS_LOGGED_IN] ?: false
+    }
+
+    override fun getToken(): Flow<String?> = dataStore.data.map { preferences ->
+        preferences[PreferencesKeys.TOKEN]
     }
 }
