@@ -18,7 +18,7 @@ import javax.inject.Inject
 class ItemAndUsagesDetailsViewModel @Inject constructor(
     savedStateHandle: SavedStateHandle,
     private val itemsRepository: ItemsRepository,
-    private val settingsRepository: SettingsRepository
+    private val settingsRepository: SettingsRepository,
 ) : ItemEntryViewModel(itemsRepository, settingsRepository) {
 
     private val itemId: Int =

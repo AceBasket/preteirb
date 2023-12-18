@@ -9,6 +9,7 @@ import androidx.lifecycle.ViewModel
 import com.example.preteirb.R
 import com.example.preteirb.common.snackbar.SnackbarManager
 import com.example.preteirb.data.SettingsRepository
+import com.example.preteirb.data.cache.items_owned.ItemsOwnedRepository
 import com.example.preteirb.data.item.Item
 import com.example.preteirb.data.item.ItemsRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -19,6 +20,7 @@ import javax.inject.Inject
 open class ItemEntryViewModel @Inject constructor(
     private val itemsRepository: ItemsRepository,
     private val settingsRepository: SettingsRepository,
+    private val itemsOwnedRepository: ItemsOwnedRepository,
 ) : ViewModel() {
     var itemUiState by mutableStateOf(ItemUiState())
         private set

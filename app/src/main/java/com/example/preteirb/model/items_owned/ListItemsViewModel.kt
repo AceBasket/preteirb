@@ -3,6 +3,8 @@ package com.example.preteirb.model.items_owned
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.preteirb.data.SettingsRepository
+import com.example.preteirb.data.cache.items_owned.ItemsOwnedRepository
+import com.example.preteirb.data.cache.items_owned.toItemOwned
 import com.example.preteirb.data.item.Item
 import com.example.preteirb.data.user.UsersRepository
 import com.example.preteirb.model.new_usage.ItemsOwnedUiState
@@ -18,7 +20,8 @@ import kotlin.properties.Delegates
 @HiltViewModel
 class ListItemsViewModel @Inject constructor(
     private val usersRepository: UsersRepository,
-    private val settingsRepository: SettingsRepository
+    private val settingsRepository: SettingsRepository,
+    private val itemsOwnedRepository: ItemsOwnedRepository,
 ) : ViewModel() {
     private var _userId by Delegates.notNull<Int>()
     val userId: Int
@@ -49,6 +52,8 @@ class ListItemsViewModel @Inject constructor(
                 .filterNotNull()
                 .collect { itemsOwned ->
                     _listItemsUiState.value = ItemsOwnedUiState(itemsOwned = itemsOwned)
+                    // caching items
+                    itemsOwnedRepository.insertAll(itemsOwned.map { it.toItemOwned() })
                 }
         }
     }
