@@ -11,6 +11,7 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.automirrored.rounded.List
+import androidx.compose.material.icons.filled.AccountCircle
 import androidx.compose.material.icons.rounded.DateRange
 import androidx.compose.material.icons.rounded.Delete
 import androidx.compose.material.icons.rounded.Search
@@ -34,7 +35,9 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.graphics.vector.rememberVectorPainter
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.painterResource
@@ -87,7 +90,6 @@ fun BottomAppBar(
 ) {
     if (!isDisplayBottomAppBar) return
     NavigationBar(
-        containerColor = MaterialTheme.colorScheme.primaryContainer,
         modifier = modifier,
     ) {
         destinations.forEach { destination ->
@@ -105,7 +107,7 @@ fun BottomAppBar(
                         imageVector = destination.icon,
                         contentDescription = "${stringResource(destination.titleRes)} Icon",
                     )
-                }
+                },
             )
         }
     }
@@ -137,7 +139,7 @@ fun AppTopBar(
         modifier = modifier,
         colors = TopAppBarDefaults.topAppBarColors(
             containerColor = MaterialTheme.colorScheme.primaryContainer,
-            titleContentColor = MaterialTheme.colorScheme.primary,
+            titleContentColor = MaterialTheme.colorScheme.onPrimaryContainer,
         ),
         navigationIcon = {
             if (canNavigateBack) {
@@ -170,12 +172,17 @@ fun AppTopBar(
                             model = if (profile.profilePicture != Uri.EMPTY) {
                                 profile.profilePicture
                             } else {
-                                R.drawable.baseline_account_circle_24
+                                Icons.Default.AccountCircle
                             },
                             contentDescription = profile.username,
                             loading = placeholder(R.drawable.loading_img),
-                            failure = placeholder(R.drawable.baseline_account_circle_24),
+                            failure = placeholder(rememberVectorPainter(Icons.Default.AccountCircle)),
                             contentScale = ContentScale.Crop,
+                            colorFilter = if (profile.profilePicture != Uri.EMPTY)
+                                null
+                            else ColorFilter.tint(
+                                MaterialTheme.colorScheme.onSurface
+                            ),
                             modifier = Modifier
                                 .clip(CircleShape)
                         )
@@ -185,11 +192,11 @@ fun AppTopBar(
                             model = if (profile.profilePicture != Uri.EMPTY) {
                                 profile.profilePicture
                             } else {
-                                R.drawable.baseline_account_circle_24
+                                Icons.Default.AccountCircle
                             },
                             contentDescription = profile.username,
                             loading = placeholder(R.drawable.loading_img),
-                            failure = placeholder(R.drawable.baseline_account_circle_24),
+                            failure = placeholder(rememberVectorPainter(Icons.Default.AccountCircle)),
                             contentScale = ContentScale.Crop,
                             modifier = Modifier
                                 .size(dimensionResource(id = R.dimen.image_size_medium))

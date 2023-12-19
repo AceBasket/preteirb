@@ -15,6 +15,8 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.AccountCircle
 import androidx.compose.material3.Card
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
@@ -29,6 +31,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.vector.rememberVectorPainter
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.stringResource
@@ -125,10 +128,13 @@ fun ProfileDialog(
             )
 
             GlideImage(
-                model = selectedImageUri ?: uiState.profileDetails.profilePicture,
+                model = selectedImageUri ?: if (uiState.profileDetails.profilePicture != Uri.EMPTY)
+                    uiState.profileDetails.profilePicture
+                else
+                    Icons.Default.AccountCircle,
                 contentDescription = uiState.profileDetails.username,
                 loading = placeholder(R.drawable.loading_img),
-                failure = placeholder(R.drawable.baseline_account_circle_24),
+                failure = placeholder(rememberVectorPainter(Icons.Default.AccountCircle)),
                 contentScale = ContentScale.Crop,
                 modifier = Modifier
                     .size(dimensionResource(id = R.dimen.image_size_large))
