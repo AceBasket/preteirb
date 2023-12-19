@@ -29,7 +29,9 @@ import com.example.preteirb.ui.screens.booking.BookItemDestination
 import com.example.preteirb.ui.screens.items_booked.ItemsBookedDestination
 import com.example.preteirb.ui.screens.items_owned.ItemAndUsagesDetailsDestination
 import com.example.preteirb.ui.screens.items_owned.ListItemsDestination
+import com.example.preteirb.ui.screens.login.ChooseAuthenticationDestination
 import com.example.preteirb.ui.screens.login.LoginDestination
+import com.example.preteirb.ui.screens.login.SignUpDestination
 import com.example.preteirb.ui.screens.profile_selection.ProfileSelectionDestination
 import com.example.preteirb.ui.screens.search.SearchDestination
 import kotlinx.coroutines.flow.first
@@ -55,9 +57,11 @@ fun PreteirbApp(
             ItemAndUsagesDetailsDestination.routeWithArgs -> ItemAndUsagesDetailsDestination
             ItemsBookedDestination.route -> ItemsBookedDestination
             LoginDestination.route -> LoginDestination
+            SignUpDestination.route -> SignUpDestination
+            ChooseAuthenticationDestination.route -> ChooseAuthenticationDestination
             else -> null
         }
-    } ?: LoginDestination
+    } ?: ChooseAuthenticationDestination
 
     var startDestination by remember { mutableStateOf(currentScreen.route) }
     LaunchedEffect(viewModel.isLoggedIn) {
@@ -65,7 +69,7 @@ fun PreteirbApp(
             if (viewModel.isLoggedIn.first() && viewModel.profileId.first() != 0) {
                 SearchDestination.route
             } else {
-                LoginDestination.route
+                ChooseAuthenticationDestination.route
             }
     }
 

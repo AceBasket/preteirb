@@ -7,4 +7,6 @@ class NetworkAccountsRepository @Inject constructor(private val authApiService: 
     AccountsRepository {
     override suspend fun login(loginDto: LoginDto): LoginResponseDto =
         authApiService.login(loginDto)
+
+    override suspend fun signUp(loginDto: LoginDto): LoginResponseDto = authApiService.signUp(loginDto)
 }
