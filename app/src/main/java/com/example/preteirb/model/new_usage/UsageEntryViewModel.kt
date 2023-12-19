@@ -4,7 +4,6 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
-import androidx.compose.runtime.snapshots.SnapshotStateList
 import androidx.compose.runtime.toMutableStateList
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
@@ -67,7 +66,7 @@ abstract class UsageEntryViewModel(
         }
     }
 
-    fun validatePeriods(periods: List<UsagePeriod>): Boolean {
+    private fun validatePeriods(periods: List<UsagePeriod>): Boolean {
         return periods.isNotEmpty() && periods.all { it.start < it.end } && periods.none {
             isPeriodOverlapping(
                 it
@@ -97,11 +96,20 @@ abstract class UsageEntryViewModel(
         if (!uiState.isEntryValid) {
             return
         }
-        val newPeriods = uiState.usageDetails.period.toMutableList()
-        newPeriods.add(lastPeriod ?: return)
+        // add last period to the list of periods
+        if (lastPeriod != null) {
+            val newPeriods = uiState.usageDetails.period.toMutableList()
+            newPeriods.add(lastPeriod)
+            updateUiState(uiState.usageDetails.copy(period = newPeriods.toMutableStateList()))
+
+            // check if the new list of periods is valid
+            if (!uiState.isEntryValid) {
+                return
+            }
+        }
 //        try {
         usagesRepository.insertUsageList(
-            uiState.usageDetails.copy(period = newPeriods.toMutableStateList()).toUsages()
+            uiState.usageDetails.toUsages()
         )
         SnackbarManager.showMessage(R.string.save_usages_success)
 //        } catch (e: Exception) {
@@ -126,7 +134,7 @@ data class UsageDetails(
     val usageId: Int = 0,
     val userId: Int = 0,
     val itemId: Int = 0,
-    val period: SnapshotStateList<UsagePeriod> = mutableStateListOf(),
+    val period: List<UsagePeriod> = mutableStateListOf(),
 )
 
 data class UsagePeriod(

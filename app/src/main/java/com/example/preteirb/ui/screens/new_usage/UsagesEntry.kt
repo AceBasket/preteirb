@@ -42,7 +42,7 @@ fun AddUsages(
             UsagePeriodListItem(
                 onNewUsagePeriodSelected = {
                     if (it.first != null && it.second != null) {
-                        val periodUpdated = usageUiState.usageDetails.period
+                        val periodUpdated = usageUiState.usageDetails.period.toMutableList()
                         periodUpdated[index] = UsagePeriod(it.first!!, it.second!!)
 
                         onUsageValueChange(
@@ -52,10 +52,10 @@ fun AddUsages(
                         )
                     }
                 },
-                notSelectablePeriods = usageUiState.bookedPeriods + usageUiState.usageDetails.period,
+                notSelectablePeriods = usageUiState.bookedPeriods + usageUiState.usageDetails.period - item,
                 usagePeriod = item,
                 onDeleteUsagePeriod = {
-                    val periodRemoved = usageUiState.usageDetails.period
+                    val periodRemoved = usageUiState.usageDetails.period.toMutableList()
                     periodRemoved.removeAt(index)
                     onUsageValueChange(
                         usageUiState.usageDetails.copy(
@@ -77,7 +77,7 @@ fun AddUsages(
                 },
                 onAddUsagePeriod = {
                     if (it.first != null && it.second != null) {
-                        val periodAdded = usageUiState.usageDetails.period
+                        val periodAdded = usageUiState.usageDetails.period.toMutableList()
                         periodAdded.add(UsagePeriod(it.first!!, it.second!!))
 
                         onUsageValueChange(

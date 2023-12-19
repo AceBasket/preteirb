@@ -22,7 +22,7 @@ class NetworkUsagesRepository @Inject constructor(
 
     override suspend fun insertUsageList(usages: List<Usage>) {
         usages.forEach() {
-            usageApiService.createUsage(it.toUsageWithStringDate())
+            insertUsage(it)
         }
     }
 
