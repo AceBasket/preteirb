@@ -38,8 +38,8 @@ fun LoginScreen(
         login = {
             coroutineScope.launch {
                 logInViewModel.login()
+                navigateToSelectProfile()
             }
-            navigateToSelectProfile()
         },
         modifier = modifier
     )

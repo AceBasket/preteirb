@@ -99,7 +99,10 @@ fun PreteirbApp(
                 },
                 updateProfile = viewModel::updateUiState,
                 profile = viewModel.currentProfile,
-                isDisplayProfileIcon = appState.currentDestination?.route == ProfileSelectionDestination.route || appState.currentDestination?.route == LoginDestination.route,
+                isDisplayProfileIcon = appState.currentDestination?.route == ProfileSelectionDestination.route
+                        || appState.currentDestination?.route == LoginDestination.route
+                        || appState.currentDestination?.route == SignUpDestination.route
+                        || appState.currentDestination?.route == ChooseAuthenticationDestination.route,
                 modifier = Modifier
                     .fillMaxWidth()
             )
@@ -109,7 +112,10 @@ fun PreteirbApp(
                 destinations = appState.topLevelDestinations,
                 currentDestination = appState.currentDestination,
                 onNavigateToDestination = appState::navigateToTopLevelDestination,
-                isDisplayBottomAppBar = appState.currentDestination?.route != ProfileSelectionDestination.route,
+                isDisplayBottomAppBar = appState.currentDestination?.route != ProfileSelectionDestination.route
+                        && appState.currentDestination?.route != LoginDestination.route
+                        && appState.currentDestination?.route != SignUpDestination.route
+                        && appState.currentDestination?.route != ChooseAuthenticationDestination.route,
                 modifier = Modifier
                     .fillMaxWidth()
             )

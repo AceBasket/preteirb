@@ -1,6 +1,5 @@
 package com.example.preteirb.ui.screens.items_booked
 
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -9,6 +8,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedCard
 import androidx.compose.material3.Text
@@ -16,12 +16,15 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.dimensionResource
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.hilt.navigation.compose.hiltViewModel
+import com.bumptech.glide.integration.compose.ExperimentalGlideComposeApi
+import com.bumptech.glide.integration.compose.GlideImage
+import com.bumptech.glide.integration.compose.placeholder
 import com.example.preteirb.R
 import com.example.preteirb.data.item.ItemWithOwner
 import com.example.preteirb.data.usage.UsageWithItemAndUser
@@ -62,8 +65,6 @@ fun ItemsBooked(
                 usage = data,
                 modifier = modifier
                     .padding(
-//                        start = dimensionResource(id = R.dimen.padding_large),
-//                        end = dimensionResource(id = R.dimen.padding_large),
                         bottom = dimensionResource(id = R.dimen.padding_small)
                     )
             )
@@ -72,6 +73,7 @@ fun ItemsBooked(
 
 }
 
+@OptIn(ExperimentalGlideComposeApi::class)
 @Composable
 fun ItemBookedCard(
     usage: UsageWithItemAndUser,
@@ -81,13 +83,15 @@ fun ItemBookedCard(
         modifier = modifier,
     ) {
         Row {
-            Image(
-                painter = painterResource(id = R.drawable.ic_broken_image),
-                contentDescription = null,
+            GlideImage(
+                model = usage.item.image ?: R.drawable.baseline_image_24,
+                contentDescription = usage.item.name,
+                loading = placeholder(R.drawable.loading_img),
+                failure = placeholder(R.drawable.baseline_broken_image_24),
                 contentScale = ContentScale.Crop,
                 modifier = Modifier
-//                    .aspectRatio(1f/1f)
                     .size(dimensionResource(id = R.dimen.image_size_medium))
+                    .clip(RoundedCornerShape(dimensionResource(id = R.dimen.corner_radius_small)))
             )
             Column(
                 modifier = Modifier

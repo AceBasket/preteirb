@@ -33,8 +33,8 @@ fun SignUpScreen(
         signUp = {
             coroutineScope.launch {
                 viewModel.signUp()
+                navigateToSelectProfile()
             }
-            navigateToSelectProfile()
         },
         modifier = modifier
     )
