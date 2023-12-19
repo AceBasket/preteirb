@@ -1,14 +1,34 @@
 package com.example.preteirb.ui.screens.new_usage
 
 import androidx.annotation.StringRes
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.RowScope
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.Check
 import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material.icons.filled.Edit
-import androidx.compose.material3.*
+import androidx.compose.material3.DatePickerDialog
+import androidx.compose.material3.DateRangePicker
+import androidx.compose.material3.DateRangePickerState
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
+import androidx.compose.material3.IconButtonDefaults
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.OutlinedButton
+import androidx.compose.material3.SelectableDates
+import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
+import androidx.compose.material3.rememberDateRangePickerState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -46,7 +66,10 @@ fun EmptyNewUsagePeriod(
             isModifiable = true,
             trailingButtons = {
                 IconButton(
-                    onClick = { onAddUsagePeriod(Pair(startPeriod, endPeriod)) },
+                    onClick = {
+                        onAddUsagePeriod(Pair(startPeriod, endPeriod))
+                        it()
+                    },
                     colors = IconButtonDefaults.iconButtonColors(containerColor = MaterialTheme.colorScheme.primaryContainer),
                 ) {
                     Icon(
@@ -183,7 +206,7 @@ fun NewUsagePeriod(
     onNewUsagePeriodSelected: (Pair<Long?, Long?>) -> Unit,
     notSelectablePeriods: List<UsagePeriod>,
     isModifiable: Boolean,
-    trailingButtons: @Composable RowScope.() -> Unit,
+    trailingButtons: @Composable RowScope.(() -> Unit) -> Unit,
     modifier: Modifier = Modifier,
     initialValues: Pair<Long?, Long?> = Pair(null, null),
 ) {
@@ -225,7 +248,12 @@ fun NewUsagePeriod(
             modifier = Modifier.testTag("endUsageDateField")
         )
         Spacer(modifier = Modifier.padding(dimensionResource(id = R.dimen.padding_extra_small)))
-        trailingButtons()
+        trailingButtons {
+            if (initialValues.first == null && initialValues.second == null) {
+                startDateTime = null
+                endDateTime = null
+            }
+        }
     }
 
     if (isShowDatePicker) {

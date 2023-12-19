@@ -37,6 +37,7 @@ fun AddUsages(
     LazyColumn(modifier = modifier) {
         itemsIndexed(
             items = usageUiState.usageDetails.period,
+            key = { _, item -> item.hashCode() }
         ) { index, item ->
             UsagePeriodListItem(
                 onNewUsagePeriodSelected = {
