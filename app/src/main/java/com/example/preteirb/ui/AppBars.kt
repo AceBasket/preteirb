@@ -50,10 +50,12 @@ import com.bumptech.glide.integration.compose.ExperimentalGlideComposeApi
 import com.bumptech.glide.integration.compose.GlideImage
 import com.bumptech.glide.integration.compose.placeholder
 import com.example.compose.AppTheme
+import com.example.preteirb.CurrentUser
 import com.example.preteirb.R
 import com.example.preteirb.common.ProfileEditor
 import com.example.preteirb.model.ProfileDetails
 import com.example.preteirb.model.ProfileUiState
+import com.example.preteirb.model.toProfileDetails
 import com.example.preteirb.ui.screens.items_booked.ItemsBookedDestination
 import com.example.preteirb.ui.screens.items_owned.ListItemsDestination
 import com.example.preteirb.ui.screens.search.SearchDestination
@@ -125,7 +127,7 @@ fun AppTopBar(
     canNavigateBack: Boolean,
     navigateUp: () -> Unit,
     logOut: () -> Unit,
-    profile: ProfileDetails,
+    profile: CurrentUser,
     profileUiState: ProfileUiState,
     updateProfile: (ProfileDetails) -> Unit,
     onSaveChangesToProfile: () -> Unit,
@@ -169,16 +171,14 @@ fun AppTopBar(
                     IconButton(onClick = { isExpanded = true }) {
                         Log.d("sync", "profile: $profile")
                         GlideImage(
-                            model = if (profile.profilePicture != Uri.EMPTY) {
-                                profile.profilePicture
-                            } else {
+                            model = profile.profilePic.ifBlank {
                                 Icons.Default.AccountCircle
                             },
                             contentDescription = profile.username,
                             loading = placeholder(R.drawable.loading_img),
                             failure = placeholder(rememberVectorPainter(Icons.Default.AccountCircle)),
                             contentScale = ContentScale.Crop,
-                            colorFilter = if (profile.profilePicture != Uri.EMPTY)
+                            colorFilter = if (profile.profilePic.isNotBlank())
                                 null
                             else ColorFilter.tint(
                                 MaterialTheme.colorScheme.onSurface
@@ -189,9 +189,7 @@ fun AppTopBar(
                     }
                     DropdownMenu(expanded = isExpanded, onDismissRequest = { isExpanded = false }) {
                         GlideImage(
-                            model = if (profile.profilePicture != Uri.EMPTY) {
-                                profile.profilePicture
-                            } else {
+                            model = profile.profilePic.ifBlank {
                                 Icons.Default.AccountCircle
                             },
                             contentDescription = profile.username,
@@ -218,7 +216,9 @@ fun AppTopBar(
                                 Text(text = stringResource(id = R.string.delete_picture))
                             },
                             onClick = {
-                                updateProfile(profile.copy(profilePicture = Uri.EMPTY))
+                                updateProfile(
+                                    profile.toProfileDetails().copy(profilePicture = Uri.EMPTY)
+                                )
                                 onSaveChangesToProfile()
                             },
                             leadingIcon = {
@@ -275,7 +275,7 @@ fun TopAppBarPreview() {
             profileUiState = ProfileUiState(),
             updateProfile = {},
             onSaveChangesToProfile = {},
-            profile = ProfileDetails(),
+            profile = CurrentUser.getDefaultInstance(),
         )
     }
 }

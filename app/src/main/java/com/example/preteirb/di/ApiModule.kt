@@ -7,7 +7,7 @@ import com.example.preteirb.api.ItemApiService
 import com.example.preteirb.api.ProfileApiService
 import com.example.preteirb.api.UsageApiService
 import com.example.preteirb.common.Constants
-import com.example.preteirb.data.SettingsRepository
+import com.example.preteirb.data.cache.current_user.CurrentUserRepository
 import com.jakewharton.retrofit2.converter.kotlinx.serialization.asConverterFactory
 import dagger.Module
 import dagger.Provides
@@ -45,8 +45,8 @@ class ApiModule {
 
     @Singleton
     @Provides
-    fun provideAuthInterceptor(settingsRepository: SettingsRepository): AuthInterceptor =
-        AuthInterceptor(settingsRepository)
+    fun provideAuthInterceptor(currentUserRepository: CurrentUserRepository): AuthInterceptor =
+        AuthInterceptor(currentUserRepository)
 
     @Singleton
     @Provides

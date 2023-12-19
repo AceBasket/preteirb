@@ -108,7 +108,8 @@ fun ProfileSelectionItem(
         text = profile.username,
         content = {
             GlideImage(
-                model = profile.profilePicture ?: Icons.Default.AccountCircle,
+                model = profile.profilePicture
+                    ?: rememberVectorPainter(Icons.Default.AccountCircle),
                 contentDescription = profile.username,
                 loading = placeholder(R.drawable.loading_img),
                 failure = placeholder(rememberVectorPainter(Icons.Default.AccountCircle)),

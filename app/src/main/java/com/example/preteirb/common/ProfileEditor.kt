@@ -131,7 +131,7 @@ fun ProfileDialog(
                 model = selectedImageUri ?: if (uiState.profileDetails.profilePicture != Uri.EMPTY)
                     uiState.profileDetails.profilePicture
                 else
-                    Icons.Default.AccountCircle,
+                    rememberVectorPainter(Icons.Default.AccountCircle),
                 contentDescription = uiState.profileDetails.username,
                 loading = placeholder(R.drawable.loading_img),
                 failure = placeholder(rememberVectorPainter(Icons.Default.AccountCircle)),

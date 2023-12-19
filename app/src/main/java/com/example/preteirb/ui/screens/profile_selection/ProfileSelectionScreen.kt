@@ -36,7 +36,6 @@ import com.example.compose.AppTheme
 import com.example.preteirb.R
 import com.example.preteirb.common.ProfileCreator
 import com.example.preteirb.data.user.User
-import com.example.preteirb.model.PreteirbAppViewModel
 import com.example.preteirb.model.ProfileDetails
 import com.example.preteirb.model.ProfileUiState
 import com.example.preteirb.model.profile_selection.ProfileSelectionUiState
@@ -54,7 +53,6 @@ fun ProfileSelectionScreen(
     navigateToSearch: () -> Unit,
     modifier: Modifier = Modifier,
     viewModel: ProfileSelectionViewModel = hiltViewModel(),
-    addProfileViewModel: PreteirbAppViewModel = hiltViewModel(),
 ) {
     val uiState by viewModel.uiState.collectAsState()
     val coroutine = rememberCoroutineScope()
@@ -66,13 +64,13 @@ fun ProfileSelectionScreen(
         onAddAccount = {
             coroutine.launch {
                 val user = viewModel.saveNewProfile()
-                addProfileViewModel.logIn(user)
+                viewModel.logIn(user)
             }
             navigateToSearch()
         },
         onClickOnProfile = {
             coroutine.launch {
-                addProfileViewModel.logIn(it)
+                viewModel.logIn(it)
             }
             navigateToSearch()
         },

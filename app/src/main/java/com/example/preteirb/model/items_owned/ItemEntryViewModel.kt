@@ -5,25 +5,36 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import com.example.preteirb.R
 import com.example.preteirb.common.snackbar.SnackbarManager
-import com.example.preteirb.data.SettingsRepository
+import com.example.preteirb.data.cache.current_user.CurrentUserRepository
 import com.example.preteirb.data.cache.items_owned.ItemsOwnedRepository
 import com.example.preteirb.data.cache.items_owned.toItemOwned
 import com.example.preteirb.data.item.Item
 import com.example.preteirb.data.item.ItemsRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
 open class ItemEntryViewModel @Inject constructor(
     private val itemsRepository: ItemsRepository,
-    private val settingsRepository: SettingsRepository,
+    private val currentUserRepository: CurrentUserRepository,
     private val itemsOwnedRepository: ItemsOwnedRepository,
 ) : ViewModel() {
     var itemUiState by mutableStateOf(ItemUiState())
         private set
+
+    private var userOwnerId by mutableStateOf(0)
+
+    init {
+        viewModelScope.launch {
+            currentUserRepository.currentUserFlow.collect {
+                userOwnerId = it.user.id
+            }
+        }
+    }
 
     fun updateUiState(itemDetails: ItemDetails) {
         itemUiState =
@@ -39,7 +50,6 @@ open class ItemEntryViewModel @Inject constructor(
     open suspend fun saveItem() = saveItemInternal(true)
 
     protected suspend fun saveItemInternal(isNewItem: Boolean) {
-        val userOwnerId = settingsRepository.getUserId().first()
         updateUiState(itemUiState.itemDetails.copy(ownerId = userOwnerId))
         if (validateInput()) {
 //            try {

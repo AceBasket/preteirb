@@ -1,67 +1,66 @@
 package com.example.preteirb.model
 
+import android.net.Uri
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.viewModelScope
-import com.example.preteirb.data.SettingsRepository
+import com.example.preteirb.CurrentUser
+import com.example.preteirb.data.cache.current_user.CurrentUserRepository
 import com.example.preteirb.data.user.User
 import com.example.preteirb.data.user.UsersRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.filterNotNull
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
 class PreteirbAppViewModel @Inject constructor(
-    private val settingsRepository: SettingsRepository,
-    private val usersRepository: UsersRepository
-) : ProfileViewModel(settingsRepository, usersRepository) {
-    var currentProfile: ProfileDetails by mutableStateOf(ProfileDetails())
+    usersRepository: UsersRepository,
+    private val currentUserRepository: CurrentUserRepository,
+) : ProfileViewModel(usersRepository) {
+    var currentProfile: CurrentUser by mutableStateOf(CurrentUser.getDefaultInstance())
+        private set
+
+    var isLoggedIn: Boolean by mutableStateOf(false)
+        private set
+
+    var isProfileSelected: Boolean by mutableStateOf(false)
         private set
 
     init {
         viewModelScope.launch {
-            settingsRepository.getUserId().collect {
-                if (it > 0) {
-                    usersRepository.getUserStream(it)
-                        .filterNotNull()
-                        .collect { user ->
-                            currentProfile = user.toProfileDetails()
-                            profileUiState = ProfileUiState(profileDetails = currentProfile)
-                        }
+            currentUserRepository.currentUserFlow.collect {
+                isLoggedIn = it.loggedIn
+                isProfileSelected = it.profileSelected
+                if (isLoggedIn && isProfileSelected) {
+                    currentProfile = it.user
+                    updateUiState(it.user.toProfileDetails())
                 }
             }
         }
     }
 
-    fun logOut() {
-        viewModelScope.launch {
-            settingsRepository.storeIsLoggedIn(false)
-        }
-    }
-
-    suspend fun logIn(user: User) {
-        settingsRepository.storeUserId(user.id)
-        settingsRepository.storeIsLoggedIn(true)
-        currentProfile = user.toProfileDetails()
-        profileUiState = profileUiState.copy(profileDetails = currentProfile)
-
+    suspend fun logOut() {
+        currentUserRepository.setIsProfileSelected(false)
+        currentUserRepository.clearCurrentUser()
     }
 
     suspend fun saveProfileModifications() {
-        saveProfile(false)
+        val changedProfile = saveProfile(false)
+        currentUserRepository.setCurrentUser(changedProfile)
     }
 
     override suspend fun saveProfile(isNewProfile: Boolean): User {
         val newUser = super.saveProfile(isNewProfile)
-        currentProfile = newUser.toProfileDetails()
+        currentUserRepository.setCurrentUser(newUser)
         return newUser
     }
+}
 
-    var profileId: Flow<Int> = settingsRepository.getUserId()
-        private set
-
-    val isLoggedIn: Flow<Boolean> = settingsRepository.getIsLoggedIn()
+fun CurrentUser.toProfileDetails(): ProfileDetails {
+    return ProfileDetails(
+        id = this.id,
+        username = this.username,
+        profilePicture = Uri.parse(this.profilePic),
+    )
 }

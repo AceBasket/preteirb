@@ -1,0 +1,18 @@
+syntax = "proto3";
+
+option java_package = "com.example.preteirb";
+option java_multiple_files = true;
+
+
+message CurrentUserInfo {
+    CurrentUser user = 1;
+    string token = 2;
+    bool logged_in = 3;
+    bool profile_selected = 4;
+}
+
+message CurrentUser {
+    int32 id = 1;
+    string username = 2;
+    string profile_pic = 3;
+}

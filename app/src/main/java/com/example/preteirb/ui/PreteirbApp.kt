@@ -8,12 +8,7 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Snackbar
 import androidx.compose.material3.SnackbarHost
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.tooling.preview.Preview
@@ -34,7 +29,6 @@ import com.example.preteirb.ui.screens.login.LoginDestination
 import com.example.preteirb.ui.screens.login.SignUpDestination
 import com.example.preteirb.ui.screens.profile_selection.ProfileSelectionDestination
 import com.example.preteirb.ui.screens.search.SearchDestination
-import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 
 @Composable
@@ -63,14 +57,12 @@ fun PreteirbApp(
         }
     } ?: ChooseAuthenticationDestination
 
-    var startDestination by remember { mutableStateOf(currentScreen.route) }
-    LaunchedEffect(viewModel.isLoggedIn) {
-        startDestination =
-            if (viewModel.isLoggedIn.first() && viewModel.profileId.first() != 0) {
-                SearchDestination.route
-            } else {
-                ChooseAuthenticationDestination.route
-            }
+    val startDestination = if (viewModel.isProfileSelected) {
+        SearchDestination.route
+    } else if (viewModel.isLoggedIn) {
+        ProfileSelectionDestination.route
+    } else {
+        ChooseAuthenticationDestination.route
     }
 
     val coroutineScope = rememberCoroutineScope()

@@ -5,12 +5,10 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
-import com.example.preteirb.data.SettingsRepository
 import com.example.preteirb.data.user.User
 import com.example.preteirb.data.user.UsersRepository
 
 open class ProfileViewModel(
-    private val settingsRepository: SettingsRepository,
     private val usersRepository: UsersRepository
 ) : ViewModel() {
     var profileUiState: ProfileUiState by mutableStateOf(ProfileUiState())

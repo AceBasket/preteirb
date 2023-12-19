@@ -1,10 +1,11 @@
 package com.example.preteirb.model.profile_selection
 
 import androidx.lifecycle.viewModelScope
-import com.example.preteirb.data.SettingsRepository
+import com.example.preteirb.data.cache.current_user.CurrentUserRepository
 import com.example.preteirb.data.user.User
 import com.example.preteirb.data.user.UsersRepository
 import com.example.preteirb.model.ProfileViewModel
+import com.example.preteirb.model.toProfileDetails
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
@@ -18,9 +19,9 @@ import javax.inject.Inject
  */
 @HiltViewModel
 class ProfileSelectionViewModel @Inject constructor(
-    private val settingsRepository: SettingsRepository,
+    private val currentUserRepository: CurrentUserRepository,
     private val usersRepository: UsersRepository,
-) : ProfileViewModel(settingsRepository, usersRepository) {
+) : ProfileViewModel(usersRepository) {
     private lateinit var _uiState: StateFlow<ProfileSelectionUiState>
 
     val uiState: StateFlow<ProfileSelectionUiState>
@@ -40,6 +41,12 @@ class ProfileSelectionViewModel @Inject constructor(
 
     suspend fun saveNewProfile(): User {
         return saveProfile(true)
+    }
+
+    suspend fun logIn(user: User) {
+        currentUserRepository.setIsProfileSelected(true)
+        currentUserRepository.setCurrentUser(user)
+        profileUiState = profileUiState.copy(profileDetails = user.toProfileDetails())
     }
 
     companion object {
