@@ -4,13 +4,6 @@ import com.example.preteirb.data.item.ItemWithOwner
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
-//data class UsageWithItemAndUser(
-//    @Embedded
-//    val item: ItemWithOwner,
-//    @Embedded
-//    val usage: Usage
-//)
-
 @Serializable
 data class UsageWithItemAndUserStringDate(
     val id: Int,
@@ -33,16 +26,6 @@ fun UsageWithItemAndUserStringDate.toUsageWithItemAndUser(): UsageWithItemAndUse
         id = id,
         startDate = getDateTime(startDate),
         endDate = getDateTime(endDate),
-        item = item,
-        user = user
-    )
-}
-
-fun UsageWithItemAndUser.toUsageWithItemAndUserStringDate(): UsageWithItemAndUserStringDate {
-    return UsageWithItemAndUserStringDate(
-        id = id,
-        startDate = getDashedNumeralDateFormat(startDate),
-        endDate = getDashedNumeralDateFormat(endDate),
         item = item,
         user = user
     )

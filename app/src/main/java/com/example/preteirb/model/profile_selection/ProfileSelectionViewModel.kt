@@ -1,6 +1,7 @@
 package com.example.preteirb.model.profile_selection
 
 import androidx.lifecycle.viewModelScope
+import com.example.preteirb.common.Constants.TIMEOUT_MILLIS
 import com.example.preteirb.data.cache.current_user.CurrentUserRepository
 import com.example.preteirb.data.user.User
 import com.example.preteirb.data.user.UsersRepository
@@ -47,10 +48,6 @@ class ProfileSelectionViewModel @Inject constructor(
         currentUserRepository.setIsProfileSelected(true)
         currentUserRepository.setCurrentUser(user)
         profileUiState = profileUiState.copy(profileDetails = user.toProfileDetails())
-    }
-
-    companion object {
-        private const val TIMEOUT_MILLIS = 5_000L
     }
 }
 

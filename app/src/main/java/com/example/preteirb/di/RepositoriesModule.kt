@@ -1,7 +1,5 @@
 package com.example.preteirb.di
 
-import com.example.preteirb.data.DataStoreSettingsRepository
-import com.example.preteirb.data.SettingsRepository
 import com.example.preteirb.data.account.AccountsRepository
 import com.example.preteirb.data.account.NetworkAccountsRepository
 import com.example.preteirb.data.item.ItemsRepository
@@ -26,10 +24,7 @@ abstract class RepositoriesModule {
 
     @Binds
     abstract fun bindUsersRepository(networkUsersRepository: NetworkUsersRepository): UsersRepository
-
-    @Binds
-    abstract fun bindSettingsRepository(dataStoreSettingsRepository: DataStoreSettingsRepository): SettingsRepository
-
+    
     @Binds
     abstract fun bindAccountsRepository(networkAccountsRepository: NetworkAccountsRepository): AccountsRepository
 }

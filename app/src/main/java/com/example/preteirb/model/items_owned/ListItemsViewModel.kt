@@ -1,8 +1,5 @@
 package com.example.preteirb.model.items_owned
 
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.preteirb.data.cache.current_user.CurrentUserRepository
@@ -23,8 +20,6 @@ class ListItemsViewModel @Inject constructor(
     private val currentUserRepository: CurrentUserRepository,
     private val itemsOwnedRepository: ItemsOwnedRepository,
 ) : ViewModel() {
-    var userId by mutableStateOf(0)
-        private set
 
     private val _listItemsUiState = MutableStateFlow(ItemsOwnedUiState())
 
@@ -34,8 +29,7 @@ class ListItemsViewModel @Inject constructor(
     init {
         viewModelScope.launch {
             currentUserRepository.currentUserFlow.collect { currentUserInfo ->
-                userId = currentUserInfo.user.id
-                usersRepository.getAllItemsOwnedByUserStream(userId)
+                usersRepository.getAllItemsOwnedByUserStream(currentUserInfo.user.id)
                     .filterNotNull()
                     .collect { itemsOwned ->
                         // caching items

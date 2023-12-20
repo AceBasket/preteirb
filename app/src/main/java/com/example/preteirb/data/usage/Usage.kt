@@ -7,29 +7,6 @@ import java.time.LocalDate
 import java.time.ZoneId
 import java.time.format.DateTimeFormatter
 
-//@Entity(
-//    tableName = "usages",
-//    foreignKeys = [
-//        ForeignKey(entity = Item::class, parentColumns = ["itemId"], childColumns = ["itemUsedId"]),
-//        ForeignKey(
-//            entity = User::class,
-//            parentColumns = ["userId"],
-//            childColumns = ["userUsingItemId"]
-//        )
-//    ],
-//    indices = [
-//        Index(value = ["userUsingItemId"]), Index(value = ["itemUsedId"])
-//    ]
-//)
-//data class Usage(
-//    @PrimaryKey(autoGenerate = true)
-//    val usageId: Int = 1,
-//    val itemUsedId: Int,
-//    val userUsingItemId: Int,
-//    val startDateTime: Long,
-//    val endDateTime: Long
-//)
-
 @Serializable
 data class UsageWithStringDate(
     val id: Int,
@@ -65,7 +42,7 @@ fun Usage.toUsageWithStringDate() = UsageWithStringDate(
 
 fun getDateTime(date: String): Long {
 //    convert date which is in format "u-M-d" to epoch milliseconds
-    return LocalDate.parse(date).atStartOfDay(ZoneId.systemDefault()).toInstant().toEpochMilli();
+    return LocalDate.parse(date).atStartOfDay(ZoneId.systemDefault()).toInstant().toEpochMilli()
 }
 
 fun getDashedNumeralDateFormat(dateTime: Long): String {
@@ -79,15 +56,6 @@ fun getDashedNumeralDateFormat(dateTime: Long): String {
 
 fun getShortenedDateFormat(dateTime: Long): String {
     return DateTimeFormatter.ofPattern("d MMM uuuu").withZone(ZoneId.systemDefault())
-        .format(
-            Instant.ofEpochMilli(
-                dateTime
-            )
-        )
-}
-
-fun getLongDateFormat(dateTime: Long): String {
-    return DateTimeFormatter.ofPattern("d MMMM uuuu").withZone(ZoneId.systemDefault())
         .format(
             Instant.ofEpochMilli(
                 dateTime

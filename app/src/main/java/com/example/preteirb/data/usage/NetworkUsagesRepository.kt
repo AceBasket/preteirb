@@ -6,8 +6,8 @@ import kotlinx.coroutines.flow.flow
 import javax.inject.Inject
 
 class NetworkUsagesRepository @Inject constructor(
-    val usageApiService: UsageApiService,
-    val itemApiService: ItemApiService
+    private val usageApiService: UsageApiService,
+    private val itemApiService: ItemApiService
 ) : UsagesRepository {
     override fun getAllUsagesStream() =
         flow { emit(usageApiService.getUsages().map { it.toUsage() }) }
@@ -21,7 +21,7 @@ class NetworkUsagesRepository @Inject constructor(
         usageApiService.createUsage(usage.toUsageWithStringDate()).id.toLong()
 
     override suspend fun insertUsageList(usages: List<Usage>) {
-        usages.forEach() {
+        usages.forEach {
             insertUsage(it)
         }
     }

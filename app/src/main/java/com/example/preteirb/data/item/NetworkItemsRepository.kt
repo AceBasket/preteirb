@@ -17,7 +17,7 @@ import javax.inject.Inject
 
 class NetworkItemsRepository @Inject constructor(
     @ApplicationContext private val applicationContext: Context,
-    val itemApiService: ItemApiService
+    private val itemApiService: ItemApiService
 ) :
     ItemsRepository {
     override suspend fun getAllItemsStream() = flow { emit(itemApiService.getItems()) }

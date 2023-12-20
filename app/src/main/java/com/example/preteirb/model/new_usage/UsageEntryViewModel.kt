@@ -10,7 +10,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.preteirb.R
 import com.example.preteirb.common.snackbar.SnackbarManager
-import com.example.preteirb.data.SettingsRepository
+import com.example.preteirb.data.cache.current_user.CurrentUserRepository
 import com.example.preteirb.data.cache.items_owned.ItemOwned
 import com.example.preteirb.data.usage.Usage
 import com.example.preteirb.data.usage.UsagesRepository
@@ -23,7 +23,7 @@ import kotlinx.coroutines.launch
 abstract class UsageEntryViewModel(
     savedStateHandle: SavedStateHandle,
     private val usagesRepository: UsagesRepository,
-    private val settingsRepository: SettingsRepository
+    private val currentUserRepository: CurrentUserRepository,
 ) : ViewModel() {
 
     protected val itemId: Int = checkNotNull(savedStateHandle[BookItemDestination.itemIdArg])
@@ -36,14 +36,17 @@ abstract class UsageEntryViewModel(
 
     init {
         viewModelScope.launch {
-            uiState = UsageUiState(
-                usageDetails = UsageDetails(
-                    userId = settingsRepository.getUserId().first(),
-                    itemId = itemId
-                ),
-                bookedPeriods = usagesRepository.getAllUsagesByItemIdStream(itemId)
-                    .first().usages.map { it.toUsage().toUsagePeriod() }
-            )
+            val bookedPeriods = usagesRepository.getAllUsagesByItemIdStream(itemId)
+                .first().usages.map { it.toUsage().toUsagePeriod() }
+            currentUserRepository.currentUserFlow.collect {
+                uiState = uiState.copy(
+                    usageDetails = uiState.usageDetails.copy(
+                        userId = it.user.id,
+                        itemId = itemId
+                    ),
+                    bookedPeriods = bookedPeriods
+                )
+            }
         }
     }
 
@@ -68,9 +71,7 @@ abstract class UsageEntryViewModel(
 
     private fun validatePeriods(periods: List<UsagePeriod>): Boolean {
         return periods.isNotEmpty() && periods.all { it.start < it.end } && periods.none {
-            isPeriodOverlapping(
-                it
-            )
+            isPeriodOverlapping(it) || it.start < System.currentTimeMillis() || it.end < System.currentTimeMillis()
         }
     }
 
@@ -107,16 +108,15 @@ abstract class UsageEntryViewModel(
                 return
             }
         }
-//        try {
-        usagesRepository.insertUsageList(
-            uiState.usageDetails.toUsages()
-        )
-        SnackbarManager.showMessage(R.string.save_usages_success)
-//        } catch (e: Exception) {
-//            Log.d("UsageEntryViewModel", "saveUsage: ${e.message}\n${e.stackTrace}")
-//            SnackbarManager.showMessage(R.string.save_usages_error)
-//            return
-//        }
+        try {
+            usagesRepository.insertUsageList(
+                uiState.usageDetails.toUsages()
+            )
+            SnackbarManager.showMessage(R.string.save_usages_success)
+        } catch (e: Exception) {
+            SnackbarManager.showMessage(R.string.save_usages_error)
+            return
+        }
     }
 }
 
@@ -147,7 +147,6 @@ fun UsageDetails.toUsages(): List<Usage> = period.map { usagePeriod ->
         id = usageId,
         userUsingItemId = userId,
         itemUsedId = itemId,
-        //TODO: might need to change this (0 would be a really bad value)
         startDateTime = usagePeriod.start,
         endDateTime = usagePeriod.end,
     )

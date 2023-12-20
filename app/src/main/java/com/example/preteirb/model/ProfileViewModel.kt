@@ -27,7 +27,7 @@ open class ProfileViewModel(
         }
     }
 
-    protected open suspend fun saveProfile(isNewProfile: Boolean): User {
+    open suspend fun saveProfile(isNewProfile: Boolean): User {
         return if (isNewProfile) {
             usersRepository.insertUser(profileUiState.profileDetails)
         } else {

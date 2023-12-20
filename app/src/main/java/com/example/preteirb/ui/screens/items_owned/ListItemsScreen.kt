@@ -23,6 +23,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import com.example.compose.AppTheme
 import com.example.preteirb.R
 import com.example.preteirb.common.ItemCreator
+import com.example.preteirb.common.ObjectList
 import com.example.preteirb.data.cache.items_owned.ItemOwned
 import com.example.preteirb.data.cache.items_owned.toItemDetails
 import com.example.preteirb.model.items_owned.ItemDetails
@@ -31,7 +32,6 @@ import com.example.preteirb.model.items_owned.ItemUiState
 import com.example.preteirb.model.items_owned.ListItemsViewModel
 import com.example.preteirb.model.new_usage.ItemsOwnedUiState
 import com.example.preteirb.ui.navigation.NavigationDestination
-import com.example.preteirb.ui.screens.search.ObjectList
 import kotlinx.coroutines.launch
 
 object ListItemsDestination : NavigationDestination {

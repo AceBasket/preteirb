@@ -62,10 +62,6 @@ class SearchViewModel @Inject constructor(
     fun onSearchQueryChanged(query: String) {
         savedStateHandle[SEARCH_QUERY] = query
     }
-
-    companion object {
-        private const val TIMEOUT_MILLIS = 5_000L
-    }
 }
 
 /** Minimum length where search query is considered as [SearchResultUiState.EmptyQuery] */

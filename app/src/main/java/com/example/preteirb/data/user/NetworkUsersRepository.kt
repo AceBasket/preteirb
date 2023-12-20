@@ -19,7 +19,7 @@ import javax.inject.Inject
 
 class NetworkUsersRepository @Inject constructor(
     @ApplicationContext private val applicationContext: Context,
-    val profileApiService: ProfileApiService
+    private val profileApiService: ProfileApiService
 ) :
     UsersRepository {
     override suspend fun getAllUsersStream() = flow { emit(profileApiService.getProfiles()) }

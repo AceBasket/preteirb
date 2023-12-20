@@ -98,7 +98,6 @@ fun ItemAndUsagesDetailsScreen(
     )
 }
 
-@OptIn(ExperimentalGlideComposeApi::class)
 @Composable
 fun ItemAndUsagesDetails(
     itemAndUsages: ItemAndUsages,

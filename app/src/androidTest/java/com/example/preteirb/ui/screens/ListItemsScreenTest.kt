@@ -7,7 +7,7 @@ import androidx.compose.ui.test.junit4.createAndroidComposeRule
 import androidx.compose.ui.test.onAllNodesWithTag
 import androidx.compose.ui.test.onNodeWithTag
 import androidx.compose.ui.test.performClick
-import com.example.preteirb.data.item.Item
+import com.example.preteirb.data.cache.items_owned.ItemOwned
 import com.example.preteirb.model.items_owned.ItemUiState
 import com.example.preteirb.model.new_usage.ItemsOwnedUiState
 import com.example.preteirb.ui.screens.items_owned.ListItemsScreenContent
@@ -68,17 +68,19 @@ class ListItemsScreenTest {
             ListItemsScreenContent(
                 objectList = ItemsOwnedUiState(
                     itemsOwned = listOf(
-                        Item(
-                            itemId = 1,
+                        ItemOwned(
+                            id = 1,
                             name = "Item 1",
                             description = "Item 1 description",
-                            userOwnerId = 1,
+                            imageUrl = null,
+                            ownerId = 1,
                         ),
-                        Item(
-                            itemId = 2,
+                        ItemOwned(
+                            id = 2,
                             name = "Item 2",
                             description = "Item 2 description",
-                            userOwnerId = 1,
+                            imageUrl = null,
+                            ownerId = 1,
                         )
                     )
                 ),
