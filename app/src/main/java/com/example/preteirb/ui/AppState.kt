@@ -22,6 +22,16 @@ import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navOptions
 import com.example.preteirb.common.snackbar.SnackbarManager
 import com.example.preteirb.common.snackbar.SnackbarMessage.Companion.toMessage
+import com.example.preteirb.ui.navigation.NavigationDestination
+import com.example.preteirb.ui.screens.auth.ChooseAuthenticationDestination
+import com.example.preteirb.ui.screens.auth.LoginDestination
+import com.example.preteirb.ui.screens.auth.SignUpDestination
+import com.example.preteirb.ui.screens.booking.BookItemDestination
+import com.example.preteirb.ui.screens.items_booked.ItemsBookedDestination
+import com.example.preteirb.ui.screens.items_owned.ItemAndUsagesDetailsDestination
+import com.example.preteirb.ui.screens.items_owned.ListItemsDestination
+import com.example.preteirb.ui.screens.profile_selection.ProfileSelectionDestination
+import com.example.preteirb.ui.screens.search.SearchDestination
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.filterNotNull
 import kotlinx.coroutines.launch
@@ -48,6 +58,31 @@ class AppState(
         @Composable get() = navController
             .currentBackStackEntryAsState().value?.destination
 
+    val currentScreen: NavigationDestination
+        @Composable get() = currentDestination?.route.let { route ->
+            when (route) {
+                SearchDestination.route -> SearchDestination
+                ProfileSelectionDestination.route -> ProfileSelectionDestination
+                BookItemDestination.routeWithArgs -> BookItemDestination
+                ListItemsDestination.route -> ListItemsDestination
+                ItemAndUsagesDetailsDestination.routeWithArgs -> ItemAndUsagesDetailsDestination
+                ItemsBookedDestination.route -> ItemsBookedDestination
+                LoginDestination.route -> LoginDestination
+                SignUpDestination.route -> SignUpDestination
+                ChooseAuthenticationDestination.route -> ChooseAuthenticationDestination
+                else -> null
+            }
+        } ?: ChooseAuthenticationDestination
+
+    val displayProfileIcon: Boolean
+        @Composable get() = currentDestination?.route != ProfileSelectionDestination.route
+                && currentDestination?.route != LoginDestination.route
+                && currentDestination?.route != SignUpDestination.route
+                && currentDestination?.route != ChooseAuthenticationDestination.route
+
+    val displayBottomAppBar: Boolean
+        @Composable get() = displayProfileIcon
+
     val currentTopLevelDestination: TopLevelDestination?
         @Composable get() = when (currentDestination?.route) {
             TopLevelDestination.SEARCH.route -> TopLevelDestination.SEARCH
@@ -56,7 +91,7 @@ class AppState(
             else -> null
         }
 
-    val topLevelDestinations: List<TopLevelDestination> = TopLevelDestination.values().asList()
+    val topLevelDestinations: List<TopLevelDestination> = TopLevelDestination.entries
 
     fun popUp() {
         navController.popBackStack()

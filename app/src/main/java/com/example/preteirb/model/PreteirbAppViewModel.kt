@@ -44,6 +44,13 @@ class PreteirbAppViewModel @Inject constructor(
 
     suspend fun logOut() {
         currentUserRepository.setIsProfileSelected(false)
+        currentUserRepository.setIsLoggedIn(false)
+        currentUserRepository.clearCurrentUser()
+        currentUserRepository.clearToken()
+    }
+
+    suspend fun switchProfile() {
+        currentUserRepository.setIsProfileSelected(false)
         currentUserRepository.clearCurrentUser()
     }
 

@@ -9,6 +9,7 @@ import com.example.preteirb.data.account.AccountsRepository
 import com.example.preteirb.data.account.LoginDto
 import com.example.preteirb.data.cache.current_user.CurrentUserRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
+import org.json.JSONObject
 import javax.inject.Inject
 
 @HiltViewModel
@@ -50,7 +51,11 @@ class AuthViewModel @Inject constructor(
                 uiState = uiState.copy(isAuthLoading = false)
             }
         } else {
-            SnackbarManager.showMessage("Authentication failed")
+            val error = authResponse.errorBody()?.string()
+            val jsonError = JSONObject(error ?: "{}")
+            jsonError.keys().forEach {
+                SnackbarManager.showMessage(it + ": " + jsonError.getString(it))
+            }
             uiState = uiState.copy(isAuthLoading = false)
         }
     }

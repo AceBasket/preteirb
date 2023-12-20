@@ -127,6 +127,7 @@ fun AppTopBar(
     canNavigateBack: Boolean,
     navigateUp: () -> Unit,
     logOut: () -> Unit,
+    switchProfile: () -> Unit,
     profile: CurrentUser,
     profileUiState: ProfileUiState,
     updateProfile: (ProfileDetails) -> Unit,
@@ -154,7 +155,7 @@ fun AppTopBar(
             }
         },
         actions = {
-            if (!isDisplayProfileIcon) {
+            if (isDisplayProfileIcon) {
                 var showEditProfileDialog by remember { mutableStateOf(false) }
                 if (showEditProfileDialog) {
                     ProfileEditor(
@@ -169,7 +170,6 @@ fun AppTopBar(
                 }
                 Box {
                     IconButton(onClick = { isExpanded = true }) {
-                        Log.d("sync", "profile: $profile")
                         CustomGlideImage(
                             model = profile.profilePic,
                             placeholder = Icons.Default.AccountCircle,
@@ -177,9 +177,7 @@ fun AppTopBar(
                             loading = placeholder(R.drawable.loading_img),
                             failure = placeholder(rememberVectorPainter(Icons.Default.AccountCircle)),
                             contentScale = ContentScale.Crop,
-                            colorFilter = if (profile.profilePic.isNotBlank())
-                                null
-                            else ColorFilter.tint(
+                            colorFilter = ColorFilter.tint(
                                 MaterialTheme.colorScheme.onSurface
                             ),
                             modifier = Modifier
@@ -228,6 +226,21 @@ fun AppTopBar(
                         )
                         DropdownMenuItem(
                             text = {
+                                Text(text = stringResource(id = R.string.switch_profile))
+                            },
+                            onClick = {
+                                isExpanded = false
+                                switchProfile()
+                            },
+                            leadingIcon = {
+                                Icon(
+                                    painter = painterResource(id = R.drawable.baseline_switch_account_24),
+                                    contentDescription = stringResource(id = R.string.switch_profile_icon)
+                                )
+                            }
+                        )
+                        DropdownMenuItem(
+                            text = {
                                 Text(text = stringResource(id = R.string.logout))
                             },
                             onClick = {
@@ -270,6 +283,7 @@ fun TopAppBarPreview() {
             canNavigateBack = false,
             navigateUp = {},
             logOut = {},
+            switchProfile = {},
             profileUiState = ProfileUiState(),
             updateProfile = {},
             onSaveChangesToProfile = {},

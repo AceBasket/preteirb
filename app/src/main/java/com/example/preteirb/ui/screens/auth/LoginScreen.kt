@@ -1,7 +1,9 @@
 package com.example.preteirb.ui.screens.auth
 
 import androidx.annotation.StringRes
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
@@ -23,6 +25,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.LocalFocusManager
+import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.input.ImeAction
@@ -96,6 +99,7 @@ fun LoginForm(
 
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
+        verticalArrangement = Arrangement.Center,
         modifier = modifier
     ) {
         TextField(
@@ -109,7 +113,8 @@ fun LoginForm(
                     imageVector = Icons.Default.Person,
                     contentDescription = stringResource(R.string.username)
                 )
-            }
+            },
+            modifier = Modifier.padding(bottom = dimensionResource(id = R.dimen.padding_extra_small))
         )
         var isPassword1Visible by remember { mutableStateOf(false) }
         TextField(
@@ -146,7 +151,10 @@ fun LoginForm(
                     }
                 }
             ),
-            visualTransformation = if (isPassword1Visible) VisualTransformation.None else PasswordVisualTransformation()
+            visualTransformation = if (isPassword1Visible)
+                VisualTransformation.None
+            else PasswordVisualTransformation(),
+            modifier = Modifier.padding(bottom = dimensionResource(id = R.dimen.padding_extra_small))
         )
         if (isAccountCreation) {
             var isPassword2Visible by remember { mutableStateOf(false) }
@@ -207,6 +215,18 @@ fun LoginScreenPreview() {
             uiState = AuthState(),
             updateUiState = {},
             login = {},
+        )
+    }
+}
+
+@Preview(showBackground = true)
+@Composable
+fun SignupScreenPreview() {
+    AppTheme {
+        SignUpScreenContent(
+            uiState = AuthState(),
+            updateUiState = {},
+            signUp = {},
         )
     }
 }

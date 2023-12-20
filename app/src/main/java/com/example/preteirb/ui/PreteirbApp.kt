@@ -3,7 +3,6 @@ package com.example.preteirb.ui
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Snackbar
 import androidx.compose.material3.SnackbarHost
@@ -12,21 +11,13 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.compose.NavHost
 import com.example.compose.AppTheme
 import com.example.preteirb.R
 import com.example.preteirb.model.PreteirbAppViewModel
-import com.example.preteirb.ui.navigation.NavigationDestination
 import com.example.preteirb.ui.navigation.appNavGraph
 import com.example.preteirb.ui.screens.auth.ChooseAuthenticationDestination
-import com.example.preteirb.ui.screens.auth.LoginDestination
-import com.example.preteirb.ui.screens.auth.SignUpDestination
-import com.example.preteirb.ui.screens.booking.BookItemDestination
-import com.example.preteirb.ui.screens.items_booked.ItemsBookedDestination
-import com.example.preteirb.ui.screens.items_owned.ItemAndUsagesDetailsDestination
-import com.example.preteirb.ui.screens.items_owned.ListItemsDestination
 import com.example.preteirb.ui.screens.profile_selection.ProfileSelectionDestination
 import com.example.preteirb.ui.screens.search.SearchDestination
 import kotlinx.coroutines.launch
@@ -40,22 +31,6 @@ fun PreteirbApp(
 
     //Create NavController
     val navController = appState.navController
-
-    // Get the current destination
-    val currentScreen: NavigationDestination = appState.currentDestination?.route.let { route ->
-        when (route) {
-            SearchDestination.route -> SearchDestination
-            ProfileSelectionDestination.route -> ProfileSelectionDestination
-            BookItemDestination.routeWithArgs -> BookItemDestination
-            ListItemsDestination.route -> ListItemsDestination
-            ItemAndUsagesDetailsDestination.routeWithArgs -> ItemAndUsagesDetailsDestination
-            ItemsBookedDestination.route -> ItemsBookedDestination
-            LoginDestination.route -> LoginDestination
-            SignUpDestination.route -> SignUpDestination
-            ChooseAuthenticationDestination.route -> ChooseAuthenticationDestination
-            else -> null
-        }
-    } ?: ChooseAuthenticationDestination
 
     val startDestination = if (viewModel.isProfileSelected) {
         SearchDestination.route
@@ -72,7 +47,7 @@ fun PreteirbApp(
         modifier = modifier,
         topBar = {
             AppTopBar(
-                currentScreenTitle = currentScreen.titleRes,
+                currentScreenTitle = appState.currentScreen.titleRes,
                 canNavigateBack = navController.previousBackStackEntry != null
                         && !appState.topLevelDestinations.map { it.route }
                     .contains(appState.currentDestination?.route),
@@ -80,6 +55,12 @@ fun PreteirbApp(
                 logOut = {
                     coroutineScope.launch {
                         viewModel.logOut()
+                    }
+                    appState.clearAndNavigate(ProfileSelectionDestination.route)
+                },
+                switchProfile = {
+                    coroutineScope.launch {
+                        viewModel.switchProfile()
                     }
                     appState.clearAndNavigate(ProfileSelectionDestination.route)
                 },
@@ -91,10 +72,7 @@ fun PreteirbApp(
                 },
                 updateProfile = viewModel::updateUiState,
                 profile = viewModel.currentProfile,
-                isDisplayProfileIcon = appState.currentDestination?.route == ProfileSelectionDestination.route
-                        || appState.currentDestination?.route == LoginDestination.route
-                        || appState.currentDestination?.route == SignUpDestination.route
-                        || appState.currentDestination?.route == ChooseAuthenticationDestination.route,
+                isDisplayProfileIcon = appState.displayProfileIcon,
                 modifier = Modifier
                     .fillMaxWidth()
             )
@@ -104,10 +82,7 @@ fun PreteirbApp(
                 destinations = appState.topLevelDestinations,
                 currentDestination = appState.currentDestination,
                 onNavigateToDestination = appState::navigateToTopLevelDestination,
-                isDisplayBottomAppBar = appState.currentDestination?.route != ProfileSelectionDestination.route
-                        && appState.currentDestination?.route != LoginDestination.route
-                        && appState.currentDestination?.route != SignUpDestination.route
-                        && appState.currentDestination?.route != ChooseAuthenticationDestination.route,
+                isDisplayBottomAppBar = appState.displayBottomAppBar,
                 modifier = Modifier
                     .fillMaxWidth()
             )
@@ -115,9 +90,9 @@ fun PreteirbApp(
         snackbarHost = {
             SnackbarHost(
                 hostState = appState.snackbarHostState,
-                modifier = Modifier.padding(8.dp),
+                modifier = Modifier.padding(dimensionResource(id = R.dimen.padding_small)),
                 snackbar = { snackbarData ->
-                    Snackbar(snackbarData, contentColor = MaterialTheme.colorScheme.primary)
+                    Snackbar(snackbarData)
                 }
             )
         },

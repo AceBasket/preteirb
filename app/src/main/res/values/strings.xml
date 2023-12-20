@@ -66,4 +66,6 @@
     <string name="password">Password</string>
     <string name="confirm_password">Confirm password</string>
     <string name="sign_up">Sign up</string>
+    <string name="switch_profile_icon">Switch profile icon</string>
+    <string name="switch_profile">Switch profile</string>
 </resources>
