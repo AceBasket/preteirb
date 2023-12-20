@@ -5,7 +5,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
-import com.example.preteirb.data.user.User
+import com.example.preteirb.data.user.UserDto
 import com.example.preteirb.data.user.UsersRepository
 
 open class ProfileViewModel(
@@ -14,7 +14,7 @@ open class ProfileViewModel(
     var profileUiState: ProfileUiState by mutableStateOf(ProfileUiState())
         protected set
 
-    fun updateUiState(profileDetails: ProfileDetails) {
+    open fun updateUiState(profileDetails: ProfileDetails) {
         profileUiState = ProfileUiState(
             profileDetails = profileDetails,
             isEntryValid = validateInput(profileDetails),
@@ -27,12 +27,18 @@ open class ProfileViewModel(
         }
     }
 
-    open suspend fun saveProfile(isNewProfile: Boolean): User {
+    open suspend fun saveProfile(isNewProfile: Boolean): UserDto {
         return if (isNewProfile) {
             usersRepository.insertUser(profileUiState.profileDetails)
+        } else if (!profileUiState.isImageChanged) {
+            usersRepository.updateUsername(profileUiState.profileDetails)
         } else {
             usersRepository.updateUser(profileUiState.profileDetails)
         }
+    }
+
+    protected fun setImageChanged() {
+        profileUiState = profileUiState.copy(isImageChanged = true)
     }
 }
 
@@ -42,7 +48,7 @@ data class ProfileDetails(
     val profilePicture: Uri = Uri.EMPTY,
 )
 
-fun User.toProfileDetails() = ProfileDetails(
+fun UserDto.toProfileDetails() = ProfileDetails(
     id = id,
     username = username,
     profilePicture = Uri.parse(profilePicture ?: ""),
@@ -51,4 +57,5 @@ fun User.toProfileDetails() = ProfileDetails(
 data class ProfileUiState(
     val profileDetails: ProfileDetails = ProfileDetails(),
     val isEntryValid: Boolean = false,
+    val isImageChanged: Boolean = false,
 )

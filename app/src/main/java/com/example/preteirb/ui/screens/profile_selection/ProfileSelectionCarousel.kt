@@ -37,13 +37,13 @@ import com.bumptech.glide.integration.compose.placeholder
 import com.example.compose.AppTheme
 import com.example.preteirb.R
 import com.example.preteirb.common.CustomGlideImage
-import com.example.preteirb.data.user.User
+import com.example.preteirb.data.user.UserDto
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun ProfileSelectionCarousel(
-    list: List<User>,
-    onClickOnProfile: (User) -> Unit,
+    list: List<UserDto>,
+    onClickOnProfile: (UserDto) -> Unit,
     onClickOnAddProfile: () -> Unit,
     modifier: Modifier = Modifier
 ) {
@@ -101,7 +101,7 @@ fun ProfileSelectionCarousel(
 @OptIn(ExperimentalGlideComposeApi::class)
 @Composable
 fun ProfileSelectionItem(
-    profile: User,
+    profile: UserDto,
     modifier: Modifier = Modifier
 ) {
     ProfileCarouselItem(
@@ -167,35 +167,35 @@ fun ProfileCarouselItem(
 @Composable
 fun ProfileSelectionCarouselPreview() {
     AppTheme {
-        val userList = listOf(
-            User(
+        val userDtoLists = listOf(
+            UserDto(
                 id = 0,
                 username = "Sarah",
                 profilePicture = "",
             ),
-            User(
+            UserDto(
                 id = 1,
                 username = "Camille",
                 profilePicture = "",
             ),
-            User(
+            UserDto(
                 id = 2,
                 username = "Tiphaine",
                 profilePicture = "",
             ),
-            User(
+            UserDto(
                 id = 3,
                 username = "Brigitte",
                 profilePicture = "",
             ),
-            User(
+            UserDto(
                 id = 4,
                 username = "Jerome",
                 profilePicture = "",
             )
         )
         ProfileSelectionCarousel(
-            list = userList,
+            list = userDtoLists,
             onClickOnProfile = {},
             onClickOnAddProfile = {}
         )
@@ -207,7 +207,7 @@ fun ProfileSelectionCarouselPreview() {
 fun ProfileSelectionItemPreview() {
     AppTheme {
         ProfileSelectionItem(
-            profile = User(
+            profile = UserDto(
                 id = 0,
                 username = "username",
                 profilePicture = "",

@@ -3,7 +3,7 @@ package com.example.preteirb.data.cache.current_user
 import androidx.datastore.core.DataStore
 import com.example.preteirb.CurrentUser
 import com.example.preteirb.CurrentUserInfo
-import com.example.preteirb.data.user.User
+import com.example.preteirb.data.user.UserDto
 import kotlinx.coroutines.flow.Flow
 import javax.inject.Inject
 import javax.inject.Singleton
@@ -12,12 +12,12 @@ import javax.inject.Singleton
 class CurrentUserRepository @Inject constructor(private val currentUserInfoDataStore: DataStore<CurrentUserInfo>) {
     val currentUserFlow: Flow<CurrentUserInfo> = currentUserInfoDataStore.data
 
-    suspend fun setCurrentUser(user: User) {
+    suspend fun setCurrentUser(userDto: UserDto) {
         currentUserInfoDataStore.updateData {
             val currentUser = CurrentUser.newBuilder()
-                .setId(user.id)
-                .setProfilePic(user.profilePicture ?: "")
-                .setUsername(user.username)
+                .setId(userDto.id)
+                .setProfilePic(userDto.profilePicture ?: "")
+                .setUsername(userDto.username)
                 .build()
             it.toBuilder().setUser(currentUser).build()
         }

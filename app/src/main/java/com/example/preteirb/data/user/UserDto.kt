@@ -4,7 +4,7 @@ import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
 @Serializable
-data class User(
+data class UserDto(
     val id: Int,
     val username: String,
     @SerialName(value = "profile_pic") val profilePicture: String?,

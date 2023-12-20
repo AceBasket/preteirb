@@ -8,7 +8,7 @@ import java.time.ZoneId
 import java.time.format.DateTimeFormatter
 
 @Serializable
-data class UsageWithStringDate(
+data class UsageDto(
     val id: Int,
     @SerialName(value = "item") val itemUsedId: Int,
     @SerialName(value = "user") val userUsingItemId: Int,
@@ -24,7 +24,7 @@ data class Usage(
     val endDateTime: Long
 )
 
-fun UsageWithStringDate.toUsage() = Usage(
+fun UsageDto.toUsage() = Usage(
     id = id,
     itemUsedId = itemUsedId,
     userUsingItemId = userUsingItemId,
@@ -32,7 +32,7 @@ fun UsageWithStringDate.toUsage() = Usage(
     endDateTime = getDateTime(endDate)
 )
 
-fun Usage.toUsageWithStringDate() = UsageWithStringDate(
+fun Usage.toUsageWithStringDate() = UsageDto(
     id = id,
     itemUsedId = itemUsedId,
     userUsingItemId = userUsingItemId,

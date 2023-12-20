@@ -8,7 +8,7 @@ import androidx.compose.runtime.setValue
 import androidx.lifecycle.viewModelScope
 import com.example.preteirb.CurrentUser
 import com.example.preteirb.data.cache.current_user.CurrentUserRepository
-import com.example.preteirb.data.user.User
+import com.example.preteirb.data.user.UserDto
 import com.example.preteirb.data.user.UsersRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
@@ -42,6 +42,13 @@ class PreteirbAppViewModel @Inject constructor(
         }
     }
 
+    override fun updateUiState(profileDetails: ProfileDetails) {
+        if (profileDetails.profilePicture != Uri.parse(currentProfile.profilePic ?: "")) {
+            setImageChanged()
+        }
+        super.updateUiState(profileDetails)
+    }
+
     suspend fun logOut() {
         currentUserRepository.setIsProfileSelected(false)
         currentUserRepository.setIsLoggedIn(false)
@@ -59,7 +66,7 @@ class PreteirbAppViewModel @Inject constructor(
         currentUserRepository.setCurrentUser(changedProfile)
     }
 
-    override suspend fun saveProfile(isNewProfile: Boolean): User {
+    override suspend fun saveProfile(isNewProfile: Boolean): UserDto {
         val newUser = super.saveProfile(isNewProfile)
         currentUserRepository.setCurrentUser(newUser)
         return newUser

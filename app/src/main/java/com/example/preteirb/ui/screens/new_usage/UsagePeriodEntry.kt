@@ -266,7 +266,7 @@ fun NewUsagePeriod(
                         // is selectable if it's not in any of the notSelectablePeriods
                         return utcTimeMillis > System.currentTimeMillis()
                                 && notSelectablePeriods.none { usagePeriod ->
-                            utcTimeMillis in usagePeriod.start..usagePeriod.end
+                            utcTimeMillis in usagePeriod.start..(usagePeriod.end + 86400000) // add 1 day to the end date so that it's not selectable either
                         }
                     }
                 }

@@ -3,7 +3,7 @@ package com.example.preteirb.model.profile_selection
 import androidx.lifecycle.viewModelScope
 import com.example.preteirb.common.Constants.TIMEOUT_MILLIS
 import com.example.preteirb.data.cache.current_user.CurrentUserRepository
-import com.example.preteirb.data.user.User
+import com.example.preteirb.data.user.UserDto
 import com.example.preteirb.data.user.UsersRepository
 import com.example.preteirb.model.ProfileViewModel
 import com.example.preteirb.model.toProfileDetails
@@ -40,17 +40,17 @@ class ProfileSelectionViewModel @Inject constructor(
         }
     }
 
-    suspend fun saveNewProfile(): User {
+    suspend fun saveNewProfile(): UserDto {
         return saveProfile(true)
     }
 
-    suspend fun logIn(user: User) {
+    suspend fun logIn(userDto: UserDto) {
         currentUserRepository.setIsProfileSelected(true)
-        currentUserRepository.setCurrentUser(user)
-        profileUiState = profileUiState.copy(profileDetails = user.toProfileDetails())
+        currentUserRepository.setCurrentUser(userDto)
+        profileUiState = profileUiState.copy(profileDetails = userDto.toProfileDetails())
     }
 }
 
 data class ProfileSelectionUiState(
-    val users: List<User> = emptyList(),
+    val userDtos: List<UserDto> = emptyList(),
 )

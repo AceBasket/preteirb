@@ -35,7 +35,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import com.example.compose.AppTheme
 import com.example.preteirb.R
 import com.example.preteirb.common.ProfileCreator
-import com.example.preteirb.data.user.User
+import com.example.preteirb.data.user.UserDto
 import com.example.preteirb.model.ProfileDetails
 import com.example.preteirb.model.ProfileUiState
 import com.example.preteirb.model.profile_selection.ProfileSelectionUiState
@@ -84,13 +84,13 @@ fun ProfileSelection(
     profileUiState: ProfileUiState,
     updateProfileUiState: (ProfileDetails) -> Unit,
     onAddAccount: () -> Unit,
-    onClickOnProfile: (User) -> Unit,
+    onClickOnProfile: (UserDto) -> Unit,
     modifier: Modifier = Modifier,
 ) {
     var isShowAddAccountDialog by rememberSaveable { mutableStateOf(false) }
 
     ProfileSelectionCarousel(
-        list = uiState.users,
+        list = uiState.userDtos,
         onClickOnProfile = onClickOnProfile,
         onClickOnAddProfile = { isShowAddAccountDialog = true },
         modifier = modifier
@@ -184,17 +184,17 @@ fun ProfileSelectionPreview() {
         ) {
 
             val fakeProfileList = listOf(
-                User(
+                UserDto(
                     id = 1,
                     username = "username1",
                     profilePicture = "",
                 ),
-                User(
+                UserDto(
                     id = 2,
                     username = "username2",
                     profilePicture = "",
                 ),
-                User(
+                UserDto(
                     id = 3,
                     username = "username3",
                     profilePicture = "",
@@ -202,7 +202,7 @@ fun ProfileSelectionPreview() {
             )
             ProfileSelection(
                 uiState = ProfileSelectionUiState(
-                    users = fakeProfileList
+                    userDtos = fakeProfileList
                 ),
                 onAddAccount = { },
                 onClickOnProfile = { },

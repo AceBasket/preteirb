@@ -29,7 +29,7 @@ class NetworkItemsRepository @Inject constructor(
     override suspend fun getItemsFromQueryStream(query: String) =
         flow { emit(itemApiService.searchItems(query)) }
 
-    override suspend fun deleteItem(item: Item) = itemApiService.deleteItem(item.id)
+    override suspend fun deleteItem(itemDto: ItemDto) = itemApiService.deleteItem(itemDto.id)
 
     override suspend fun insertItem(item: ItemDetails) =
         updateOrCreateItem(item, true)
@@ -37,9 +37,15 @@ class NetworkItemsRepository @Inject constructor(
     override suspend fun updateItem(item: ItemDetails) =
         updateOrCreateItem(item, false)
 
-    private suspend fun updateOrCreateItem(item: ItemDetails, isCreate: Boolean): Item {
+    override suspend fun updateItemName(item: ItemDetails) =
+        itemApiService.updateItemName(
+            item.id,
+            item.name.toRequestBody("text/plain".toMediaTypeOrNull())
+        )
+
+    private suspend fun updateOrCreateItem(item: ItemDetails, isCreate: Boolean): ItemDto {
         if (item.image == Uri.EMPTY) {
-            val updatedItem = Item(
+            val updatedItemDto = ItemDto(
                 id = item.id,
                 name = item.name,
                 description = item.description,
@@ -47,9 +53,9 @@ class NetworkItemsRepository @Inject constructor(
                 ownerId = item.ownerId
             )
             return if (isCreate) {
-                itemApiService.createItemWithoutImage(updatedItem)
+                itemApiService.createItemWithoutImage(updatedItemDto)
             } else {
-                itemApiService.updateItemWithoutImage(updatedItem.id, updatedItem)
+                itemApiService.updateItemWithoutImage(updatedItemDto.id, updatedItemDto)
             }
         }
         val imagePart = uriToMultipartBody(item.image)

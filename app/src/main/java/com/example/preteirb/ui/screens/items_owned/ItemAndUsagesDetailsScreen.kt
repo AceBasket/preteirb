@@ -14,7 +14,6 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -40,9 +39,9 @@ import com.example.compose.AppTheme
 import com.example.preteirb.R
 import com.example.preteirb.common.CustomGlideImage
 import com.example.preteirb.common.ItemEditor
-import com.example.preteirb.data.item.ItemAndUsages
+import com.example.preteirb.data.item.ItemAndUsagesDto
 import com.example.preteirb.data.usage.Usage
-import com.example.preteirb.data.usage.UsageWithStringDate
+import com.example.preteirb.data.usage.UsageDto
 import com.example.preteirb.data.usage.toUsage
 import com.example.preteirb.model.items_owned.ItemAndUsagesDetailsViewModel
 import com.example.preteirb.model.items_owned.ItemDetails
@@ -75,17 +74,7 @@ fun ItemAndUsagesDetailsScreen(
 ) {
     val coroutineScope = rememberCoroutineScope()
     ItemAndUsagesDetails(
-        itemAndUsages = viewModel.itemAndUsages
-            .collectAsState(
-                initial = ItemAndUsages(
-                    0,
-                    "",
-                    "",
-                    null,
-                    0,
-                    emptyList()
-                )
-            ).value,
+        itemAndUsagesDto = viewModel.itemAndUsagesDto.value,
         onClickOnBookItem = navigateToBookItem,
         itemUiState = viewModel.itemUiState,
         updateItemUiState = viewModel::updateUiState,
@@ -100,7 +89,7 @@ fun ItemAndUsagesDetailsScreen(
 
 @Composable
 fun ItemAndUsagesDetails(
-    itemAndUsages: ItemAndUsages,
+    itemAndUsagesDto: ItemAndUsagesDto,
     onClickOnBookItem: (itemId: Int) -> Unit,
     itemUiState: ItemUiState,
     updateItemUiState: (ItemDetails) -> Unit,
@@ -116,11 +105,11 @@ fun ItemAndUsagesDetails(
         )
         HorizontalDivider(modifier = Modifier.padding(vertical = dimensionResource(id = R.dimen.padding_small)))
         ItemBookedPeriods(
-            usages = itemAndUsages.usages.map { it.toUsage() },
+            usages = itemAndUsagesDto.usages.map { it.toUsage() },
         )
         HorizontalDivider()
         OutlinedButton(
-            onClick = { onClickOnBookItem(itemAndUsages.id) },
+            onClick = { onClickOnBookItem(itemAndUsagesDto.id) },
             modifier = Modifier.align(Alignment.End)
         ) {
             Text(text = stringResource(id = R.string.book_item))
@@ -242,14 +231,14 @@ fun ItemBookedPeriods(
 @Composable
 fun ItemDetailsScreenDetails() {
     AppTheme {
-        val fakeData = ItemAndUsages(
+        val fakeData = ItemAndUsagesDto(
             id = 1,
             name = "Item name",
             description = "Item description",
             image = null,
             ownerId = 1,
             usages = listOf(
-                UsageWithStringDate(
+                UsageDto(
                     id = 1,
                     userUsingItemId = 1,
                     itemUsedId = 1,
@@ -259,7 +248,7 @@ fun ItemDetailsScreenDetails() {
             )
         )
         ItemAndUsagesDetails(
-            itemAndUsages = fakeData,
+            itemAndUsagesDto = fakeData,
             onClickOnBookItem = {},
             itemUiState = ItemUiState(),
             updateItemUiState = {},

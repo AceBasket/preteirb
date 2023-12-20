@@ -8,7 +8,7 @@ import androidx.compose.ui.test.assertTextContains
 import androidx.compose.ui.test.junit4.createAndroidComposeRule
 import androidx.compose.ui.test.onNodeWithTag
 import androidx.compose.ui.test.performClick
-import com.example.preteirb.data.user.User
+import com.example.preteirb.data.user.UserDto
 import com.example.preteirb.model.ProfileUiState
 import com.example.preteirb.model.profile_selection.ProfileSelectionUiState
 import com.example.preteirb.ui.screens.profile_selection.ProfileSelection
@@ -24,7 +24,7 @@ class ProfileSelectionScreenTest {
         composeTestRule.setContent {
             ProfileSelection(
                 uiState = ProfileSelectionUiState(
-                    users = emptyList(),
+                    userDtos = emptyList(),
                 ),
                 onAddAccount = {},
                 onClickOnProfile = {},
@@ -47,8 +47,8 @@ class ProfileSelectionScreenTest {
         composeTestRule.setContent {
             ProfileSelection(
                 uiState = ProfileSelectionUiState(
-                    users = listOf(
-                        User(
+                    userDtos = listOf(
+                        UserDto(
                             id = 1,
                             username = "username",
                             profilePicture = null
@@ -78,8 +78,8 @@ class ProfileSelectionScreenTest {
         composeTestRule.setContent {
             ProfileSelection(
                 uiState = ProfileSelectionUiState(
-                    users = listOf(
-                        User(
+                    userDtos = listOf(
+                        UserDto(
                             id = 1,
                             username = "username1",
                             profilePicture = null

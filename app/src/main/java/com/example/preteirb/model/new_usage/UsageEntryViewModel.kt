@@ -70,7 +70,7 @@ abstract class UsageEntryViewModel(
     }
 
     private fun validatePeriods(periods: List<UsagePeriod>): Boolean {
-        return periods.isNotEmpty() && periods.all { it.start < it.end } && periods.none {
+        return periods.isNotEmpty() && periods.all { it.start <= it.end } && periods.none {
             isPeriodOverlapping(it) || it.start < System.currentTimeMillis() || it.end < System.currentTimeMillis()
         }
     }

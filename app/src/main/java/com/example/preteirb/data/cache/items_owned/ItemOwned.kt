@@ -3,7 +3,7 @@ package com.example.preteirb.data.cache.items_owned
 import android.net.Uri
 import androidx.room.Entity
 import androidx.room.PrimaryKey
-import com.example.preteirb.data.item.Item
+import com.example.preteirb.data.item.ItemDto
 import com.example.preteirb.model.items_owned.ItemDetails
 
 @Entity(
@@ -18,7 +18,7 @@ data class ItemOwned(
     val ownerId: Int,
 )
 
-fun Item.toItemOwned(): ItemOwned {
+fun ItemDto.toItemOwned(): ItemOwned {
     return ItemOwned(
         id = id,
         name = name,
@@ -28,8 +28,8 @@ fun Item.toItemOwned(): ItemOwned {
     )
 }
 
-fun ItemOwned.toItem(): Item {
-    return Item(
+fun ItemOwned.toItem(): ItemDto {
+    return ItemDto(
         id = id,
         name = name,
         description = description,

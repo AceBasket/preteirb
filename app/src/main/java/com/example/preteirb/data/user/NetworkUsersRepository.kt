@@ -36,24 +36,32 @@ class NetworkUsersRepository @Inject constructor(
                     .map { it.toUsageWithItemAndUser() })
         }
 
-    override suspend fun insertUser(user: ProfileDetails): User {
+    override suspend fun insertUser(user: ProfileDetails): UserDto {
         return updateOrCreateUser(user, true)
     }
 
-    override suspend fun deleteUser(user: User) = profileApiService.deleteProfile(user.id)
+    override suspend fun deleteUser(userDto: UserDto) = profileApiService.deleteProfile(userDto.id)
 
-    override suspend fun updateUser(user: ProfileDetails): User {
+    override suspend fun updateUser(user: ProfileDetails): UserDto {
         return updateOrCreateUser(user, false)
     }
 
-    private suspend fun updateOrCreateUser(user: ProfileDetails, isCreate: Boolean): User {
+    override suspend fun updateUsername(user: ProfileDetails): UserDto {
+        return profileApiService.updateUsername(
+            user.id,
+            user.username.toRequestBody("text/plain".toMediaTypeOrNull())
+        )
+    }
+
+    private suspend fun updateOrCreateUser(user: ProfileDetails, isCreate: Boolean): UserDto {
         if (user.profilePicture == Uri.EMPTY) {
-            val updatedUser = User(id = user.id, username = user.username, profilePicture = null)
-            Log.d("saveProfile", "updatedUser: $updatedUser")
+            val updatedUserDto =
+                UserDto(id = user.id, username = user.username, profilePicture = null)
+            Log.d("saveProfile", "updatedUser: $updatedUserDto")
             return if (isCreate) {
-                profileApiService.createProfileWithoutPicture(updatedUser)
+                profileApiService.createProfileWithoutPicture(updatedUserDto)
             } else {
-                profileApiService.updateProfileWithoutPicture(updatedUser.id, updatedUser)
+                profileApiService.updateProfileWithoutPicture(updatedUserDto.id, updatedUserDto)
             }
         }
         val profilePicturePart = uriToMultipartBody(user.profilePicture)

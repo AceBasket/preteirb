@@ -16,7 +16,7 @@
     <string name="description">Description</string>
     <string name="your_objects">Your objects</string>
     <string name="save_item_success">Item saved successfully</string>
-    <string name="save_item_error">Item couldn\'t be saved, please check the input fields</string>
+    <string name="save_item_error">Item couldn\'t be saved</string>
 
     <!-- New usage -->
     <string name="add_usage_period">Add a new usage period</string>

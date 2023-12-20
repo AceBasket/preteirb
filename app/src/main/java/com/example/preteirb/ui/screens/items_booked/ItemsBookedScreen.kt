@@ -32,7 +32,7 @@ import com.example.preteirb.common.CustomGlideImage
 import com.example.preteirb.data.item.ItemWithOwner
 import com.example.preteirb.data.usage.UsageWithItemAndUser
 import com.example.preteirb.data.usage.getShortenedDateFormat
-import com.example.preteirb.data.user.User
+import com.example.preteirb.data.user.UserDto
 import com.example.preteirb.model.items_booked.ItemsBookedUiState
 import com.example.preteirb.model.items_booked.ItemsBookedViewModel
 import com.example.preteirb.ui.navigation.NavigationDestination
@@ -151,7 +151,7 @@ fun ItemsBookedPreview() {
                         name = "Tondeuse",
                         description = "",
                         image = null,
-                        owner = User(0, "Jean", ""),
+                        owner = UserDto(0, "Jean", ""),
                     ),
                     user = 0
                 ),
@@ -164,7 +164,7 @@ fun ItemsBookedPreview() {
                         name = "Perceuse",
                         description = "",
                         image = null,
-                        owner = User(1, "Céline", "")
+                        owner = UserDto(1, "Céline", "")
                     ),
                     user = 0
                 ),
@@ -177,7 +177,7 @@ fun ItemsBookedPreview() {
                         name = "Marteau",
                         description = "",
                         image = null,
-                        owner = User(2, "Pierre", "")
+                        owner = UserDto(2, "Pierre", "")
                     ),
                     user = 0
                 ),
@@ -190,7 +190,7 @@ fun ItemsBookedPreview() {
                         name = "Tournevis",
                         description = "",
                         image = null,
-                        owner = User(3, "Paul", "")
+                        owner = UserDto(3, "Paul", "")
                     ),
                     user = 0
                 ),
@@ -212,7 +212,7 @@ fun ItemsBookedCardPreview() {
                 name = "Tondeuse",
                 description = "",
                 image = null,
-                owner = User(0, "Jean", "")
+                owner = UserDto(0, "Jean", "")
             ),
             user = 0
         ),
