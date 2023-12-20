@@ -1,4 +1,4 @@
-package com.example.preteirb.ui.screens.login
+package com.example.preteirb.ui.screens.auth
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column

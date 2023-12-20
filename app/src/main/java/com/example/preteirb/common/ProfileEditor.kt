@@ -41,7 +41,6 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
 import com.bumptech.glide.integration.compose.ExperimentalGlideComposeApi
-import com.bumptech.glide.integration.compose.GlideImage
 import com.bumptech.glide.integration.compose.placeholder
 import com.example.compose.AppTheme
 import com.example.preteirb.R
@@ -127,11 +126,9 @@ fun ProfileDialog(
                 modifier = Modifier.align(Alignment.CenterHorizontally),
             )
 
-            GlideImage(
-                model = selectedImageUri ?: if (uiState.profileDetails.profilePicture != Uri.EMPTY)
-                    uiState.profileDetails.profilePicture
-                else
-                    rememberVectorPainter(Icons.Default.AccountCircle),
+            CustomGlideImage(
+                model = selectedImageUri ?: uiState.profileDetails.profilePicture,
+                placeholder = Icons.Default.AccountCircle,
                 contentDescription = uiState.profileDetails.username,
                 loading = placeholder(R.drawable.loading_img),
                 failure = placeholder(rememberVectorPainter(Icons.Default.AccountCircle)),

@@ -47,11 +47,11 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.navigation.NavDestination
 import androidx.navigation.NavDestination.Companion.hierarchy
 import com.bumptech.glide.integration.compose.ExperimentalGlideComposeApi
-import com.bumptech.glide.integration.compose.GlideImage
 import com.bumptech.glide.integration.compose.placeholder
 import com.example.compose.AppTheme
 import com.example.preteirb.CurrentUser
 import com.example.preteirb.R
+import com.example.preteirb.common.CustomGlideImage
 import com.example.preteirb.common.ProfileEditor
 import com.example.preteirb.model.ProfileDetails
 import com.example.preteirb.model.ProfileUiState
@@ -170,10 +170,9 @@ fun AppTopBar(
                 Box {
                     IconButton(onClick = { isExpanded = true }) {
                         Log.d("sync", "profile: $profile")
-                        GlideImage(
-                            model = profile.profilePic.ifBlank {
-                                Icons.Default.AccountCircle
-                            },
+                        CustomGlideImage(
+                            model = profile.profilePic,
+                            placeholder = Icons.Default.AccountCircle,
                             contentDescription = profile.username,
                             loading = placeholder(R.drawable.loading_img),
                             failure = placeholder(rememberVectorPainter(Icons.Default.AccountCircle)),
@@ -188,10 +187,9 @@ fun AppTopBar(
                         )
                     }
                     DropdownMenu(expanded = isExpanded, onDismissRequest = { isExpanded = false }) {
-                        GlideImage(
-                            model = profile.profilePic.ifBlank {
-                                Icons.Default.AccountCircle
-                            },
+                        CustomGlideImage(
+                            model = profile.profilePic,
+                            placeholder = Icons.Default.AccountCircle,
                             contentDescription = profile.username,
                             loading = placeholder(R.drawable.loading_img),
                             failure = placeholder(rememberVectorPainter(Icons.Default.AccountCircle)),

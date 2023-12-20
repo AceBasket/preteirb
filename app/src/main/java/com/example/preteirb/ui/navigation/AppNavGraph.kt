@@ -5,6 +5,12 @@ import androidx.navigation.NavType
 import androidx.navigation.compose.composable
 import androidx.navigation.navArgument
 import com.example.preteirb.ui.AppState
+import com.example.preteirb.ui.screens.auth.ChooseAuthenticationDestination
+import com.example.preteirb.ui.screens.auth.ChooseAuthenticationScreen
+import com.example.preteirb.ui.screens.auth.LoginDestination
+import com.example.preteirb.ui.screens.auth.LoginScreen
+import com.example.preteirb.ui.screens.auth.SignUpDestination
+import com.example.preteirb.ui.screens.auth.SignUpScreen
 import com.example.preteirb.ui.screens.booking.BookItemDestination
 import com.example.preteirb.ui.screens.booking.BookItemScreen
 import com.example.preteirb.ui.screens.items_booked.ItemsBookedDestination
@@ -13,12 +19,6 @@ import com.example.preteirb.ui.screens.items_owned.ItemAndUsagesDetailsDestinati
 import com.example.preteirb.ui.screens.items_owned.ItemAndUsagesDetailsScreen
 import com.example.preteirb.ui.screens.items_owned.ListItemsDestination
 import com.example.preteirb.ui.screens.items_owned.ListItemsScreen
-import com.example.preteirb.ui.screens.login.ChooseAuthenticationDestination
-import com.example.preteirb.ui.screens.login.ChooseAuthenticationScreen
-import com.example.preteirb.ui.screens.login.LoginDestination
-import com.example.preteirb.ui.screens.login.LoginScreen
-import com.example.preteirb.ui.screens.login.SignUpDestination
-import com.example.preteirb.ui.screens.login.SignUpScreen
 import com.example.preteirb.ui.screens.profile_selection.ProfileSelectionDestination
 import com.example.preteirb.ui.screens.profile_selection.ProfileSelectionScreen
 import com.example.preteirb.ui.screens.search.SearchDestination
@@ -92,10 +92,10 @@ fun NavGraphBuilder.appNavGraph(appState: AppState) {
     composable(route = ChooseAuthenticationDestination.route) {
         ChooseAuthenticationScreen(
             navigateToLogin = {
-                appState.clearAndNavigate(LoginDestination.route)
+                appState.navigate(LoginDestination.route)
             },
             navigateToSignUp = {
-                appState.clearAndNavigate(SignUpDestination.route)
+                appState.navigate(SignUpDestination.route)
             },
         )
     }

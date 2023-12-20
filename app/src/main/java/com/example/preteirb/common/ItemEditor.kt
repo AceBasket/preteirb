@@ -35,15 +35,16 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.input.KeyboardCapitalization
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.window.Dialog
 import androidx.compose.ui.window.DialogProperties
 import com.bumptech.glide.integration.compose.ExperimentalGlideComposeApi
-import com.bumptech.glide.integration.compose.GlideImage
 import com.bumptech.glide.integration.compose.placeholder
 import com.example.compose.AppTheme
 import com.example.preteirb.R
@@ -150,11 +151,9 @@ fun ItemDialog(
                         }
                     }
                 )
-                GlideImage(
-                    model = selectedImageUri ?: if (itemUiState.itemDetails.image != Uri.EMPTY)
-                        itemUiState.itemDetails.image
-                    else
-                        R.drawable.baseline_image_24,
+                CustomGlideImage(
+                    model = selectedImageUri ?: itemUiState.itemDetails.image,
+                    placeholder = ImageVector.vectorResource(R.drawable.baseline_image_24),
                     contentDescription = stringResource(id = R.string.object_photo),
                     loading = placeholder(R.drawable.loading_img),
                     failure = placeholder(R.drawable.baseline_broken_image_24),

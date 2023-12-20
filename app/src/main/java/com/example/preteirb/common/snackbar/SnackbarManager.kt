@@ -34,8 +34,8 @@ object SnackbarManager {
         messages.value = SnackbarMessage.ResourceSnackbar(message)
     }
 
-    fun showMessage(message: SnackbarMessage) {
-        messages.value = message
+    fun showMessage(message: String) {
+        messages.value = SnackbarMessage.StringSnackbar(message)
     }
 
     fun clearSnackbarState() {

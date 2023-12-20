@@ -65,14 +65,14 @@ fun ProfileSelectionScreen(
             coroutine.launch {
                 val user = viewModel.saveNewProfile()
                 viewModel.logIn(user)
+                navigateToSearch()
             }
-            navigateToSearch()
         },
         onClickOnProfile = {
             coroutine.launch {
                 viewModel.logIn(it)
+                navigateToSearch()
             }
-            navigateToSearch()
         },
         modifier = modifier
     )

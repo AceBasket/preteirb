@@ -1,6 +1,5 @@
 package com.example.preteirb.ui.screens.items_owned
 
-import android.net.Uri
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
@@ -25,19 +24,21 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.bumptech.glide.integration.compose.ExperimentalGlideComposeApi
-import com.bumptech.glide.integration.compose.GlideImage
 import com.bumptech.glide.integration.compose.placeholder
 import com.example.compose.AppTheme
 import com.example.preteirb.R
+import com.example.preteirb.common.CustomGlideImage
 import com.example.preteirb.common.ItemEditor
 import com.example.preteirb.data.item.ItemAndUsages
 import com.example.preteirb.data.usage.Usage
@@ -171,8 +172,9 @@ fun DetailsHeadline(
                 style = MaterialTheme.typography.headlineLarge,
                 fontStyle = FontStyle.Italic,
             )
-            GlideImage(
-                model = if (item.image != Uri.EMPTY) item.image else R.drawable.baseline_image_24,
+            CustomGlideImage(
+                model = item.image,
+                placeholder = ImageVector.vectorResource(R.drawable.baseline_image_24),
                 contentDescription = item.name,
                 loading = placeholder(R.drawable.loading_img),
                 failure = placeholder(R.drawable.ic_broken_image),

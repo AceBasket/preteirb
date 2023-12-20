@@ -1,4 +1,4 @@
-package com.example.preteirb.ui.screens.login
+package com.example.preteirb.ui.screens.auth
 
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.rememberCoroutineScope
@@ -7,9 +7,9 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.example.compose.AppTheme
 import com.example.preteirb.R
-import com.example.preteirb.model.login.LogInViewModel
-import com.example.preteirb.model.login.LoginDetails
-import com.example.preteirb.model.login.LoginState
+import com.example.preteirb.model.auth.AuthDetails
+import com.example.preteirb.model.auth.AuthState
+import com.example.preteirb.model.auth.AuthViewModel
 import com.example.preteirb.ui.navigation.NavigationDestination
 import kotlinx.coroutines.launch
 
@@ -22,7 +22,7 @@ object SignUpDestination : NavigationDestination {
 fun SignUpScreen(
     navigateToSelectProfile: () -> Unit,
     modifier: Modifier = Modifier,
-    viewModel: LogInViewModel = hiltViewModel(),
+    viewModel: AuthViewModel = hiltViewModel(),
 ) {
     val coroutineScope = rememberCoroutineScope()
     viewModel.setAccountCreation(true)
@@ -33,7 +33,9 @@ fun SignUpScreen(
         signUp = {
             coroutineScope.launch {
                 viewModel.signUp()
-                navigateToSelectProfile()
+                if (viewModel.uiState.isAuthSuccess) {
+                    navigateToSelectProfile()
+                }
             }
         },
         modifier = modifier
@@ -42,13 +44,13 @@ fun SignUpScreen(
 
 @Composable
 fun SignUpScreenContent(
-    uiState: LoginState,
-    updateUiState: (LoginDetails) -> Unit,
+    uiState: AuthState,
+    updateUiState: (AuthDetails) -> Unit,
     signUp: () -> Unit,
     modifier: Modifier = Modifier
 ) {
     LoginForm(
-        loginState = uiState,
+        authState = uiState,
         updateUiState = updateUiState,
         login = signUp,
         isAccountCreation = true,
@@ -62,7 +64,7 @@ fun SignUpScreenContent(
 fun SignUpScreenContentPreview() {
     AppTheme {
         SignUpScreenContent(
-            uiState = LoginState(),
+            uiState = AuthState(),
             updateUiState = {},
             signUp = {},
         )

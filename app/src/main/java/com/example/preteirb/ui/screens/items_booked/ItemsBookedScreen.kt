@@ -18,15 +18,17 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.dimensionResource
+import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.bumptech.glide.integration.compose.ExperimentalGlideComposeApi
-import com.bumptech.glide.integration.compose.GlideImage
 import com.bumptech.glide.integration.compose.placeholder
 import com.example.preteirb.R
+import com.example.preteirb.common.CustomGlideImage
 import com.example.preteirb.data.item.ItemWithOwner
 import com.example.preteirb.data.usage.UsageWithItemAndUser
 import com.example.preteirb.data.usage.getShortenedDateFormat
@@ -88,8 +90,9 @@ fun ItemBookedCard(
         modifier = modifier,
     ) {
         Row {
-            GlideImage(
-                model = usage.item.image ?: R.drawable.baseline_image_24,
+            CustomGlideImage(
+                model = usage.item.image,
+                placeholder = ImageVector.vectorResource(R.drawable.baseline_image_24),
                 contentDescription = usage.item.name,
                 loading = placeholder(R.drawable.loading_img),
                 failure = placeholder(R.drawable.baseline_broken_image_24),

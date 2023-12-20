@@ -33,10 +33,10 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.bumptech.glide.integration.compose.ExperimentalGlideComposeApi
-import com.bumptech.glide.integration.compose.GlideImage
 import com.bumptech.glide.integration.compose.placeholder
 import com.example.compose.AppTheme
 import com.example.preteirb.R
+import com.example.preteirb.common.CustomGlideImage
 import com.example.preteirb.data.user.User
 
 @OptIn(ExperimentalFoundationApi::class)
@@ -107,9 +107,9 @@ fun ProfileSelectionItem(
     ProfileCarouselItem(
         text = profile.username,
         content = {
-            GlideImage(
-                model = profile.profilePicture
-                    ?: rememberVectorPainter(Icons.Default.AccountCircle),
+            CustomGlideImage(
+                model = profile.profilePicture,
+                placeholder = Icons.Default.AccountCircle,
                 contentDescription = profile.username,
                 loading = placeholder(R.drawable.loading_img),
                 failure = placeholder(rememberVectorPainter(Icons.Default.AccountCircle)),

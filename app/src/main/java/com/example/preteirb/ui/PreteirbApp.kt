@@ -20,13 +20,13 @@ import com.example.preteirb.R
 import com.example.preteirb.model.PreteirbAppViewModel
 import com.example.preteirb.ui.navigation.NavigationDestination
 import com.example.preteirb.ui.navigation.appNavGraph
+import com.example.preteirb.ui.screens.auth.ChooseAuthenticationDestination
+import com.example.preteirb.ui.screens.auth.LoginDestination
+import com.example.preteirb.ui.screens.auth.SignUpDestination
 import com.example.preteirb.ui.screens.booking.BookItemDestination
 import com.example.preteirb.ui.screens.items_booked.ItemsBookedDestination
 import com.example.preteirb.ui.screens.items_owned.ItemAndUsagesDetailsDestination
 import com.example.preteirb.ui.screens.items_owned.ListItemsDestination
-import com.example.preteirb.ui.screens.login.ChooseAuthenticationDestination
-import com.example.preteirb.ui.screens.login.LoginDestination
-import com.example.preteirb.ui.screens.login.SignUpDestination
 import com.example.preteirb.ui.screens.profile_selection.ProfileSelectionDestination
 import com.example.preteirb.ui.screens.search.SearchDestination
 import kotlinx.coroutines.launch

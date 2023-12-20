@@ -1,6 +1,7 @@
 package com.example.preteirb.model
 
 import android.net.Uri
+import android.util.Log
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
@@ -30,6 +31,7 @@ class PreteirbAppViewModel @Inject constructor(
     init {
         viewModelScope.launch {
             currentUserRepository.currentUserFlow.collect {
+                Log.d("currentUserRepo", "currentUserFlow.collect: $it")
                 isLoggedIn = it.loggedIn
                 isProfileSelected = it.profileSelected
                 if (isLoggedIn && isProfileSelected) {
